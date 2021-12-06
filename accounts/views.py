@@ -1,35 +1,18 @@
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404, render
 from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin
+import datetime
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.contrib.auth.models import User, UserManager 
-from django.contrib.auth import login as log_in, get_user, get_user_model
-from django.http import HttpResponse, request
-from django.contrib.auth.decorators import login_required, permission_required
-from django.views.generic.edit import UpdateView , DeleteView
-from django.urls import reverse
+from django.contrib.auth.models import User
+from django.views.generic.edit import UpdateView , DeleteView , CreateView 
 from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.contrib.auth import get_user, get_user_model
-from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth import  get_user, get_user_model
-from django.shortcuts import redirect
-
-
-#from accounts.forms import RegistrationForm,AccountAuthenticationForm, AccountUpdateForm
-from accounts.models import Account
-
-
-
+from django.contrib.auth.models import User
 
 
 
 # view the list of the users.
+
 class usersListView(PermissionRequiredMixin,generic.ListView):
-#class usersListView(generic.ListView):
 
     permission_required = 'catalog.can_mark_returned'
     model = User
@@ -58,7 +41,15 @@ class UserDelete(DeleteView):
     success_url = reverse_lazy('user_list')
 
 
+# Add new user.
 
-def my_view(request):
-    output = _("Welcome to my site.")
-    return HttpResponse(output)
+class UserCreate(CreateView):
+    model = User
+    fields =['username','first_name','last_name','password','email','is_active','is_staff','is_superuser','groups','user_permissions','last_login','date_joined']
+    initial = {'is_superuser': 'False' ,'date_joined':str(datetime.date.today()), 'last_login':str(datetime.date.today()) }
+    success_url = reverse_lazy('users')
+
+
+
+
+

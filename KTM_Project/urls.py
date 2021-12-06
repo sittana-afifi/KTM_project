@@ -30,16 +30,15 @@ from django.conf.urls.static import static
 from django.conf.urls.i18n import i18n_patterns
 from django.utils.translation import gettext_lazy as _
 from accounts import views
+from TaskManagement import views
 
 
 urlpatterns = i18n_patterns(
+    #path('', views.my_view, name='home'),
     path('admin/', admin.site.urls),    
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-
-
-
-   
+    path('TaskManagement/', include('TaskManagement.urls')),
    #path('rosetta/', include('rosetta.urls')),  # add Rosetta's URL to main URL configuration
 
  ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,0 +1,26 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  
+<h1>Employees: <a href="{% url 'employee-create' %}"> <img src="https://www.iconsdb.com/icons/download/color/87BBFF/add-16.ico" alt="add new employeer" style="width:25px;height:25px;"></a></h1>
+ 
+ 
+  {% if employee_list %}
+  
+  <ul>
+    {% for employee in employee_list %}
+      <li>
+        <a href="{% url 'employee-detail' employee.id%}">{{ employee.user }} </a>
+
+          <a href=" {% url 'employee-update' employee.id%} ">  <img src="https://www.iconsdb.com/icons/download/color/8ABDFF/edit-9-16.ico" 
+            alt="update employee" style="width:30px;height:20px;">
+            <a href=" {% url 'employee-delete' employee.id%}  ">  <img src="https://www.iconsdb.com/icons/download/color/87BBFF/delete-16.ico" 
+              alt="delete employee" style="width:20px;height:22px;">
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no employees in the library.</p>
+  {% endif %}
+    
+{% endblock %}

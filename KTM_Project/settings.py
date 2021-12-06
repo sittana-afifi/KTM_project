@@ -56,13 +56,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # configure the accounts app 
     'accounts.apps.AccountsConfig',
-     # Add our new application framework 
-    #'framework.apps.FrameworkConfig',#This object was created for us in /framework/apps.py added by eman 
     #'rosetta',  # Rosetta Translation Interface
     # Custom for contact application
     #'contact',
     # 3rd party apps
     'crispy_forms',
+    'TaskManagement.apps.TaskManagementConfig',
 ]
 
 # Indicates the frontend framework django crispy forms use
@@ -71,6 +70,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.locale.LocaleMiddleware', # For localization and translation settings
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
