@@ -1,0 +1,28 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Tasks List
+    <a href="{% url 'taskmanagment-create' %}"> 
+        <img alt="Add taskmanagment" src="https://www.iconsdb.com/icons/download/color/096647/add-file-16.png">
+      </a>
+  </h1>
+  {% if taskmanagment_list %}
+  <ul>
+    {% for taskmanagment in taskmanagment_list %}
+      <li>
+        <a href="{{ taskmanagment.get_absolute_url }}">
+          {{ taskmanagment.id}}, {{ taskmanagment.task_managment}}</a> 
+       
+        <a href="{% url 'taskmanagment-delete' taskmanagment.id %}">
+          <img alt="Delete" src="https://www.iconsdb.com/icons/download/red/delete-16.png">
+        </a>
+        <a href="{% url 'taskmanagment-update' taskmanagment.id %}">
+          <img alt="Update" src="https://www.iconsdb.com/icons/download/orange/edit-2-16.png">
+      </a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no tasks in the library.</p>
+  {% endif %}
+{% endblock %}

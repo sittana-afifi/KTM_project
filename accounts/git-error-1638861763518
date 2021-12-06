@@ -1,0 +1,4 @@
+> git rebase --continue
+error: Terminal is dumb, but EDITOR unset
+Please supply the message using either -m or -F option.
+error: could not commit staged changes.

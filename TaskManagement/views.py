@@ -43,3 +43,30 @@ class EmployeeUpdateView(UpdateView):
     fields = ['Employee_id', 'Phone_number', 'date_joined']
     success_url = reverse_lazy('employee_list')
     
+
+
+#######################################################
+# Taskmanagment List View:
+class TaskmanagmentListView(generic.ListView):
+    model = Taskmanagment
+    template_name ='TaskManagement/taskmanagment_list.html'
+
+# Taskmanagment Details View:
+class TaskmanagmentDetailView(generic.DetailView):
+    model = Taskmanagment
+    template_name ='TaskManagement/taskmanagment_detail.html'
+
+# Create a specific taskmanagment:
+class TaskmanagmentCreate(CreateView):
+    model = Taskmanagment
+    fields = '__all__'
+
+# Update a specific taskmanagment:
+class TaskmanagmentUpdate(UpdateView):
+    model = Taskmanagment
+    fields = '__all__' # Not recommended (potential security issue if more fields added)
+
+# Delete a specific taskmanagment:
+class TaskmanagmentDelete(DeleteView):
+    model = Taskmanagment
+    success_url = reverse_lazy('taskmanagments')
