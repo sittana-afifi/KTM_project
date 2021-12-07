@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from .models import Employee
 from django.views.generic.edit import UpdateView , DeleteView , CreateView 
 from django.views import generic
-from .models import Project, Task
+from .models import Project, Task, Taskmanagment
 
 
 
