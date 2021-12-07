@@ -1,9 +1,9 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.urls import reverse_lazy
-from .models import Employee 
+from .models import Employee
 from django.views.generic.edit import UpdateView , DeleteView , CreateView 
 from django.views import generic
-
+from .models import Project, Task
 
 
 
@@ -44,6 +44,26 @@ class EmployeeUpdateView(UpdateView):
     success_url = reverse_lazy('employee_list')
     
 
+#####################################################
+class ProjectListView(generic.ListView):
+    model = Project
+    template_name = 'TaskManagement/project_list.html'
+
+class ProjectDetailView(generic.DetailView):
+    model = Project
+    template_name = 'TaskManagement/project_detail.html'
+
+class ProjectCreate(CreateView):
+    model = Project
+    fields = '__all__'
+
+class ProjectUpdate(UpdateView):
+    model = Project
+    fields = '__all__' # Not recommended (potential security issue if more fields added)
+
+class ProjectDelete(DeleteView):
+    model = Project
+    success_url = reverse_lazy('projects')
 
 #######################################################
 # Taskmanagment List View:

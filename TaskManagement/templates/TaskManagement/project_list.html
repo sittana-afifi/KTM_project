@@ -1,0 +1,27 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Project List
+      <a href="{% url 'project-create' %}"> 
+        <img alt="Add project" src="https://www.iconsdb.com/icons/download/color/096647/add-file-16.png">
+      </a>
+  </h1>
+  {% if project_list %}
+  <ul>
+    {% for project in project_list %}
+      <li  display:inline;>
+        <a href="{{ project.get_absolute_url }}">{{ project.name }}</a>
+        <a href="{% url 'project-delete' project.id %}">
+            <img alt="Delete" src="https://www.iconsdb.com/icons/download/red/delete-16.png">
+        </a>
+        <a href="{% url 'project-update' project.id %}">
+            <img alt="Update" src="https://www.iconsdb.com/icons/download/orange/edit-2-16.png">
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no projects.</p>
+  {% endif %}
+{% endblock %}
+
