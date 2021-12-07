@@ -12,6 +12,4 @@ urlpatterns = [
     path('taskmanagment/create/', views.TaskmanagmentCreate.as_view(), name='taskmanagment-create'),
     path('taskmanagment/<int:pk>/update/', views.TaskmanagmentUpdate.as_view(), name='taskmanagment-update'),
     path('taskmanagment/<int:pk>/delete/', views.TaskmanagmentDelete.as_view(), name='taskmanagment-delete'),
-
-
 ]

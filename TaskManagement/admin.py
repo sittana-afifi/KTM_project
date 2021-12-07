@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Employee
-from .models import Taskmanagment
+from .models import Employee, Taskmanagment
 
 
 
