@@ -9,6 +9,10 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+# fist import the needed packages
+import ldap
+from django_auth_ldap.config import LDAPSearch
+from django_auth_ldap.config import ActiveDirectoryGroupType
 
 
 from pathlib import Path
@@ -42,7 +46,7 @@ SECRET_KEY = 'django-insecure-8g-804gv!!s53=a7ahuz#u7pef3#jx@7(r!h1&av=*8f%)a91#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.21.133','localhost', '127.0.0.1','192.168.41.136']
+ALLOWED_HOSTS = [env('APP_SERVER'),'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -84,7 +88,7 @@ ROOT_URLCONF = 'KTM_Project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [''],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -223,10 +227,6 @@ LOGGING = {
 
 
 # LDAP CONFIGRATION START HERE !
-# fist import the needed packages
-import ldap
-from django_auth_ldap.config import LDAPSearch
-from django_auth_ldap.config import ActiveDirectoryGroupType
 
 
 
@@ -234,8 +234,7 @@ from django_auth_ldap.config import ActiveDirectoryGroupType
 
 
 
-#AUTH_LDAP_SERVER_URI = env('AUTH_LDAP_SERVER_URI')
-AUTH_LDAP_SERVER_URI = 'ldap://192.168.41.149'
+AUTH_LDAP_SERVER_URI = env('AUTH_LDAP_SERVER_URI')
 
 AUTH_LDAP_BIND_DN = "CN=bind,CN=Users,DC=BD,DC=COM"
 AUTH_LDAP_BIND_PASSWORD = env('AUTH_LDAP_BIND_PASSWORD')
@@ -277,10 +276,9 @@ AUTHENTICATION_BACKENDS = [
 
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'mail2.sd.zain.com'
-EMAIL_PORT = 25
-EMAIL_USE_TLS = True
+EMAIL_BACKEND = env('EMAIL_BACKEND')
+EMAIL_HOST =env('EMAIL_HOST')
+EMAIL_PORT = env('EMAIL_PORT')
+EMAIL_USE_TLS = env('EMAIL_USE_TLS')
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD =env('EMAIL_HOST_PASSWORD')
-RECIPIENT_ADDRESS=env('RECIPIENT_ADDRESS') 

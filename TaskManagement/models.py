@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.fields import DateField
+from django.urls.base import reverse
 
 
 
@@ -12,7 +14,10 @@ class Employee(models.Model):
     Employee_id = models.CharField(max_length=4,  blank=True)
     Phone_number = models.CharField( max_length=10,  blank=True)
     date_joined = models.DateField(null=True, blank=True)
-
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.user}'
+        
 #################################################
 # Create a project model :
 class Project(models.Model):
@@ -81,7 +86,7 @@ class Taskmanagment(models.Model):
 
     @property
     def is_overdue(self):
-        if self.end_date and date.today() > self.end_date:
+        if self.end_date and DateField.today() > self.end_date:
             return True
         return False
 
