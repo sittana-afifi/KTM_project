@@ -113,7 +113,7 @@ class TaskUpdate(UpdateView):
     fields = '__all__' # Not recommended (potential security issue if more fields added)
 
 class TaskDelete(DeleteView):
-    model = Project
+    model = Task
     success_url = reverse_lazy('tasks')
 
 #######################################################
