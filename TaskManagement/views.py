@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from .models import Employee , Taskmanagment
 from django.views.generic.edit import UpdateView , DeleteView , CreateView 
@@ -8,7 +9,7 @@ from .models import Project, Task, Taskmanagment
 
 
 # view a list of all employees.
-class EmployeesListView(PermissionRequiredMixin,generic.ListView):
+class EmployeesListView(LoginRequiredMixin,generic.ListView):
     model = Employee
     template_name ='TaskManagement/employee_list.html'
 
