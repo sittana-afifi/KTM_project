@@ -35,10 +35,12 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic import RedirectView
 
+
+
 urlpatterns = i18n_patterns(
     #path('', views.my_view, name='home'),
-    path('admin/', admin.site.urls),   
-    path('accounts/', include('accounts.urls')),
+    path('admin/', admin.site.urls),    
+    path('accounts/', include('accounts.urls' )),
     path('accounts/', include('django.contrib.auth.urls')),
     path('TaskManagement/', include('TaskManagement.urls')),
     path('', RedirectView.as_view(url='accounts/', permanent=True)), 
