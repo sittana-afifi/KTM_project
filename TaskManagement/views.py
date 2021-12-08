@@ -93,3 +93,27 @@ class TaskmanagmentUpdate(UpdateView):
 class TaskmanagmentDelete(DeleteView):
     model = Taskmanagment
     success_url = reverse_lazy('taskmanagments')
+
+
+#####################################################
+class TaskListView(generic.ListView):
+    model = Task
+    template_name = 'TaskManagement/task_list.html'
+
+class TaskDetailView(generic.DetailView):
+    model = Task
+    template_name = 'TaskManagement/task_detail.html'
+
+class TaskCreate(CreateView):
+    model = Task
+    fields = '__all__'
+
+class TaskUpdate(UpdateView):
+    model = Task
+    fields = '__all__' # Not recommended (potential security issue if more fields added)
+
+class TaskDelete(DeleteView):
+    model = Project
+    success_url = reverse_lazy('tasks')
+
+#######################################################

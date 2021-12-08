@@ -4,7 +4,7 @@
 
 <h1>Delete the Task </h1>
 
-<p>Are you sure you want to delete the task: {{ task }}?</p>
+<p>Are you sure you want to delete the task: {{ task.project }},{{ task.id}}?</p>
 
 <form action="" method="POST">
   {% csrf_token %}
