@@ -9,8 +9,6 @@ from .models import Project, Task, Taskmanagment
 
 # view a list of all employees.
 class EmployeesListView(PermissionRequiredMixin,generic.ListView):
-
-    permission_required = 'catalog.can_mark_returned'
     model = Employee
     template_name ='TaskManagement/employee_list.html'
 

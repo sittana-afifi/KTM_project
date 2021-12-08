@@ -4,7 +4,7 @@
 
 <h1>Delete Taskmanagment</h1>
 
-<p>Are you sure you want to delete the task: {{ taskmanagment }}?</p>
+<p>Are you sure you want to delete the task: {{ taskmanagment.id}},{{ taskmanagment.task_managment}}?</p>
 
 <form action="" method="POST">
   {% csrf_token %}
