@@ -38,7 +38,7 @@ class Project(models.Model):
 
 class Task(models.Model):
     """Model representing a specific task in a project."""
-    project = models.ForeignKey('Project', on_delete=models.SET_NULL, null=True)
+    project = models.ForeignKey('Project', on_delete=models.SET_NULL, null=True, blank=True)
     task_name = models.CharField(max_length=200, help_text='Enter a task name (e.g. Design)')
     task_description = models.TextField(max_length=1000, help_text='Enter a brief description of the task')
     def __str__(self):
