@@ -44,7 +44,7 @@ class EmployeeUpdateView(UpdateView):
     
 
 #####################################################
-class ProjectListView(generic.ListView):
+class ProjectListView(LoginRequiredMixin,generic.ListView):
     model = Project
     template_name = 'TaskManagement/project_list.html'
 
@@ -66,7 +66,7 @@ class ProjectDelete(DeleteView):
 
 #######################################################
 # Taskmanagment List View:
-class TaskmanagmentListView(generic.ListView):
+class TaskmanagmentListView(LoginRequiredMixin,generic.ListView):
     model = Taskmanagment
     template_name ='TaskManagement/taskmanagment_list.html'
 
@@ -96,7 +96,7 @@ class TaskmanagmentDelete(DeleteView):
 
 
 #####################################################
-class TaskListView(generic.ListView):
+class TaskListView(LoginRequiredMixin,generic.ListView):
     model = Task
     template_name = 'TaskManagement/task_list.html'
 
