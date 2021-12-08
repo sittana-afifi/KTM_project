@@ -1,0 +1,13 @@
+
+{% extends "base_generic.html" %}
+
+{% block content %}
+<p></p>
+<h1>Task Details: {{ task.id}},{{ task.project}</h1>
+
+<p style="margin-left:2.5em">About the Task:</p>
+<p style="margin-left:2.5em"><strong>Task project name:</strong> {{ task.project }}</p>
+<p style="margin-left:2.5em"><strong>Task Name:</strong> {{ task.task_name }}</p>
+<p style="margin-left:2.5em"><strong>Task Details</strong> {{ task.task_description }}</p>
+
+{% endblock %}
