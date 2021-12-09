@@ -1,10 +1,7 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-
-  {% if form.errors %}
-    <p>Your username and password didn't match. Please try again.</p>
-  {% endif %}
+<h2>Login Form</h2>
 
   {% if next %}
     {% if user.is_authenticated %}
@@ -27,10 +24,13 @@
         <td>{{ form.password }}</td>
       </tr>
     </table>
-    <input type="submit" value="login" />
-    <input type="hidden" name="next" value="{{ next }}" />
+    <input class="btn btn-success my-3" position="relative" type="submit" value="login" />
+    <input type="hidden"   name="next" value="{{ next }}" />
   </form>
 
   
+  {% if form.errors %}
+    <p class="text-danger">Your username and password didn't match. Please try again.</p>
+  {% endif %}
 
 {% endblock %}
