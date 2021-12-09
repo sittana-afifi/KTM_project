@@ -1,5 +1,7 @@
 {% extends "base_generic.html" %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
 
 
@@ -9,5 +11,8 @@
 
   <p> <strong> Date Joined:</strong> {{ employee.date_joined}}</p>
 
- 
+  {{ form | crispy }}
+  <a href="{% url 'employee_list' %}"><button class="btn btn-success my-3">ok</button></a>
+  </form>
+  
 {% endblock %}

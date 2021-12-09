@@ -10,7 +10,7 @@
   <ul>
     {% for task in task_list %}
       <li  display:inline;>
-        <a href="{{ task.get_absolute_url }}">{{ task.id }} , {{ task.project }}</a>
+        <a href="{{ task.get_absolute_url }}"> {{ task.task_name }}</a>
         <a href="{% url 'task-delete' task.id %}">
             <img alt="Delete" src="https://www.iconsdb.com/icons/download/red/delete-16.png">
         </a>

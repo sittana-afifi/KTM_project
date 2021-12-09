@@ -1,4 +1,6 @@
 {% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+
 
 {% block content %}
 
@@ -8,7 +10,8 @@
 
 <form action="" method="POST">
   {% csrf_token %}
-  <input type="submit" value="Yes, delete.">
+  {{ form | crispy }}
+  <button class="btn btn-success my-3" type="submit">Yes, delete.</button>
 </form>
 
 {% endblock %}

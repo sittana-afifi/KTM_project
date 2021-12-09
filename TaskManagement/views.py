@@ -48,23 +48,45 @@ class ProjectListView(LoginRequiredMixin,generic.ListView):
     model = Project
     template_name = 'TaskManagement/project_list.html'
 
-class ProjectDetailView(generic.DetailView):
+class ProjectDetailView(LoginRequiredMixin,generic.DetailView):
     model = Project
     template_name = 'TaskManagement/project_detail.html'
 
-class ProjectCreate(CreateView):
+class ProjectCreate(LoginRequiredMixin,CreateView):
     model = Project
     fields = '__all__'
 
-class ProjectUpdate(UpdateView):
+class ProjectUpdate(LoginRequiredMixin,UpdateView):
     model = Project
     fields = '__all__' # Not recommended (potential security issue if more fields added)
 
-class ProjectDelete(DeleteView):
+class ProjectDelete(LoginRequiredMixin,DeleteView):
     model = Project
     success_url = reverse_lazy('projects')
 
+#####################################################
+class TaskListView(LoginRequiredMixin,generic.ListView):
+    model = Task
+    template_name = 'TaskManagement/task_list.html'
+
+class TaskDetailView(LoginRequiredMixin,generic.DetailView):
+    model = Task
+    template_name = 'TaskManagement/task_detail.html'
+
+class TaskCreate(LoginRequiredMixin,CreateView):
+    model = Task
+    fields = '__all__'
+
+class TaskUpdate(LoginRequiredMixin,UpdateView):
+    model = Task
+    fields = '__all__' # Not recommended (potential security issue if more fields added)
+
+class TaskDelete(LoginRequiredMixin,DeleteView):
+    model = Task
+    success_url = reverse_lazy('tasks')
+
 #######################################################
+
 # Taskmanagment List View:
 class TaskmanagmentListView(LoginRequiredMixin,generic.ListView):
     model = Taskmanagment
@@ -72,48 +94,26 @@ class TaskmanagmentListView(LoginRequiredMixin,generic.ListView):
 
 
 # Taskmanagment Details View:
-class TaskmanagmentDetailView(generic.DetailView):
+class TaskmanagmentDetailView(LoginRequiredMixin,generic.DetailView):
     model = Taskmanagment
     template_name ='TaskManagement/taskmanagment_detail.html'
 
 
 # Create a specific taskmanagment:
-class TaskmanagmentCreate(CreateView):
+class TaskmanagmentCreate(LoginRequiredMixin,CreateView):
     model = Taskmanagment
     fields = '__all__'
 
 
 # Update a specific taskmanagment:
-class TaskmanagmentUpdate(UpdateView):
+class TaskmanagmentUpdate(LoginRequiredMixin,UpdateView):
     model = Taskmanagment
     fields = '__all__' # Not recommended (potential security issue if more fields added)
 
 
 # Delete a specific taskmanagment:
-class TaskmanagmentDelete(DeleteView):
+class TaskmanagmentDelete(LoginRequiredMixin,DeleteView):
     model = Taskmanagment
     success_url = reverse_lazy('taskmanagments')
-
-
-#####################################################
-class TaskListView(LoginRequiredMixin,generic.ListView):
-    model = Task
-    template_name = 'TaskManagement/task_list.html'
-
-class TaskDetailView(generic.DetailView):
-    model = Task
-    template_name = 'TaskManagement/task_detail.html'
-
-class TaskCreate(CreateView):
-    model = Task
-    fields = '__all__'
-
-class TaskUpdate(UpdateView):
-    model = Task
-    fields = '__all__' # Not recommended (potential security issue if more fields added)
-
-class TaskDelete(DeleteView):
-    model = Task
-    success_url = reverse_lazy('tasks')
 
 #######################################################

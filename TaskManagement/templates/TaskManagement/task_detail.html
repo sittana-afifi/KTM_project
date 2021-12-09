@@ -1,6 +1,8 @@
 
 {% extends "base_generic.html" %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
 <p></p>
 <h1>Task Details: {{ task.id}}</h1>
@@ -9,5 +11,8 @@
 <p style="margin-left:2.5em"><strong>Task project name:</strong> {{ task.project }}</p>
 <p style="margin-left:2.5em"><strong>Task Name:</strong> {{ task.task_name }}</p>
 <p style="margin-left:2.5em"><strong>Task Details</strong> {{ task.task_description }}</p>
+{{ form | crispy }}
+<a href="{% url 'tasks' %}"><button class="btn btn-success my-3">ok</button></a>
+</form>
 
 {% endblock %}
