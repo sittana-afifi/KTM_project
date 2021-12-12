@@ -66,6 +66,8 @@ INSTALLED_APPS = [
     # 3rd party apps
     'crispy_forms',
     'TaskManagement.apps.TaskManagementConfig',
+     # configure the MeetingRoom app 
+    'MeetingRoom.apps.MeetingRoomConfig',
 ]
 
 # Indicates the frontend framework django crispy forms use
@@ -234,10 +236,10 @@ LOGGING = {
 
 
 
-AUTH_LDAP_SERVER_URI = env('AUTH_LDAP_SERVER_URI')
+#AUTH_LDAP_SERVER_URI = env('AUTH_LDAP_SERVER_URI')
 
 AUTH_LDAP_BIND_DN = "CN=bind,CN=Users,DC=BD,DC=COM"
-AUTH_LDAP_BIND_PASSWORD = env('AUTH_LDAP_BIND_PASSWORD')
+#AUTH_LDAP_BIND_PASSWORD = env('AUTH_LDAP_BIND_PASSWORD')
 AUTH_LDAP_USER_SEARCH = LDAPSearch(
             "dc=BD,dc=COM", ldap.SCOPE_SUBTREE, "sAMAccountName=%(user)s"
             )

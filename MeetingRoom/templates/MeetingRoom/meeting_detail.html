@@ -1,0 +1,19 @@
+
+{% extends "base_generic.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<p></p>
+<h1>Meeting Details: {{ meeting.id}}</h1>
+
+<p style="margin-left:2.5em">About the Meeting:</p>
+<p style="margin-left:2.5em"><strong>Meeting ID:</strong> {{ meeting.id}}</p>
+<p style="margin-left:2.5em"><strong>Meeting Name:</strong> {{ meeting.name }}</p>
+<p style="margin-left:2.5em"><strong>Meeting Details:</strong> {{ meeting.location }}</p>
+
+{{ form | crispy }}
+<a href="{% url 'meetings' %}"><button class="btn btn-success my-3">ok</button></a>
+</form>
+
+{% endblock %}
