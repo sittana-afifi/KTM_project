@@ -52,7 +52,8 @@ class Task(models.Model):
 # Create taskmanagment model :
 class Taskmanagment(models.Model):
     assignee = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=False, related_name='Taskmanagment')
-    assigneedTo = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=False,related_name='teammamember')
+    assigneedTo = models.ManyToManyField(Employee)
+    #assigneedTo= models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=False,related_name='teammamember')
     task_managment = models.ForeignKey('Task', on_delete=models.SET_NULL, null=True,blank=False)
 
     TASK_STATUS = (
@@ -63,7 +64,7 @@ class Taskmanagment(models.Model):
     status = models.CharField(
         max_length=2,
         choices=TASK_STATUS,
-        blank=True,
+        blank=False,
         default='C',
         help_text='Tasks Status',
     )
@@ -76,13 +77,13 @@ class Taskmanagment(models.Model):
     priority = models.CharField(
         max_length=1,
         choices=TASK_PRIORITY,
-        blank=True,
+        blank=False,
         default='l',
         help_text='Tasks Priorities',
     )
     comment = models.CharField(max_length=200)
-    start_date = models.DateField(null=True, blank=True)
-    end_date = models.DateField(null=True, blank=True)
+    start_date = models.DateField(null=True, blank=False)
+    end_date = models.DateField(null=True, blank=False)
 
     @property
     def is_overdue(self):
