@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'TaskManagement.apps.TaskManagementConfig',
      # configure the MeetingRoom app 
     'MeetingRoom.apps.MeetingRoomConfig',
+    'bootstrap4',
 ]
 
 # Indicates the frontend framework django crispy forms use
