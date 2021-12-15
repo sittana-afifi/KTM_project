@@ -60,7 +60,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # configure the accounts app 
     'accounts.apps.AccountsConfig',
-    #'rosetta',  # Rosetta Translation Interface
+    'rosetta',  # Rosetta Translation Interface
     # Custom for contact application
     #'contact',
     # 3rd party apps
@@ -69,6 +69,8 @@ INSTALLED_APPS = [
      # configure the MeetingRoom app 
     'MeetingRoom.apps.MeetingRoomConfig',
     'bootstrap4',
+    'bootstrap_datepicker_plus',
+    'flatpickr',
 ]
 
 # Indicates the frontend framework django crispy forms use

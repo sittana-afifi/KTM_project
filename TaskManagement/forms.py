@@ -2,7 +2,7 @@ from django import forms
 from .models import Employee, Task, Taskmanagment
 import datetime
 from django.core.exceptions import ValidationError
-
+from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 
 # Create Assign Task Form:
 class AssignTaskForm(forms.ModelForm):
@@ -26,8 +26,8 @@ class AssignTaskForm(forms.ModelForm):
     )
     priority = forms.ChoiceField(choices=TASK_PRIORITY)
     comment = forms.CharField()
-    start_date = forms.DateField()
-    end_date = forms.DateField()
+    start_date = forms.DateField(widget=DatePickerInput())
+    end_date = forms.DateField(widget=DatePickerInput())
 
     def clean_assignee(self):
         data = self.cleaned_data['assignee']

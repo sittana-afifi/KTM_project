@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.fields import DateField
 from django.urls.base import reverse
-
+from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 
 
 
@@ -13,7 +13,7 @@ class Employee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     Employee_id = models.CharField(max_length=4,  blank=True)
     Phone_number = models.CharField( max_length=10,  blank=True)
-    date_joined = models.DateField(null=True, blank=True)
+    date_joined = models.DateField(null=True, blank=True,)
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.user}'
