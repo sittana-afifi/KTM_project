@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>reservationmeetingroom</h1>
+  
+  {% if reservationmeetingroom_list %}
+  <ul>
+    {% for reservationmeetingroom in reservationmeetingroom_list %}
+      <li>
+        <a href="{{ reservationmeetingroom.get_absolute_url }}">{{ reservationmeetingroom.meeting_room}}</a> 
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no tasks in the library.</p>
+  {% endif %}
+{% endblock %}

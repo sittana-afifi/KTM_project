@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     # configure the accounts app 
     'accounts.apps.AccountsConfig',
     'rosetta',  # Rosetta Translation Interface
+    'parler', #Translating Models with django-parler
     # Custom for contact application
     #'contact',
     # 3rd party apps
@@ -165,6 +166,19 @@ LANGUAGES = (
     ('fr', _('French')),
     ('ar', _('Arabic')),
 )
+
+
+PARLER_LANGUAGES = {
+    None: (
+        {'code': 'en',}, # English
+        {'code': 'fr',}, # French
+        {'code': 'ar',}, # Arabic
+    ),
+    'default': {
+        'fallbacks': ['en'],
+        'hide_untranslated': False,
+    }
+}
 
 # locale path directory for your application where message files will reside
 

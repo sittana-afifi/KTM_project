@@ -35,12 +35,10 @@
         <li><a href="{% url 'taskmanagments' %}">Task Managment List </a></li>
         <li><a href="{% url 'meetings' %}"> Meetings</a></li>  
         <li><a href="{% url 'assign-task' %}"> Assign Task </a></li>  
-
-         
-  
+        <li><a href="{% url 'reserve' %}"> Reservate Meeting Room  </a></li>  
+        <li><a href="{% url 'reservationmeetingrooms' %}"> Reservation Meeting Room Requests List  </a></li>  
         
         <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
-        
         {% else %}
         <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
         {% endif %}

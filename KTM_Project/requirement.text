@@ -89,3 +89,5 @@ pip3 install	whitenoise==5.3.0
 pip3 install	zipp==3.5.1
 pip3 install	zope.interface==4.3.2
 pip3 install    django-crispy-forms
+pip install     django-parler
+pip3 install    django-flatpickr
