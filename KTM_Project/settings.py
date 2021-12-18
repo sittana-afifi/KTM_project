@@ -199,7 +199,7 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 '''
-# Configuring logging settings:
+# Configuring logging settings for FileHandeler:
 # Disabling logging configuration below settings only when need to disable default django logging :
 # LOGGING_CONFIG = None
 # logging.config.dictConfig(...)
@@ -302,3 +302,39 @@ EMAIL_PORT = env('EMAIL_PORT')
 EMAIL_USE_TLS = env('EMAIL_USE_TLS')
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD =env('EMAIL_HOST_PASSWORD')
+
+'''
+#####################################################
+# Configuring logging settings for StreamHandeler (Console):
+# Disabling logging configuration below settings only when need to disable default django logging :
+# LOGGING_CONFIG = None
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+   #"root": {"level": "DEBUG", "handlers": ["console"]},
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "test_format",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": True
+        },
+    },
+    "formatters": {
+        "test_format": {
+            "format": (
+                u"[%(asctime)s] [%(levelname)-4s]  [%(name)-12s] "
+                "(%(module)s.%(funcName)s) %(message)s"
+            ),
+            "datefmt": "%Y-%m-%d %H:%M:%S %p %Z %z",
+        },
+    }, 
+}
+
+'''
