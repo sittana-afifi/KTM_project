@@ -14,6 +14,7 @@ from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 from django.contrib import messages
 from django.forms import ValidationError
 from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 
 
@@ -74,15 +75,15 @@ def reserve_view(request):
             reservation_to_time = form.cleaned_data['reservation_to_time']
             team = form.cleaned_data['team']
             form = form.save(commit=False)
-            if  form.meeting_room == form.meeting_room:
-                case_1 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room,reservation_date=reservation_date, reservation_from_time__lte=reservation_from_time, reservation_to_time__gte=reservation_to_time).exists()
-                # case 2: a room is booked before the requested check_out date and check_out date is after requested check_out date
-                case_2 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room,reservation_date=reservation_date, reservation_from_time__lte=reservation_to_time, reservation_to_time__gte=reservation_to_time).exists()
-                case_3 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room,reservation_date=reservation_date, reservation_from_time__gte=reservation_from_time, reservation_to_time__lte=reservation_to_time).exists()
-                # if either of these is true, abort and render the error
-                if case_1 or case_2 or case_3:                    
-                    #raise ValidationError(('Selected Meeting room already reserved at this date and time'))
-                    return render (request, "MeetingRoom/reserveerrorl.html")
+            #if  form.meeting_room == form.meeting_room:
+            case_1 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room,reservation_date=reservation_date, reservation_from_time__lte=reservation_from_time, reservation_to_time__gte=reservation_to_time).exists()
+            # case 2: a room is booked before the requested check_out date and check_out date is after requested check_out date
+            case_2 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room,reservation_date=reservation_date, reservation_from_time__lte=reservation_to_time, reservation_to_time__gte=reservation_to_time).exists()
+            case_3 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room,reservation_date=reservation_date, reservation_from_time__gte=reservation_from_time, reservation_to_time__lte=reservation_to_time).exists()
+            # if either of these is true, abort and render the error
+            if case_1 or case_2 or case_3:                    
+                #raise ValidationError(('Selected Meeting room already reserved at this date and time'))
+                return render (request, "MeetingRoom/reserveerrorl.html")
             form.save()
             return HttpResponseRedirect(reverse('reservationmeetingrooms') )
         else:

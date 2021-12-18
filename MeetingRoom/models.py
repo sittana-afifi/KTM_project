@@ -27,7 +27,7 @@ class ReservationMeetingRoom(models.Model):
     reservation_date = models.DateField(null=True, blank=False)
     reservation_from_time = models.TimeField(auto_now=False, auto_now_add=False)
     reservation_to_time = models.TimeField(auto_now=False, auto_now_add=False)
-    team = models.ManyToManyField(Employee) 
+    team = models.ManyToManyField(Employee,blank=True) 
     #models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=False)
     def clean_reservation_date(self):
         date = self.cleaned_date['reservation_date']

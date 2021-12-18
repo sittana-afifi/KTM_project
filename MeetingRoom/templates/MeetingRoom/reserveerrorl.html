@@ -1,5 +1,5 @@
 {% load crispy_forms_tags %}
-<h1>Selected Meeting room already reserved at this date and time</h1>
+<h3>Selected Meeting room already reserved at this date and time</h3>
 
 {{ form | crispy }}
 <a href="{% url 'reserve' %}"><button class="btn btn-success my-3">ok</button></a>
