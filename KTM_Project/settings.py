@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     'bootstrap4',
     'bootstrap_datepicker_plus',
     'flatpickr',
+    
 ]
 
 # Indicates the frontend framework django crispy forms use
