@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import reverse_lazy
 from django.views import generic
 from .models import Meeting, ReservationMeetingRoom
@@ -41,29 +42,30 @@ class MeetingDelete(LoginRequiredMixin,DeleteView):
 
 ######################################################
 # ReservationMeetingRoom CRUD:
-class ReservationMeetingRoomListView(generic.ListView):
+class ReservationMeetingRoomListView(LoginRequiredMixin,generic.ListView):
     model = ReservationMeetingRoom
     template_name = 'MeetingRoom/reservationmeetingroom_list.html'
 
-class ReservationMeetingRoomDetailView(generic.DetailView):
+class ReservationMeetingRoomDetailView(LoginRequiredMixin,generic.DetailView):
     model = ReservationMeetingRoom
     template_name = 'MeetingRoom/reservationmeetingroom_detail.html'
 
-class ReservationMeetingRoomCreate(CreateView):
+class ReservationMeetingRoomCreate(LoginRequiredMixin,CreateView):
     model = ReservationMeetingRoom
     fields = '__all__'
 
-class ReservationMeetingRoomUpdate(UpdateView):
+class ReservationMeetingRoomUpdate(LoginRequiredMixin,UpdateView):
     model = ReservationMeetingRoom
     fields = '__all__' # Not recommended (potential security issue if more fields added)
 
-class ReservationMeetingRoomDelete(DeleteView):
+class ReservationMeetingRoomDelete(LoginRequiredMixin,DeleteView):
     model = ReservationMeetingRoom
     success_url = reverse_lazy('reservationmeetingrooms')
 
 ###############################################
 
-# Reservation Form View 
+# Reservation Form View:
+@login_required
 def reserve_view(request):
     form = ReservationForm(request.POST)
     if request.method == "POST":
