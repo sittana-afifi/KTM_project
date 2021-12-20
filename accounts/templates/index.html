@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+{% load i18n %}
+{% block content %}
+<style>
+    body {
+      background-image: url('https://lists.office.com/Images/9188040d-6c67-4c5b-b112-36a304b66dad/00000000-0000-0000-0003-bffd093ecbe7/T3WVIOPND8QMLBQI7ZS2QN8EJW/300dcea7-bc3d-4d75-b483-a798da121ccc');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-size: 100% 100%;
+      background-position: center ;
+      background-attachment: scroll;
+    }
+    </style> 
+<h1>KSHC Team Managment Application Home page</h1>
+<p>You have visited this page {{ num_visits }} time{{ num_visits|pluralize }}.</p>
+
+{% endblock %}

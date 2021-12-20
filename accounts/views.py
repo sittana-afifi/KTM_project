@@ -7,6 +7,21 @@ from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required, permission_required
+
+
+
+@login_required
+def index(request):
+    """View function for home page of site."""
+    num_visits = request.session.get('num_visits', 0)
+    request.session['num_visits'] = num_visits + 1
+    context = {
+        'num_visits':num_visits,
+    }
+    # Render the HTML template index.html with the data in the context variable
+    return render(request, 'index.html', context=context)
 
 
 
