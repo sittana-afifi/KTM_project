@@ -1,7 +1,11 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>reservationmeetingroom</h1>
+  <h1>reservationmeetingroom
+    <a href="{% url 'reserve' %}"> 
+      <img alt="Add reservationmeetingroom" src="https://www.iconsdb.com/icons/download/color/096647/add-file-16.png">
+    </a>
+  </h1>
   
   {% if reservationmeetingroom_list %}
   <ul>
