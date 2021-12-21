@@ -15,6 +15,7 @@ urlpatterns = [
     path('reservationmeetingroom/<int:pk>/update/', views.ReservationMeetingRoomUpdate.as_view(), name='reservationmeetingroom-update'),
     path('reservationmeetingroom/<int:pk>/delete/', views.ReservationMeetingRoomDelete.as_view(), name='reservationmeetingroom-delete'),
     path('reservationmeetingroom/reserve/', views.reserve_view, name='reserve'),
+    path('reservationmeetingroom/reserve/<int:pk>/update/', views.update_reserve_view, name='reserve-update'),
 
    
 ]

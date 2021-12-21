@@ -12,6 +12,11 @@
     {% for reservationmeetingroom in reservationmeetingroom_list %}
       <li>
         <a href="{{ reservationmeetingroom.get_absolute_url }}">{{ reservationmeetingroom.meeting_room}}</a> 
+        
+        <a href="{% url 'reserve-update' reservationmeetingroom.id %}">
+          <img alt="Update" src="https://www.iconsdb.com/icons/download/orange/edit-2-16.png">
+        </a>
+
         <a href="{% url 'reservationmeetingroom-delete' reservationmeetingroom.id %}">
           <img alt="Delete" src="https://www.iconsdb.com/icons/download/red/delete-16.png">
         </a>
