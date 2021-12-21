@@ -1,36 +1,64 @@
-{% extends "base_generic.html" %}
 
-{% block content %}
-<h2>Login Form</h2>
 
-  {% if next %}
-    {% if user.is_authenticated %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/logincss/main.css' %}">
+<link rel="stylesheet" href="{% static 'css/logincss/util.css' %}">
+{% if next %} 
+        {% if user.is_authenticated %}
       <p>Your account doesn't have access to this page. To proceed,
       please login with an account that has access.</p>
     {% else %}
-      <p>Please login to see this page.</p>
-    {% endif %}
+     <!-- <p>Please login to see this page.</p> -->
+    {% endif %} 
   {% endif %} 
-
-  <form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    <table>
-      <tr>
-        <td>{{ form.username.label_tag }}</td>
-        <td>{{ form.username }}</td>
-      </tr>
-      <tr>
-        <td>{{ form.password.label_tag }}</td>
-        <td>{{ form.password }}</td>
-      </tr>
-    </table>
-    <input class="btn btn-success my-3" position="relative" type="submit" value="login" />
-    <input type="hidden"   name="next" value="{{ next }}" />
-  </form>
-
-  
-  {% if form.errors %}
-    <p class="text-danger">Your username and password didn't match. Please try again.</p>
-  {% endif %}
-
-{% endblock %}
+<div class="limiter">
+  <div class="container-login100">
+    <div class="wrap-login100 p-l-85 p-r-85 p-t-55 p-b-55">
+      
+      <form class="login100-form validate-form flex-sb flex-w" method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <span class="login100-form-title p-b-32">
+          Account Login
+        </span>
+        <span class="txt1 p-b-11">
+          Username
+        </span>
+        <div class="wrap-input100 validate-input m-b-36" data-validate = "Username is required">
+          <input class="input100" type="text" name="username" >
+          <span class="focus-input100"></span>
+        </div>
+        
+        <span class="txt1 p-b-11">
+          Password
+        </span>
+        <div class="wrap-input100 validate-input m-b-12" data-validate = "Password is required">
+          <span class="btn-show-pass">
+            <i class="fa fa-eye"></i>
+          </span>
+          <input class="input100" type="password" name="pass" >
+          <span class="focus-input100"></span>
+        </div>
+        <div class="flex-sb-m w-full p-b-48">
+          <div>
+            <a href="#" class="txt3">
+              Forgot Password?
+            </a>
+          </div>
+        </div>
+        <div class="container-login100-form-btn">
+          <button class="btn btn-success my-3" position="relative" type="submit" value="login"></button>
+          <button class="login100-form-btn"> Login </button> 
+          <input type="hidden"   name="next" value="{{ next }}" />
+          
+          
+          <!-- <input type="submit" value="login" />
+        <input type="hidden" name="next" value="{{ next }}" />zx -->
+        </div>
+        
+        {% if form.errors %}
+          <p class="text-danger">Your username and password didn't match. Please try again.</p>
+        {% endif %}
+        </form>
+    </div>
+  </div>
+</div>

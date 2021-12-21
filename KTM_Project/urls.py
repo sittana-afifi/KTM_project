@@ -35,6 +35,7 @@ from MeetingRoom import views
 from django.contrib import admin
 from django.urls import path
 from django.views.generic import RedirectView
+from django.views.generic import TemplateView
 
 
 
@@ -47,5 +48,6 @@ urlpatterns = i18n_patterns(
     path('MeetingRoom/', include('MeetingRoom.urls')),
     path('', RedirectView.as_view(url='accounts/', permanent=True)), 
    #path('rosetta/', include('rosetta.urls')),  # add Rosetta's URL to main URL configuration
+    path('bootstrap/',TemplateView.as_view(template_name='bootstrap/')),
 
  ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
