@@ -263,6 +263,7 @@ EMAIL_HOST_PASSWORD =env('EMAIL_HOST_PASSWORD')
 # Configuring logging settings for StreamHandeler (Console):
 # Disabling logging configuration below settings only when need to disable default django logging :
 # LOGGING_CONFIG = None
+'''
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -292,3 +293,4 @@ LOGGING = {
     }, 
 }
 
+'''
