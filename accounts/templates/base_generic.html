@@ -108,15 +108,15 @@
                                     <img src=" {% static 'css/assets/images/avatar/KSH Good logo.jpg' %}" alt="" srcset="">
                                 </div>
                                 
-                                <div class="d-none d-md-block d-lg-inline-block"> Hi</div>
+                                <div class="d-none d-md-block d-lg-inline-block"> Hi </div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a class="dropdown-item" href="#"><i data-feather="user"></i>Profile</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{% url 'logout'%}?next={{request.path}}"><i data-feather="log-out"></i> Logout</a>
-                                {% else %}
-                                <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
-                                {% endif %}
+                              
+                                <!-- <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li> -->
+                                
                                 
                             </div>
                             
