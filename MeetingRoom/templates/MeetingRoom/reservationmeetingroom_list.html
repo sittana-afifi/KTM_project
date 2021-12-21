@@ -1,0 +1,29 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>reservationmeetingroom
+    <a href="{% url 'reserve' %}"> 
+      <img alt="Add reservationmeetingroom" src="https://www.iconsdb.com/icons/download/color/096647/add-file-16.png">
+    </a>
+  </h1>
+  
+  {% if reservationmeetingroom_list %}
+  <ul>
+    {% for reservationmeetingroom in reservationmeetingroom_list %}
+      <li>
+        <a href="{{ reservationmeetingroom.get_absolute_url }}">{{ reservationmeetingroom.meeting_room}}</a> 
+        
+        <a href="{% url 'reserve-update' reservationmeetingroom.id %}">
+          <img alt="Update" src="https://www.iconsdb.com/icons/download/orange/edit-2-16.png">
+        </a>
+
+        <a href="{% url 'reservationmeetingroom-delete' reservationmeetingroom.id %}">
+          <img alt="Delete" src="https://www.iconsdb.com/icons/download/red/delete-16.png">
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no tasks in the library.</p>
+  {% endif %}
+{% endblock %}

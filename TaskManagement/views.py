@@ -5,8 +5,14 @@ from django.views import generic
 from .models import Employee , Taskmanagment
 from django.views.generic.edit import UpdateView , DeleteView , CreateView 
 from .models import Project, Task, Taskmanagment
-
-
+from django.contrib.auth.decorators import login_required, permission_required
+from django import forms
+from .forms import AssignTaskForm
+import datetime
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 
 # view a list of all employees.
 class EmployeesListView(LoginRequiredMixin,generic.ListView):
@@ -117,3 +123,18 @@ class TaskmanagmentDelete(LoginRequiredMixin,DeleteView):
     success_url = reverse_lazy('taskmanagments')
 
 #######################################################
+
+# Define Assign Task Form View : 
+@login_required
+def assign_task_view(request):
+    form = AssignTaskForm(request.POST)
+    if request.method == "POST":
+        form = AssignTaskForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('taskmanagments') )
+    context = {
+        'form' : form ,
+        }
+    return render(request, "TaskManagement/assign_task.html", context)
+

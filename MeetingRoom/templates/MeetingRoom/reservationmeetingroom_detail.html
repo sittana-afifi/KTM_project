@@ -1,0 +1,13 @@
+{% extends "base_generic.html" %}
+{% block content %}
+
+<h1> Reservation Meeting Room Request Details:</h1>
+
+<h2>Request ID :{{ reservationmeetingroom.id}},{{ reservationmeetingroom.meeting_room}}</h2>
+<p style="margin-left:2.5em">Meeting Room Name:{{ reservationmeetingroom.meeting_room}}</p>
+{# <p style="margin-left:2.5em"><strong>Team Members</strong> {{ reservationmeetingroom.team }}</p>#}
+<p style="margin-left:2.5em"><strong>Reservation Date</strong> {{ reservationmeetingroom.reservation_date }}</p>
+<p style="margin-left:2.5em"><strong> Reservation Start time:</strong> {{ reservationmeetingroom.reservation_from_time }}</p>
+<p style="margin-left:2.5em"><strong>Reservation End Date:</strong> {{ reservationmeetingroom.reservation_to_time }}</p>
+
+{% endblock %}

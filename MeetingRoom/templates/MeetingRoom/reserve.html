@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+  <form action="" method="post">
+    {% csrf_token %}
+    {% if form.errors %}
+    {% endif %}
+    {{ form |crispy }}
+    {{ form.media }}  {# Adds all flatpickr JS/CSS files from CDN #}
+
+    <input class="btn btn-success my-3" type="submit" value="Submit">
+  </form>
+{% endblock %}

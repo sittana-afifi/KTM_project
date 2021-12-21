@@ -1,0 +1,9 @@
+{% load crispy_forms_tags %}
+<h3>Selected Meeting room already reserved at this date and time</h3>
+
+{{ form | crispy }}
+{# <a href="{% url 'reserve' %}"><button class="btn btn-success my-3">ok</button></a> #}
+<input type = button value=" Back to previous page to edit data" onclick="javascript:history.go(-1)"> 
+
+</form>
+

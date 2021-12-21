@@ -60,7 +60,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # configure the accounts app 
     'accounts.apps.AccountsConfig',
-    #'rosetta',  # Rosetta Translation Interface
+    'rosetta',  # Rosetta Translation Interface
+    'parler', #Translating Models with django-parler
     # Custom for contact application
     #'contact',
     # 3rd party apps
@@ -69,6 +70,9 @@ INSTALLED_APPS = [
      # configure the MeetingRoom app 
     'MeetingRoom.apps.MeetingRoomConfig',
     'bootstrap4',
+    'bootstrap_datepicker_plus',
+    'flatpickr',
+    
 ]
 
 # Indicates the frontend framework django crispy forms use
@@ -164,6 +168,19 @@ LANGUAGES = (
     ('ar', _('Arabic')),
 )
 
+
+PARLER_LANGUAGES = {
+    None: (
+        {'code': 'en',}, # English
+        {'code': 'fr',}, # French
+        {'code': 'ar',}, # Arabic
+    ),
+    'default': {
+        'fallbacks': ['en'],
+        'hide_untranslated': False,
+    }
+}
+
 # locale path directory for your application where message files will reside
 
 LOCALE_PATHS = [
@@ -181,51 +198,6 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-'''
-# Configuring logging settings:
-# Disabling logging configuration below settings only when need to disable default django logging :
-# LOGGING_CONFIG = None
-# logging.config.dictConfig(...)
-# below are configuration logging settings:
-LOGGING = {
-    'version': 1, # version of logging
-    'disable_existing_loggers': False, 
-    # If the disable_existing_loggers key in the LOGGING dictConfig is set to True 
-    # (which is the dictConfig default if the key is missing) then all loggers from the default 
-    # configuration will be disabled. Disabled loggers are not the same as removed;
-    # the logger will still exist, but will silently discard anything logged to it,
-    # not even propagating entries to a parent logger.
-    "handlers" : { 
-        "file": {
-            "level": "DEBUG", #This log level describes the severity of the messages that the logger will handle
-            "class": "logging.FileHandler",#writes all logging from the django named logger to a local file.
-            #"class":"logging.handlers.TimedRotatingFileHandler",# when need to create file every specific period
-            #"when": "m", # this specifies the interval hour "h" day "d" , minuites "m" ,seconds "s".
-            #'interval': 1, # defaults to 1, only necessary for other values 
-            #'backupCount': 1, # how many backup file to keep, 1 per day
-            "filename": BASE_DIR / 'django.log', #local logging file name. and path.
-            "formatter": "test_format", 
-        },
-    },
-    "loggers": {
-        "django": {
-            "handlers": ["file"],
-            "level": "DEBUG",
-            "propagate": True
-        },
-    },
-    "formatters": {
-        # log record needs to be rendered as text. Formatters describe the exact format of that text
-        "test_format": {
-            "format": (
-                u"[%(asctime)s] [%(levelname)-4s] "
-                "(%(module)s.%(funcName)s) %(message)s"
-            ),
-            "datefmt": "%Y-%m-%d %H:%M:%S %p %Z %z",
-        },
-    },  
-}
-'''
 
 
 
@@ -285,3 +257,38 @@ EMAIL_PORT = env('EMAIL_PORT')
 EMAIL_USE_TLS = env('EMAIL_USE_TLS')
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD =env('EMAIL_HOST_PASSWORD')
+
+
+#####################################################
+# Configuring logging settings for StreamHandeler (Console):
+# Disabling logging configuration below settings only when need to disable default django logging :
+# LOGGING_CONFIG = None
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+   #"root": {"level": "DEBUG", "handlers": ["console"]},
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "test_format",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": True
+        },
+    },
+    "formatters": {
+        "test_format": {
+            "format": (
+                u"[%(asctime)s] [%(levelname)-4s]  [%(name)-12s] "
+                "(%(module)s.%(funcName)s) %(message)s"
+            ),
+            "datefmt": "%Y-%m-%d %H:%M:%S %p %Z %z",
+        },
+    }, 
+}
+
