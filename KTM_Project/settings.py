@@ -60,19 +60,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # configure the accounts app 
     'accounts.apps.AccountsConfig',
-    'rosetta',  # Rosetta Translation Interface
+    #'rosetta',  # Rosetta Translation Interface
     'parler', #Translating Models with django-parler
     # Custom for contact application
     #'contact',
     # 3rd party apps
     'crispy_forms',
-    'flatpickr',
     'TaskManagement.apps.TaskManagementConfig',
      # configure the MeetingRoom app 
     'MeetingRoom.apps.MeetingRoomConfig',
-    'bootstrap4',
     'bootstrap_datepicker_plus',
-    'flatpickr',
+    #'flatpickr',
+    'bootstrap4',
     
 ]
 
@@ -267,7 +266,7 @@ LOGGING = {
    #"root": {"level": "DEBUG", "handlers": ["console"]},
     "handlers": {
         "console": {
-            "level": "DEBUG",
+            "level": "INFO",
             "class": "logging.StreamHandler",
             "formatter": "test_format",
         },
@@ -275,7 +274,7 @@ LOGGING = {
     "loggers": {
         "django": {
             "handlers": ["console"],
-            "level": "DEBUG",
+            "level": "INFO",
             "propagate": True
         },
     },
