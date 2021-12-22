@@ -92,3 +92,6 @@ pip3 install    django-crispy-forms
 pip3 install    django-parler
 pip3 install    django-flatpickr
 pip3 install    django-bootstrap-datepicker-plus
+pip3 install    django-bootstrap4
+pip3 install    django-rosetta
+

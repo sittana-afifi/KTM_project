@@ -13,7 +13,7 @@
 
     <link rel="stylesheet" href="{% static 'css/assets/vendors/perfect-scrollbar/perfect-scrollbar.css' %}">
     <link rel="stylesheet" href="{% static 'css/assets/css/app.css' %}">
-    <link rel="shortcut icon" href="{% static 'css/assets/images/favicon.svg'%}" type= "image/x-icon">
+    <link rel="shortcut icon" href="{% static 'css/assets/images/KSH Good logo.jpg'%}" type= "image/x-icon">
 </head>
 
 <body>
@@ -48,28 +48,28 @@
 
                         <li class="sidebar-item  active">
                             <a href="{% url 'projects' %}" class='sidebar-link'>
-                                <i data-feather="briefcase" width="20"></i>
+                                <i data-feather="layout" width="20"></i>
                                 <span>Projects</span>
                             </a>
 
                         </li>
                         <li class="sidebar-item  active">
                             <a href="{% url 'tasks' %}" class='sidebar-link'>
-                                <i data-feather="briefcase" width="20"></i>
+                                <i data-feather="book" width="20"></i>
                                 <span>Tasks</span>
                             </a>
 
                         </li>
                         <li class="sidebar-item  active">
                             <a href="{% url 'taskmanagments' %}" class='sidebar-link'>
-                                <i data-feather="briefcase" width="20"></i>
+                                <i data-feather="airplay" width="20"></i>
                                 <span>Assign Task</span>
                             </a>
 
                         </li>
                         <li class="sidebar-item active">
                             <a href="{% url 'meetings' %}" class='sidebar-link'>
-                                <i data-feather="briefcase" width="20"></i>
+                                <i data-feather="trello" width="20"></i>
                                 <span>Meetings</span>
                             </a>
 
@@ -108,10 +108,10 @@
                                     <img src=" {% static 'css/assets/images/avatar/KSH Good logo.jpg' %}" alt="" srcset="">
                                 </div>
                                 
-                                <div class="d-none d-md-block d-lg-inline-block"> Hi </div>
+                                <div class="d-none d-md-block d-lg-inline-block"> Hello </div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="#"><i data-feather="user"></i>Profile</a>
+                                <a class="dropdown-item" href=""><i data-feather="user"></i>Profile</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{% url 'logout'%}?next={{request.path}}"><i data-feather="log-out"></i> Logout</a>
                               
@@ -139,14 +139,27 @@
         <footer>
             <div class="footer clearfix mb-0 text-muted">
                 <div class="float-start">
+                    <p>2020 &copy; KSHC</p>
+                </div>
+                <div class="float-end">
+                    <p>Crafted with <span class='text-danger'><i data-feather="heart"></i></span> by <a
+                            href="http://ahmadsaugi.com">BD Team</a></p>
+                </div>
+            </div>
+        </footer>
+        <!--
+        <footer>
+            <div class="footer clearfix mb-0 text-muted">
+                <div class="float-start">
                 </div>
                 <div class="float-end">
                    
-                   <pre> <p>2020 &copy; KSHC</p><p>Crafted with <span class='text-danger'><i data-feather="heart"></i></span> by <a
-                            href="http://ahmadsaugi.com">BD Team</a></p></pre>
+                    <p>2020 &copy; KSHC</p><p>Crafted with <span class='text-danger'><i data-feather="circle"></i></span> by <a
+                            href="http://KuwaiteSudaneseHoldingCompany.com">BD Team</a></p>
                 </div>
             </div>
             </footer>
+            -->
     </div>
     <script src="{% static 'css/assets/js/feather-icons/feather.min.js' %}"></script>
     <script src="{% static 'css/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
