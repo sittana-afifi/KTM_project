@@ -3,11 +3,11 @@ from TaskManagement import views
 
 
 urlpatterns = [
-    path('', views.EmployeesListView.as_view(), name='employee_list'),
-    path('detail/<int:pk>/', views.EmployeeDetailView.as_view(), name='employee-detail'),
-    path('<int:pk>/update/', views.EmployeeUpdateView.as_view(), name='employee-update'),
-    path('<int:pk>/delete/', views.EmployeeDelete.as_view(), name='employee-delete'),
-    path('create/', views.EmployeeCreateView.as_view(), name='employee-create'),
+    path('employee', views.EmployeesListView.as_view(), name='employee_list'),
+    path('employee/detail/<int:pk>/', views.EmployeeDetailView.as_view(), name='employee-detail'),
+    path('employee/<int:pk>/update/', views.EmployeeUpdateView.as_view(), name='employee-update'),
+    path('employee/<int:pk>/delete/', views.EmployeeDelete.as_view(), name='employee-delete'),
+    path('employee/create/', views.EmployeeCreateView.as_view(), name='employee-create'),
     path('projects/', views.ProjectListView.as_view(), name='projects'),
     path('project/<int:pk>/', views.ProjectDetailView.as_view(), name='project-detail'),
     path('project/create/', views.ProjectCreate.as_view(), name='project-create'),
