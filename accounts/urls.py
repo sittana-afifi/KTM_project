@@ -6,7 +6,7 @@ from TaskManagement import forms
 from accounts import views , forms
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    
     path('users', views.usersListView.as_view(), name='user_list'),
     path('detail/<int:pk>/', views.UserDetailView.as_view(), name='user-detail'),
     path('<int:pk>/update/', views.UserUpdate.as_view(), name='user-update'),

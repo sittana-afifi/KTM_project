@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KSHC Team Management</title>
+    {% block title %}<title>KSHC Team Management</title>{% endblock %}
     {% load bootstrap4 %}
     {% load static %}
     <link rel="stylesheet" href= "{% static 'css/assets/css/bootstrap.css' %}">
@@ -17,7 +17,7 @@
 </head>
 
 <body>
-   
+    {% block sidebar %}
     <div id="app">
         
         <div id="sidebar" class='active'>
@@ -80,9 +80,10 @@
                 <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
             </div>
         </div>
+        {% endblock %}
         <div id="main">
             <nav class="navbar navbar-header navbar-expand navbar-light">
-                <a class="sidebar-toggler" href="#"><span class="navbar-toggler-icon"></span></a>
+                <a class="sidebar-toggler" href=""><span class="navbar-toggler-icon"></span></a>
                 <button class="btn navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -125,41 +126,30 @@
                 </div>
             </nav>
 
-            <div class="main-content container-fluid">
-                <div class="page-title">
-                    <h3>Dashboard</h3>
-                    <p class="text-subtitle text-muted">Welcom to KSHC </p>
-                </div>
-                <section class="section">
-                    
-                </section>
-            </div>
+ 
+            <script src="{% static 'css/assets/js/feather-icons/feather.min.js' %}"></script>
+            <script src="{% static 'css/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+            <script src="{% static 'css/assets/js/app.js' %} "></script>
+        
+            <script src="{% static 'css/assets/vendors/chartjs/Chart.min.js' %}"></script>
+            <script src="{% static 'css/assets/vendors/apexcharts/apexcharts.min.js' %}"></script>
+            <script src="{% static 'css/assets/js/pages/dashboard.js' %}"></script>
+        
+            <script src="{% static 'css/assets/js/main.js' %}"></script>
 
-        </div>
-        <footer>
-            <div class="footer clearfix mb-0 text-muted">
-                <div class="float-start">
-                </div>
-                <div class="float-end">
-                   
-                   <pre> <p>2020 &copy; KSHC</p><p>Crafted with <span class='text-danger'><i data-feather="heart"></i></span> by <a
-                            href="http://ahmadsaugi.com">BD Team</a></p></pre>
-                </div>
-            </div>
-            </footer>
-    </div>
-    <script src="{% static 'css/assets/js/feather-icons/feather.min.js' %}"></script>
-    <script src="{% static 'css/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
-    <script src="{% static 'css/assets/js/app.js' %} "></script>
 
-    <script src="{% static 'css/assets/vendors/chartjs/Chart.min.js' %}"></script>
-    <script src="{% static 'css/assets/vendors/apexcharts/apexcharts.min.js' %}"></script>
-    <script src="{% static 'css/assets/js/pages/dashboard.js' %}"></script>
-
-    <script src="{% static 'css/assets/js/main.js' %}"></script>
-   
+            
+    <div class="col-sm-10 ">{% block content %}  {% endblock content%}</div>
 </body>
-
+<footer>
+    <div class="footer clearfix  mb-0 text-muted">
+        <div class="float-start">
+        </div>
+        <div class="float-end">
+           
+           <pre> <p>2021 &copy; KSHC</p><p>Crafted with <span class='text-danger'><i data-feather="heart"></i></span> by <a
+                    href="">BD Team</a></p></pre>
+        </div>
+    </div>
+    </footer>
 </html>
-
-

@@ -36,17 +36,18 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic import RedirectView
 from django.views.generic import TemplateView
-
+from accounts import views
 
 
 urlpatterns = i18n_patterns(
     #path('', views.my_view, name='home'),
+    path('', views.index, name='index'),
     path('admin/', admin.site.urls),    
     path('accounts/', include('accounts.urls' )),
     path('accounts/', include('django.contrib.auth.urls')),
     path('TaskManagement/', include('TaskManagement.urls')),
     path('MeetingRoom/', include('MeetingRoom.urls')),
-    path('', RedirectView.as_view(url='accounts/', permanent=True)), 
+    #path('', RedirectView.as_view(url='accounts/', permanent=True)), 
    #path('rosetta/', include('rosetta.urls')),  # add Rosetta's URL to main URL configuration
     path('bootstrap/',TemplateView.as_view(template_name='bootstrap/')),
 
