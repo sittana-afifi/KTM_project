@@ -40,15 +40,13 @@ from accounts import views
 
 
 urlpatterns = i18n_patterns(
-    #path('', views.my_view, name='home'),
     path('', views.index, name='index'),
     path('admin/', admin.site.urls),    
     path('accounts/', include('accounts.urls' )),
     path('accounts/', include('django.contrib.auth.urls')),
     path('TaskManagement/', include('TaskManagement.urls')),
     path('MeetingRoom/', include('MeetingRoom.urls')),
-    #path('', RedirectView.as_view(url='accounts/', permanent=True)), 
-   #path('rosetta/', include('rosetta.urls')),  # add Rosetta's URL to main URL configuration
+    path('rosetta/', include('rosetta.urls')),  # add Rosetta's URL to main URL configuration
     path('bootstrap/',TemplateView.as_view(template_name='bootstrap/')),
 
  ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

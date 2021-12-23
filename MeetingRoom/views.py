@@ -110,13 +110,13 @@ def update_reserve_view(request, pk):
     form = ReservationForm(request.POST or None,instance=reservation)
     if request.method == "POST":
         if form.is_valid(): 
-            '''
+            
             form.meeting_room = form.cleaned_data['meeting_room']
             form.reservation_date = form.cleaned_data['reservation_date']
             form.reservation_from_time = form.cleaned_data['reservation_from_time']
             form.reservation_to_time = form.cleaned_data['reservation_to_time']
             form.team = form.cleaned_data['team']
-            '''
+            
             form= form.save(commit= False)
             case_1 = ReservationMeetingRoom.objects.filter(meeting_room=form.meeting_room,reservation_date=form.reservation_date, reservation_from_time__lte=form.reservation_from_time, reservation_to_time__gte=form.reservation_to_time).exists()
             # case 2: a room is booked before the requested check_out date and check_out date is after requested check_out date
