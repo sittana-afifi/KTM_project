@@ -20,7 +20,7 @@ class Meeting(models.Model):
 
 
 
-# Ceate Reservation Meeting Room Model:
+# ReservationMeetingRoom Model:
 class ReservationMeetingRoom(models.Model):
     """Model representing a project."""
     meeting_room = models.ForeignKey(Meeting, on_delete=models.SET_NULL, null=True, blank=False)
@@ -28,7 +28,6 @@ class ReservationMeetingRoom(models.Model):
     reservation_from_time = models.TimeField(auto_now=False, auto_now_add=False)
     reservation_to_time = models.TimeField(auto_now=False, auto_now_add=False)
     team = models.ManyToManyField(Employee,blank=True,related_name='+') 
-    #models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=False)
     def clean_reservation_date(self):
         date = self.cleaned_date['reservation_date']
         # Check if a date is not in the past.
@@ -39,6 +38,8 @@ class ReservationMeetingRoom(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.meeting_room}'
+        return f'{self.team.first_name}'
     def get_absolute_url(self):
         """Returns the url to access a detail record for this project."""
         return reverse('reservationmeetingroom-detail', args=[str(self.id)])
+

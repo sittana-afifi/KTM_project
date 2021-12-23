@@ -66,7 +66,7 @@ class ReservationMeetingRoomDelete(LoginRequiredMixin,DeleteView):
 
 ###############################################
 
-# Reservation Form View:
+# Reservation Form Create View:
 @login_required
 def reserve_view(request):
     form = ReservationForm(request.POST)
@@ -103,37 +103,30 @@ def reserve_view(request):
 
 
 ###########################################
-# Reservation Update View :
+# Reservation Form Update View :
 @login_required
 def update_reserve_view(request, pk):
-        form = ReservationForm(request.POST)
-        form= get_object_or_404(ReservationMeetingRoom, pk=pk)
-        form = ReservationForm(request.POST or None, instance= form)
-        context= {'form': form}
-        if request.method == "POST":
-            form = ReservationForm(request.POST)
-            if form.is_valid():
-                meeting_room = form.cleaned_data['meeting_room']
-                reservation_date = form.cleaned_data['reservation_date']
-                reservation_from_time = form.cleaned_data['reservation_from_time']
-                reservation_to_time = form.cleaned_data['reservation_to_time']
-                team = form.cleaned_data['team']
-                form= form.save(commit= False)
-                case_1 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room,reservation_date=reservation_date, reservation_from_time__lte=reservation_from_time, reservation_to_time__gte=reservation_to_time).exists()
+    reservation = ReservationMeetingRoom.objects.get(pk=pk)
+    form = ReservationForm(request.POST or None,instance=reservation)
+    if request.method == "POST":
+        if form.is_valid(): 
+            '''
+            form.meeting_room = form.cleaned_data['meeting_room']
+            form.reservation_date = form.cleaned_data['reservation_date']
+            form.reservation_from_time = form.cleaned_data['reservation_from_time']
+            form.reservation_to_time = form.cleaned_data['reservation_to_time']
+            '''
+            form.team = form.cleaned_data['team']
+            form= form.save(commit= False)
+            case_1 = ReservationMeetingRoom.objects.filter(meeting_room=form.meeting_room,reservation_date=form.reservation_date, reservation_from_time__lte=form.reservation_from_time, reservation_to_time__gte=form.reservation_to_time).exists()
             # case 2: a room is booked before the requested check_out date and check_out date is after requested check_out date
-                case_2 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room,reservation_date=reservation_date, reservation_from_time__lte=reservation_to_time, reservation_to_time__gte=reservation_to_time).exists()
-                case_3 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room,reservation_date=reservation_date, reservation_from_time__gte=reservation_from_time, reservation_to_time__lte=reservation_to_time).exists()
-            # if either of these is true, abort and render the error
-                if case_1 or case_2 or case_3:
-                    return render (request, "MeetingRoom/reserveerrorl.html")
-                    raise ValidationError(('Selected Meeting room already reserved at this date and time'))
-                form.save()
-                messages.success(request, "You successfully updated the post")
-                context= {'form': form}
-                return HttpResponseRedirect(reverse('reservationmeetingrooms') )
-        else:
-            context= {'form': form,}
-                  #'error': 'The form was not updated successfully. Please enter in a title and content'}
-            return render(request,'MeetingRoom/update_reserve_view.html' , context)
-
+            case_2 = ReservationMeetingRoom.objects.filter(meeting_room=form.meeting_room,reservation_date=form.reservation_date, reservation_from_time__lte=form.reservation_to_time, reservation_to_time__gte=form.reservation_to_time).exists()
+            case_3 = ReservationMeetingRoom.objects.filter(meeting_room=form.meeting_room,reservation_date=form.reservation_date, reservation_from_time__gte=form.reservation_from_time, reservation_to_time__lte=form.reservation_to_time).exists()                # if either of these is true, abort and render the error
+            if case_1 or case_2 or case_3:
+                #raise ValidationError(_('Selected Meeting room already reserved at this date and time'))
+                return render (request, "MeetingRoom/reserveerrorl.html")
+            form.save()
+            messages.success(request, "You successfully updated the post")
+            return HttpResponseRedirect(reverse('reservationmeetingrooms'))
+    return render(request, 'MeetingRoom/update_reserve_view.html', {'form':form})
 
