@@ -1,21 +1,22 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Task List
+  <h2>Tasks List
       <a href="{% url 'task-create' %}"> 
-        <img alt="Add task" src="https://www.iconsdb.com/icons/download/color/096647/add-file-16.png">
+        <i data-feather="plus-circle" style="width:25px;height:25px;" ></i><!--<img alt="Add task" src="https://www.iconsdb.com/icons/download/color/096647/add-file-16.png">-->
       </a>
-  </h1>
+  </h2>
   {% if task_list %}
   <ul>
     {% for task in task_list %}
       <li  display:inline;>
         <a href="{{ task.get_absolute_url }}"> {{ task.task_name }}</a>
-        <a href="{% url 'task-delete' task.id %}">
-            <img alt="Delete" src="https://www.iconsdb.com/icons/download/red/delete-16.png">
-        </a>
+        
         <a href="{% url 'task-update' task.id %}">
-            <img alt="Update" src="https://www.iconsdb.com/icons/download/orange/edit-2-16.png">
+          <i data-feather="edit-3" style="width:20px" > </i> <!--<img alt="Update" src="https://www.iconsdb.com/icons/download/orange/edit-2-16.png">-->
+        </a>
+        <a href="{% url 'task-delete' task.id %}">
+          <i data-feather="trash-2" style="width:20px" ></i> <!-- <img alt="Delete" src="https://www.iconsdb.com/icons/download/red/delete-16.png">-->
         </a>
       </li>
     {% endfor %}

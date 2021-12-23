@@ -1,22 +1,23 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Meetings List
+  <h2>Meetings List
       <a href="{% url 'meeting-create' %}"> 
-        <img alt="Add meeting" src="https://www.iconsdb.com/icons/download/color/096647/add-file-16.png">
+        <i data-feather="plus-circle" style="width:25px;height:25px;" ></i>  <!-- <img alt="Add meeting" src="https://www.iconsdb.com/icons/download/color/096647/add-file-16.png">-->
       </a>
-  </h1>
+  </h2>
   {% if meeting_list %}
   <ul>
     {% for meeting in meeting_list %}
       <li  display:inline;>
         <a href="{{ meeting.get_absolute_url }}">{{ meeting.name }}</a>
-        <a href="{% url 'meeting-delete' meeting.id %}">
-            <img alt="Delete" src="https://www.iconsdb.com/icons/download/red/delete-16.png">
-        </a>
         <a href="{% url 'meeting-update' meeting.id %}">
-            <img alt="Update" src="https://www.iconsdb.com/icons/download/orange/edit-2-16.png">
+          <i data-feather="edit-3" style="width:20px" ></i>  <!-- <img alt="Update" src="https://www.iconsdb.com/icons/download/orange/edit-2-16.png">-->
         </a>
+        <a href="{% url 'meeting-delete' meeting.id %}">
+          <i data-feather="trash-2" style="width:20px" ></i> <!--  <img alt="Delete" src="https://www.iconsdb.com/icons/download/red/delete-16.png">-->
+        </a>
+        
       </li>
     {% endfor %}
   </ul>

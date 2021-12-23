@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h1>Employees: <a href="{% url 'employee-create' %}"> <img src="https://www.iconsdb.com/icons/download/color/87BBFF/add-16.ico" alt="add new employeer" style="width:25px;height:25px;"></a></h1>
+<h2>Employees<a href="{% url 'employee-create' %}"> <i data-feather="plus-circle" style="width:25px;height:25px;" ></i><!--<img src="https://www.iconsdb.com/icons/download/color/87BBFF/add-16.ico" alt="add new employeer" style="width:25px;height:25px;"> --></a></h2>
  
  
   {% if employee_list %}
@@ -11,11 +11,10 @@
     {% for employee in employee_list %}
       <li>
         <a href="{% url 'employee-detail' employee.id%}">{{ employee.user }} </a>
-
-          <a href=" {% url 'employee-update' employee.id%} ">  <img src="https://www.iconsdb.com/icons/download/color/8ABDFF/edit-9-16.ico" 
-            alt="update employee" style="width:30px;height:20px;">
-            <a href=" {% url 'employee-delete' employee.id%}  ">  <img src="https://www.iconsdb.com/icons/download/color/87BBFF/delete-16.ico" 
-              alt="delete employee" style="width:20px;height:22px;">
+            <a href=" {% url 'employee-delete' employee.id%}  "><i data-feather="edit-3" style="width:20px" ></i> <!-- <img src="https://www.iconsdb.com/icons/download/color/87BBFF/delete-16.ico" 
+              alt="delete employee" style="width:20px;height:22px;"> -->
+              <a href=" {% url 'employee-update' employee.id%} "><i data-feather="trash-2" style="width:20px" ></i> <!-- <img src="https://www.iconsdb.com/icons/download/color/8ABDFF/edit-9-16.ico"  
+                alt="update employee" style="width:30px;height:20px;"> -->
       </li>
     {% endfor %}
   </ul>

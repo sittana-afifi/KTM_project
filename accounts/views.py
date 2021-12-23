@@ -1,4 +1,4 @@
-from typing_extensions import Self
+#from typing_extensions import Self
 from urllib import request
 from django.db import connection
 from django.forms import formsets
