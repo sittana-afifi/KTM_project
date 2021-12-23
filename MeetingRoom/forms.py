@@ -13,7 +13,7 @@ from .models import ReservationMeetingRoom, Meeting
 from django.utils import timezone
 from django.forms.utils import ErrorList
 
-
+# Reservation Meeting room form:
 class ReservationForm(forms.ModelForm):
     class Meta:
         model = ReservationMeetingRoom
@@ -21,7 +21,7 @@ class ReservationForm(forms.ModelForm):
         fields = ['meeting_room', 'id', 'reservation_date', 'reservation_from_time', 'reservation_to_time', 'team']
     meeting_room = forms.ModelChoiceField(queryset = Meeting.objects.all())
     reservation_date = forms.DateField(widget=DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}))
-    team = forms.ModelMultipleChoiceField(queryset =Employee.objects.all(),widget=forms.CheckboxSelectMultiple,blank=True,required=False) 
+    team = forms.ModelMultipleChoiceField(queryset =Employee.objects.all(),blank=True,required=False) 
     reservation_from_time = forms.TimeField()
     reservation_to_time = forms.TimeField()
 
