@@ -11,10 +11,8 @@
     {% for user in user_list %}
       <li>
         <a href="{% url 'user-detail' user.id%}">{{ user.username }} </a>
-        <a href=" {% url 'user-update' user.id%} "> <i data-feather="edit-3" style="width:20px" ></i><!-- <img src="https://www.iconsdb.com/icons/download/color/8ABDFF/edit-9-16.ico" 
-          alt="update user" style="width:30px;height:20px;"> -->
-            <a href=" {% url 'user-delete' user.id%}  "> <i data-feather="trash-2" style="width:20px" ></i>  <!--<img src="https://www.iconsdb.com/icons/download/color/87BBFF/delete-16.ico" 
-              alt="delete user" style="width:20px;height:22px;"> -->
+        <a href=" {% url 'user-update' user.id%} "> <i data-feather="edit-3" style="width:20px" ></i>
+            <a href=" {% url 'user-delete' user.id%}  "> <i data-feather="trash-2" style="width:20px" ></i>  
               
       </li>
     {% endfor %}

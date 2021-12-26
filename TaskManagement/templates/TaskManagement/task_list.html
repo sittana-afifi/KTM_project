@@ -3,7 +3,7 @@
 {% block content %}
   <h2>Tasks List
       <a href="{% url 'task-create' %}"> 
-        <i data-feather="plus-circle" style="width:25px;height:25px;" ></i><!--<img alt="Add task" src="https://www.iconsdb.com/icons/download/color/096647/add-file-16.png">-->
+        <i data-feather="plus-circle" style="width:25px;height:25px;" ></i>
       </a>
   </h2>
   {% if task_list %}
@@ -13,10 +13,10 @@
         <a href="{{ task.get_absolute_url }}"> {{ task.task_name }}</a>
         
         <a href="{% url 'task-update' task.id %}">
-          <i data-feather="edit-3" style="width:20px" > </i> <!--<img alt="Update" src="https://www.iconsdb.com/icons/download/orange/edit-2-16.png">-->
+          <i data-feather="edit-3" style="width:20px" > </i> 
         </a>
         <a href="{% url 'task-delete' task.id %}">
-          <i data-feather="trash-2" style="width:20px" ></i> <!-- <img alt="Delete" src="https://www.iconsdb.com/icons/download/red/delete-16.png">-->
+          <i data-feather="trash-2" style="width:20px" ></i> 
         </a>
       </li>
     {% endfor %}
