@@ -46,13 +46,13 @@ def index(request):
 def getUserInfoFromLDAP(request):
     '''Get User Info from LDAP'''
     username = request.POST.get('username')
-    user = LDAPBackend().populate_user(username)
-    if user is None:
-        raise Exception("No user named ", username)
-        #messages.success(request, 'User Already Exist')
-        #return redirect( 'get_user_info') 
-        
-    user.delete()
+    try:
+        user = LDAPBackend().populate_user(username)
+        if user is None:
+            raise Exception("User Already Exit")
+        user.delete()
+    except AttributeError as e:
+        print("Error")
     # dictionary for initial data with 
     # field names as keys
     init = {
@@ -88,29 +88,15 @@ def createUser(request):
                 messages.error(request, 'User Already Exist')
                 return redirect( 'get_user_info') 
         #else:
-        u_form = getUserInfoFromLDAP(request) 
-        return render(request, 'user_create.html', {'u_form' :u_form}) 
-'''
-def register(request):  
-            print(request.method)
-            if request.method == 'POST':  
-                u_form = UserForm(request.POST)  
-                print(u_form)
-                if u_form.is_valid():  
-                    print('in valiiiiiiiiiiiiiiiiiiiiiiiiid')
-                    u_form.save()
-                    return render(request, 'user_create.html')  
-            else: 
-                print('in invaliiiiiiiiiiiiiiiiiiiiiiiiid') 
-                #u_form = UserForm()
-                u_form = getUserInfoFromLDAP(request)    
-                print(u_form)
-            context = {  
-                'u_form':u_form  
-            }  
-            return render(request, 'user_create.html', context)  
+        try:
+            u_form = getUserInfoFromLDAP(request) 
+            return render(request, 'user_create.html', {'u_form' :u_form}) 
+        except Exception as e:
+            messages.error(request, 'User Doesn\'t exist in Active Directory')
+            #raise Exception("No user named ", username)
+            u_form = UserForm()
+            return render(request, 'get_user_info.html', {'u_form' :u_form}) 
 
-  '''          
 # view the list of the users.
 
 class usersListView(LoginRequiredMixin,generic.ListView):
