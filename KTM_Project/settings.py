@@ -33,6 +33,17 @@ from django.utils.log import DEFAULT_LOGGING
 from django.utils.translation import gettext, ngettext
 from django.utils.translation import gettext_lazy as _
 
+# messages :
+from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+        messages.DEBUG: 'alert-secondary',
+        messages.INFO: 'alert-info',
+        messages.SUCCESS: 'alert-success',
+        messages.WARNING: 'alert-warning',
+        messages.ERROR: 'alert-danger',
+ }
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
