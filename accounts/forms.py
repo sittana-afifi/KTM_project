@@ -20,13 +20,12 @@ class UserForm(forms.ModelForm):
             model = User
             fields = ('username' , )
     def clean_username(self):
-            if self.is_valid():
-                username = self.cleaned_data['username']
-            try:
-                account= User.objects.exclude(pk=self.instance.pk).get(username=username)
-            except User.DoesNotExist:
-                return username
-            raise forms.ValidationError('username "%s%" is already in use.'% username)
+            print ('enter validation username')
+            username = self.cleaned_data['username'].lower()  
+            new = User.objects.filter(username = username)  
+            if new.count():  
+                raise ValidationError("User Already Exist")  
+            return username  
 
 
 
@@ -45,13 +44,17 @@ class AccountCreateForm(forms.ModelForm):
         fields = ('username','first_name','last_name','email')#, 'is_superuser', 'is_active', 'is_staff')
         #'last_login',
     
+
         def clean_username(self):
-            print("entered is valid")
-            username = self.cleaned_data['username'].lower()
-            r = User.objects.filter(username=username)
-            if r.count():
-                raise  ValidationError("Username already exists")
-            return username
+                print("entered is valid")
+
+                if self.is_valid():
+                    username = self.cleaned_data['username']
+                try:
+                    account= User.objects.exclude(pk=self.instance.pk).get(username=username)
+                except User.DoesNotExist:
+                    return username
+                raise forms.ValidationError('username "%s%" is already in use.'% username)
 
         def clean_email(self):
             print("entered is valid")
