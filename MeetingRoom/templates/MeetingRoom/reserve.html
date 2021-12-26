@@ -2,11 +2,13 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-
+{% if messages %}
+{% for message in messages %}
+{{ message }}
+{% endfor %}
+{% endif%}
   <form action="" method="post">
     {% csrf_token %}
-    {% if form.errors %}
-    {% endif %}
     {{ form |crispy }}
     {{ form.media }}  {# Adds all flatpickr JS/CSS files from CDN #}
 

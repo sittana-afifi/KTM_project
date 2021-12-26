@@ -17,7 +17,7 @@ from django.forms import ValidationError
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
-
+from django.shortcuts import redirect
 
 
 
@@ -92,12 +92,16 @@ def reserve_view(request):
     if request.method == "POST":
         form = ReservationForm(request.POST)
         notvalidform =  validateReservationForm(form)
-        if notvalidform:                    
+        if notvalidform:  
+            messages.error(request, "Selected Meeting room already reserved at this date and time ,please correct your information and then submit")
+            return redirect(reverse('reserve'))                  
             #raise ValidationError(('Selected Meeting room already reserved at this date and time'))
-            return render (request, "MeetingRoom/reserveerrorl.html")
+            #return render (request, "MeetingRoom/reserveerrorl.html")
         else:
             form.save()
-            return HttpResponseRedirect(reverse('reservationmeetingrooms') )
+            messages.success(request, "You successfully reserve this meeting room at this time and date")
+            return redirect('reserve')
+            #return HttpResponseRedirect(reverse('reservationmeetingrooms') )
     else:
         print('Error please correct your information and then submit')
     context = {
@@ -115,11 +119,19 @@ def update_reserve_view(request, pk):
     if request.method == "POST":
         notvalidform =  validateReservationForm(form)
         if notvalidform:
-                #raise ValidationError(_('Selected Meeting room already reserved at this date and time'))
-            return render (request, "MeetingRoom/reserveerrorl.html")
+            messages.error(request, "Selected Meeting room already reserved at this date and time ,please correct your information and then submit")
+            #return redirect(reverse('reserve-update', reserve-update.pk))
+            #return redirect(reverse('reserve-update')) 
+            #raise ValidationError(_('Selected Meeting room already reserved at this date and time'))
+            #return render (request, "MeetingRoom/reserveerrorl.html")
         else:
             form.save()
-            messages.success(request, "You successfully updated the post")
-            return HttpResponseRedirect(reverse('reservationmeetingrooms'))
-    return render(request, 'MeetingRoom/update_reserve_view.html', {'form':form})
+            messages.success(request, "You successfully reserve this meeting room at this time and date")
+            #return redirect('reserve-update', reserve-update.pk)
+            #return redirect(('reserve-update.pk')) 
+            #return HttpResponseRedirect(reverse('reservationmeetingrooms'))
+    context = {
+    'form' : form ,
+    }
+    return render(request, 'MeetingRoom/update_reserve_view.html', context)
 
