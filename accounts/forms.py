@@ -40,15 +40,13 @@ class AccountCreateForm(forms.ModelForm):
     #is_staff= forms.BooleanField(label="Staff status" , required= False, initial=False)
     #is_superuser= forms.BooleanField(label="Superuser status" , required= False ,initial=False)
 
-
-
-
     class Meta:
         model = User
         fields = ('username','first_name','last_name','email')#, 'is_superuser', 'is_active', 'is_staff')
         #'last_login',
     
         def clean_username(self):
+            print("entered is valid")
             username = self.cleaned_data['username'].lower()
             r = User.objects.filter(username=username)
             if r.count():
@@ -56,6 +54,7 @@ class AccountCreateForm(forms.ModelForm):
             return username
 
         def clean_email(self):
+            print("entered is valid")
             email = self.cleaned_data['email'].lower()
             r = User.objects.filter(email=email)
             if r.count():
@@ -63,6 +62,7 @@ class AccountCreateForm(forms.ModelForm):
             return email
 
         def clean_first_name(self):
+            print("entered is valid")
             first_name = self.cleaned_data['first_name'].lower()
             r = User.objects.filter(first_name=first_name)
             if r.count():
@@ -70,11 +70,13 @@ class AccountCreateForm(forms.ModelForm):
             return first_name
 
         def clean_last_name(self):
+            print("entered is valid")
             last_name = self.cleaned_data['last_name'].lower()
             r = User.objects.filter(last_name=last_name)
             if r.count():
                 raise  ValidationError("last_name already exists")
             return last_name
+            
 '''
         def clean(self):
                 if self.is_valid():
