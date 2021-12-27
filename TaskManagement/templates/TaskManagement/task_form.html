@@ -8,5 +8,7 @@
     {{ form |crispy }}
     </table>
     <input class="btn btn-success my-3" type="submit" value="Submit">
+    <a href="{% url 'tasks' %}" class="btn btn-danger my-3">Cancel</a>
+
   </form>
 {% endblock %}
