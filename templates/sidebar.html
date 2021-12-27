@@ -1,0 +1,90 @@
+{% load i18n %} 
+{% load bootstrap4 %}
+{% load static %}
+<body>
+    {% block app %}
+    <div id="app">
+        
+        <div id="sidebar" class='active'>
+            <div class="sidebar-wrapper active">
+                <div class="sidebar-header">
+                    <img src="{% static 'css/assets/images/KSH Good logo.jpg' %}" alt="" srcset="">
+                </div>
+                <div class="sidebar-menu">
+                    <ul class="menu">
+
+
+                        <li class='sidebar-title'>Main Menu</li>
+
+                        <li class="sidebar-item active ">
+                            <a href="{% url 'user_list' %}" class='sidebar-link'>
+                                <i data-feather="home" width="20"></i>
+                                <span>Accounts</span>
+                            </a>
+
+                        </li>
+                        <li class="sidebar-item  active ">
+                            <a href="{% url 'employee_list' %}" class='sidebar-link'>
+                                <i data-feather="briefcase" width="20"></i>
+                                <span>Employees</span>
+                            </a>
+
+                        </li>
+
+                        <li class="sidebar-item  active">
+                            <a href="{% url 'projects' %}" class='sidebar-link'>
+                                <i data-feather="layout" width="20"></i>
+                                <span>Projects</span>
+                            </a>
+
+                        </li>
+                        <li class="sidebar-item  active">
+                            <a href="{% url 'tasks' %}" class='sidebar-link'>
+                                <i data-feather="book" width="20"></i>
+                                <span>Tasks</span>
+                            </a>
+
+                        </li>
+                        <li class="sidebar-item  active">
+                            <a href="{% url 'taskmanagments' %}" class='sidebar-link'>
+                                <i data-feather="airplay" width="20"></i>
+                                <span>Assign Task</span>
+                            </a>
+
+                        </li>
+                        <li class="sidebar-item active">
+                            <a href="{% url 'meetings' %}" class='sidebar-link'>
+                                <i data-feather="trello" width="20"></i>
+                                <span>Meetings</span>
+                            </a>
+
+                        </li>
+                        <li class="sidebar-item active">
+                            <a href="{% url 'reservationmeetingrooms' %}" class='sidebar-link'>
+                                <i data-feather="pocket" width="20"></i>
+                                <span>Reservation Meeting Rooms List</span>
+                            </a>
+
+                        </li>
+
+                    </ul>
+                </div>
+                <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+            </div>
+           
+        </div>
+    </div>
+    
+   
+    <script src="{% static 'css/assets/js/feather-icons/feather.min.js' %}"></script>
+    <script src="{% static 'css/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
+    <script src="{% static 'css/assets/js/app.js' %} "></script>
+
+    <script src="{% static 'css/assets/vendors/chartjs/Chart.min.js' %}"></script>
+    <script src="{% static 'css/assets/vendors/apexcharts/apexcharts.min.js' %}"></script>
+    <script src="{% static 'css/assets/js/pages/dashboard.js' %}"></script>
+
+    <script src="{% static 'css/assets/js/main.js' %}"></script>
+   
+</body>
+{% endblock app %}
