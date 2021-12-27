@@ -22,7 +22,7 @@ class ReservationForm(forms.ModelForm):
         #fields = '__all__' 
         fields = ['meeting_room', 'id','meeting_project_name', 'task_name' ,'reservation_date', 'reservation_from_time', 'reservation_to_time', 'team']
     meeting_room = forms.ModelChoiceField(queryset = Meeting.objects.all())
-    reservation_date = forms.DateField(widget=DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}),required=True)
+    reservation_date = forms.DateField(required=True, widget=DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}))
     team = forms.ModelMultipleChoiceField(queryset =Employee.objects.all(),blank=True,required=False) 
     reservation_from_time = forms.TimeField()
     reservation_to_time = forms.TimeField()
@@ -44,13 +44,6 @@ class ReservationForm(forms.ModelForm):
         return data
 
     def clean_reservation_date(self):
-        data = self.cleaned_data['reservation_date']
-        # Check if a date is not in the past.
-        if data is None:
-            raise ValidationError(_('This field is required'))
-        return data
-
-    def clean_validate_reservation_date(self):
         data = self.cleaned_data['reservation_date']
         if data < datetime.date.today():
             raise ValidationError(_('Invalid date - Date cannot be in the past'))

@@ -46,7 +46,9 @@ class EmployeeCreateView(CreateView):
 class EmployeeUpdateView(UpdateView):
     model = Employee
     fields = ['Employee_id', 'Phone_number', 'date_joined']
-    success_url = reverse_lazy('employee_list')
+    def get_success_url(self):
+        return reverse('employee-detail',args= [str(self.object.id)]) 
+
     
 
 #####################################################

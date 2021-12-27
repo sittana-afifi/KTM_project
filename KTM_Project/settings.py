@@ -298,3 +298,8 @@ LOGGING = {
     }, 
 }
 
+
+
+ABSOLUTE_URL_OVERRIDES = {
+    'auth.user': lambda u: "../../detail/%s/" % u.id,
+}
