@@ -1,3 +1,13 @@
+<<<<<<< HEAD
+=======
+from urllib import request
+from django.db import connection
+from django.forms import formsets
+from django.forms.forms import Form
+from django.forms.widgets import FILE_INPUT_CONTRADICTION
+from django.http.response import HttpResponse, HttpResponseRedirect
+from django.urls.base import is_valid_path, reverse
+>>>>>>> 8e409910bfc2efbb5f9e5f3bbb457f389681bab8
 from django.views import generic
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import User
@@ -6,13 +16,14 @@ from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required, permission_required
 from django_auth_ldap.backend import LDAPBackend
 from .forms import UserForm , AccountCreateForm 
 from django.shortcuts import render
 from django.contrib.auth import authenticate as authenticate_django
 from pathlib import Path
+from django.contrib import messages
 
 
 
@@ -38,17 +49,20 @@ def index(request):
 def getUserInfoFromLDAP(request):
     '''Get User Info from LDAP'''
     username = request.POST.get('username')
-    user1 = LDAPBackend().populate_user(username)
-    if user1 is None:
-        raise Exception("No user named ", username)
-    user1.delete()
+    try:
+        user = LDAPBackend().populate_user(username)
+        if user is None:
+            raise Exception("User Already Exit")
+        user.delete()
+    except AttributeError as e:
+        print("Error")
     # dictionary for initial data with 
     # field names as keys
     init = {
-        'username' : user1.username,
-        'first_name' : user1.first_name,
-        'last_name' : user1.last_name,
-        'email' :  user1.email,
+        'username' : user.username,
+        'first_name' : user.first_name,
+        'last_name' : user.last_name,
+        'email' :  user.email,
         #'is_active' : 'True',
         #'is_staff':'True',
         #'is_superuser':'True',
@@ -59,10 +73,11 @@ def getUserInfoFromLDAP(request):
 
 def submitUserForm(request):
     u_form = AccountCreateForm( request.POST)  
-    if(u_form.is_valid()):
+    if u_form.is_valid() :
         u_form.save()
-    return render(request, 'usersubmitform.html')
-    
+        return redirect( 'user_list') 
+    #return render(request, 'usersubmitform.html')
+
 def createUser(request):
     context = {}
     if request.method == 'GET' :
@@ -70,14 +85,21 @@ def createUser(request):
         context ['u_form' ]= u_form
         return render(request, 'get_user_info.html', context) 
     if request.method == 'POST' :
-        u_form = getUserInfoFromLDAP(request)    
-        context ['u_form' ]= u_form
-        return render(request, 'user_create.html', {'u_form' :u_form}) 
+        username = request.POST.get('username')
+        isExist = User.objects.filter(username = username).exists()
+        if isExist:
+                messages.error(request, 'User Already Exist')
+                return redirect( 'get_user_info') 
+        #else:
+        try:
+            u_form = getUserInfoFromLDAP(request) 
+            return render(request, 'user_create.html', {'u_form' :u_form}) 
+        except Exception as e:
+            messages.error(request, 'User Doesn\'t exist in Active Directory')
+            #raise Exception("No user named ", username)
+            u_form = UserForm()
+            return render(request, 'get_user_info.html', {'u_form' :u_form}) 
 
-
-  
-
-     
 # view the list of the users.
 
 class usersListView(LoginRequiredMixin,generic.ListView):

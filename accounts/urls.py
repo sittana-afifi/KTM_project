@@ -12,9 +12,8 @@ urlpatterns = [
     path('<int:pk>/update/', views.UserUpdate.as_view(), name='user-update'),
     path('<int:pk>/delete/', views.UserDelete.as_view(), name='user-delete'),
     path('create/', views.createUser, name='get_user_info'),
+
     path('create1/', views.getUserInfoFromLDAP, name='user-create'),
-    path('create', views.submitUserForm, name='usersubmitform'),
-    #path('create1/', views.moiz, name='moiz'),
-    #path('search/', views.search, name='search'),
+    path('create2/', views.submitUserForm, name='usersubmitform'),
 
 ]

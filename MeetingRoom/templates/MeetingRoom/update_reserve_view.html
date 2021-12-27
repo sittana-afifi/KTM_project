@@ -2,22 +2,18 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-
-  <form action="" method="post">
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %} 
+<form action="" method="post">
     {% csrf_token %}
     {{ form |crispy }}
     {{ form.media }}  {# Adds all flatpickr JS/CSS files from CDN #}
-    {% if messages %}
-    <ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-    </ul>
-    {% endif %}
-
-    {% if error %}
-    {{ error }}
-    {% endif %}
+    
     <input class="btn btn-success my-3" type="submit" value="Submit">
   </form>
 {% endblock %}

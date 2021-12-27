@@ -2,12 +2,18 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+{% for message in messages %} 
+<div class= 'alert alert-danger'>
+      {{message}}
+    </div>
+  {% endfor%}
   <form action="" method="post">
     {% csrf_token %}
     <table>
     {{ u_form | crispy }}
     </table>
     <input class="btn btn-success my-3" type="submit" value="Get">
+    <a href="{% url 'user_list' %}" class="btn btn-danger my-3">Cancel</a>
   </form>
 {{u_form.errors}}
 {% endblock %}

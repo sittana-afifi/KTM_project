@@ -34,17 +34,22 @@
 
 
                         <li class='sidebar-title'>Main Menu</li>
+                        <li class="sidebar-item active ">
+                            <a href="{% url 'index' %}" class='sidebar-link'>
+                                <i data-feather="home" width="20"></i>
+                                <span>Home</span>
+                            </a>
 
                         <li class="sidebar-item active ">
                             <a href="{% url 'user_list' %}" class='sidebar-link'>
-                                <i data-feather="home" width="20"></i>
+                                <i data-feather="user" width="20"></i>
                                 <span>Accounts</span>
                             </a>
 
                         </li>
                         <li class="sidebar-item  active ">
                             <a href="{% url 'employee_list' %}" class='sidebar-link'>
-                                <i data-feather="briefcase" width="20"></i>
+                                <i data-feather="user-check" width="20"></i>
                                 <span>Employees</span>
                             </a>
 
@@ -211,6 +216,26 @@
     
 </body>
 {% endblock app %}
+<<<<<<< HEAD
+=======
+<footer style="background-color:#3b4042">
+    <div class="footer clearfix mb-0 text-muted" >
+        <div class="float-start">
+            <p>2020 &copy; KSHC</p>
+        </div>
+        <div class="float-end">
+            <a href="">Praivacy Policy</a> |
+            <a href="">Terms and Conditions</a> 
+           <!-- <p>Crafted with <span class='text-danger'><i data-feather="circle"></i></span> by <a
+                    href="http://KuwaiteSudaneseHoldingCompany.com">BD Team</a></p>-->
+           
+           <pre> <p href="">2021 &copy; KSHC</p><p>Crafted with <span class='text-danger'><i data-feather="heart"></i></span> by <a
+                    href="">BD Team</a></p></pre>
+        </div>
+    </div>
+</footer>
+</html>
+>>>>>>> 8e409910bfc2efbb5f9e5f3bbb457f389681bab8
 
 
 </html>
