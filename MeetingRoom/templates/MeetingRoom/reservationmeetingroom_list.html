@@ -3,7 +3,7 @@
 {% block content %}
   <h2>Reservation Meeting Room
     <a href="{% url 'reserve' %}"> 
-      <img alt="Add reservationmeetingroom" src="https://www.iconsdb.com/icons/download/color/096647/add-file-16.png">
+      <i data-feather="plus-circle" style="width:25px;height:25px;" ></i>  
     </a>
   </h2>
   
@@ -13,10 +13,9 @@
       <li>
         <a href="{{ reservationmeetingroom.get_absolute_url }}">{{ reservationmeetingroom.meeting_room}}</a> 
         
-        <a href="{% url 'reserve-update' reservationmeetingroom.id %}"> <i data-feather="edit-3" style="width:20px" ></i>
-  
+        <a href="{% url 'reserve-update' reservationmeetingroom.id %}"> 
+          <i data-feather="edit-3" style="width:20px" ></i>
         </a>
-
         <a href="{% url 'reservationmeetingroom-delete' reservationmeetingroom.id %}">
           <i data-feather="trash-2" style="width:20px" ></i>  
         </a>
