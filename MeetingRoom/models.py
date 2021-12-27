@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models.fields import DateField
 from django.urls.base import reverse
 from django.core.exceptions import ValidationError
-from TaskManagement.models import Employee
+from TaskManagement.models import Employee, Project, Task, Taskmanagment
 from parler.models import TranslatableModel, TranslatedFields
 
 # Create your models here.
@@ -24,10 +24,13 @@ class Meeting(models.Model):
 class ReservationMeetingRoom(models.Model):
     """Model representing a project."""
     meeting_room = models.ForeignKey(Meeting, on_delete=models.SET_NULL, null=True, blank=False)
-    reservation_date = models.DateField(null=True, blank=False)
+    reservation_date = models.DateField(null=False, blank=False)
     reservation_from_time = models.TimeField(auto_now=False, auto_now_add=False)
     reservation_to_time = models.TimeField(auto_now=False, auto_now_add=False)
-    team = models.ManyToManyField(Employee,blank=True,related_name='+') 
+    team = models.ManyToManyField(Employee,blank=True,related_name='+')
+    meeting_outcomes = models.TextField(max_length=1000, help_text='Enter the meeting outcomes')
+    meeting_project_name = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, blank=True)
+    task_name = models.ForeignKey(Task, on_delete=models.SET_NULL, null=True, blank=True)
     def clean_reservation_date(self):
         date = self.cleaned_date['reservation_date']
         # Check if a date is not in the past.

@@ -7,7 +7,7 @@ from .models import Meeting, ReservationMeetingRoom
 from django.views.generic.edit import UpdateView , DeleteView , CreateView 
 from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput, MonthPickerInput, YearPickerInput
 from django.shortcuts import render 
-from .forms import ReservationForm
+from .forms import ReservationForm, UpdateReservationForm
 from django.core.exceptions import ValidationError 
 from django.forms import ValidationError
 from .forms import ReservationForm
@@ -88,6 +88,7 @@ def validateReservationForm(form):
 # Reservation Form Create View:
 @login_required
 def reserve_view(request):
+    #fields = ['meeting_room', 'id','meeting_project_name', 'task_name' ,'reservation_date', 'reservation_from_time', 'reservation_to_time', 'team']
     form = ReservationForm(request.POST)
     if request.method == "POST":
         form = ReservationForm(request.POST)
@@ -115,7 +116,7 @@ def reserve_view(request):
 @login_required
 def update_reserve_view(request, pk):
     reservation = ReservationMeetingRoom.objects.get(pk=pk)
-    form = ReservationForm(request.POST or None,instance=reservation)
+    form = UpdateReservationForm(request.POST or None,instance=reservation)
     if request.method == "POST":
         notvalidform =  validateReservationForm(form)
         if notvalidform:
