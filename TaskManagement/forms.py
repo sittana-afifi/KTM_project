@@ -10,7 +10,6 @@ class AssignTaskForm(forms.ModelForm):
         model = Taskmanagment
         fields = '__all__' 
     assignee = forms.ModelChoiceField(queryset = Employee.objects.all())
-#   assigneedTo = forms.ModelChoiceField(queryset = Employee.objects.all())
     assigneedTo = forms.ModelMultipleChoiceField(queryset =Employee.objects.all())
     task_managment = forms.ModelChoiceField(queryset =Task.objects.all())
     TASK_STATUS = (

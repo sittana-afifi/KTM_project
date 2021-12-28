@@ -92,9 +92,6 @@ pip3 install    django-crispy-forms
 pip3 install    django-parler
 pip3 install    django-flatpickr
 pip3 install    django-bootstrap-datepicker-plus
-<<<<<<< HEAD
 pip3 install    django-bootstrap4
 pip3 install    django-rosetta
-
-=======
->>>>>>> f285c8d4042f40a860ee7b747c277f1c7ec9e7af
+pip install     django-readonly-field

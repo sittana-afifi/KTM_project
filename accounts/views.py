@@ -1,3 +1,13 @@
+<<<<<<< HEAD
+=======
+from urllib import request
+from django.db import connection
+from django.forms import formsets
+from django.forms.forms import Form
+from django.forms.widgets import FILE_INPUT_CONTRADICTION
+from django.http.response import HttpResponse, HttpResponseRedirect
+from django.urls.base import is_valid_path, reverse
+>>>>>>> e560c87a172267158317c0ce425136123f8df475
 from django.views import generic
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import User
@@ -42,6 +52,7 @@ def getUserInfoFromLDAP(request):
     try:
         user = LDAPBackend().populate_user(username)
         if user is None:
+            
             raise Exception("User Already Exit")
         user.delete()
     except AttributeError as e:
@@ -76,19 +87,22 @@ def createUser(request):
         return render(request, 'get_user_info.html', context) 
     if request.method == 'POST' :
         username = request.POST.get('username')
+
         isExist = User.objects.filter(username = username).exists()
         if isExist:
                 messages.error(request, 'User Already Exist')
                 return redirect( 'get_user_info') 
-        #else:
+        
         try:
             u_form = getUserInfoFromLDAP(request) 
+            print('user : ',u_form)
             return render(request, 'user_create.html', {'u_form' :u_form}) 
+
         except Exception as e:
             messages.error(request, 'User Doesn\'t exist in Active Directory')
-            #raise Exception("No user named ", username)
             u_form = UserForm()
             return render(request, 'get_user_info.html', {'u_form' :u_form}) 
+
 
 # view the list of the users.
 
@@ -109,7 +123,6 @@ class UserDetailView(LoginRequiredMixin,generic.DetailView):
 class UserUpdate(LoginRequiredMixin,UpdateView):
     model = User
     fields =['is_active','is_staff','is_superuser','groups','user_permissions']
-    #success_url = reverse_lazy('user-detail')
     #def get_success_url(self):
      #   return reverse('user-detail',args= [str(self.object.id)]) 
 

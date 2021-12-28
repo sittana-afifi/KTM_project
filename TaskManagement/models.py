@@ -53,7 +53,6 @@ class Task(models.Model):
 class Taskmanagment(models.Model):
     assignee = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=False, related_name='Taskmanagment')
     assigneedTo = models.ManyToManyField(Employee)
-    #assigneedTo= models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=False,related_name='teammamember')
     task_managment = models.ForeignKey('Task', on_delete=models.SET_NULL, null=True,blank=False)
 
     TASK_STATUS = (

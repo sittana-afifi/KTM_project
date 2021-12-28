@@ -11,11 +11,8 @@ urlpatterns = [
     path('meeting/<int:pk>/delete/', views.MeetingDelete.as_view(), name='meeting-delete'),
     path('reservationmeetingrooms/', views.ReservationMeetingRoomListView.as_view(), name='reservationmeetingrooms'),
     path('reservationmeetingroom/<int:pk>/', views.ReservationMeetingRoomDetailView.as_view(), name='reservationmeetingroom-detail'),
-    path('reservationmeetingroom/create/', views.ReservationMeetingRoomCreate.as_view(), name='reservationmeetingroom-create'),
-    path('reservationmeetingroom/<int:pk>/update/', views.ReservationMeetingRoomUpdate.as_view(), name='reservationmeetingroom-update'),
     path('reservationmeetingroom/<int:pk>/delete/', views.ReservationMeetingRoomDelete.as_view(), name='reservationmeetingroom-delete'),
     path('reservationmeetingroom/reserve/', views.reserve_view, name='reserve'),
     path('reservationmeetingroom/reserve/<int:pk>/update/', views.update_reserve_view, name='reserve-update'),
-
    
 ]

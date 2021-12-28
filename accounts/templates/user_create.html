@@ -1,6 +1,13 @@
 {% extends "base_generic.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
+{% if messages %}
+<div class="messages">
+    {% for message in messages %}
+    <div {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+    {% endfor %}
+</div>
+{% endif %}
 <h1>Create new user form :</h1>
 
   <form action="{% url 'usersubmitform' %}" method="post">
@@ -13,9 +20,6 @@
 
     
   </form>
-  
-
-
 
 
 {% endblock %}

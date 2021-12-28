@@ -75,7 +75,6 @@ def validateReservationForm(form):
             reservation_to_time = form.cleaned_data['reservation_to_time']
             team = form.cleaned_data['team']
             form = form.save(commit=False)
-            #if  form.meeting_room == form.meeting_room:
             case_1 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room,reservation_date=reservation_date, reservation_from_time__lte=reservation_from_time, reservation_to_time__gte=reservation_to_time).exists()
             # case 2: a room is booked before the requested check_out date and check_out date is after requested check_out date
             case_2 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room,reservation_date=reservation_date, reservation_from_time__lte=reservation_to_time, reservation_to_time__gte=reservation_to_time).exists()
@@ -88,7 +87,6 @@ def validateReservationForm(form):
 # Reservation Form Create View:
 @login_required
 def reserve_view(request):
-    #fields = ['meeting_room', 'id','meeting_project_name', 'task_name' ,'reservation_date', 'reservation_from_time', 'reservation_to_time', 'team']
     form = ReservationForm(request.POST)
     if request.method == "POST":
         form = ReservationForm(request.POST)
@@ -96,15 +94,10 @@ def reserve_view(request):
         if notvalidform:  
             messages.error(request, "Selected Meeting room already reserved at this date and time ,please correct your information and then submit")
             return redirect(reverse('reserve'))                  
-            #raise ValidationError(('Selected Meeting room already reserved at this date and time'))
-            #return render (request, "MeetingRoom/reserveerrorl.html")
-        else:
+        elif form.is_valid():
             form.save()
             messages.success(request, "You successfully reserve this meeting room at this time and date")
-            return redirect('reserve')
-            #return HttpResponseRedirect(reverse('reservationmeetingrooms') )
-    else:
-        print('Error please correct your information and then submit')
+            return HttpResponseRedirect(reverse('reservationmeetingrooms') )
     context = {
     'form' : form ,
     }
@@ -121,16 +114,10 @@ def update_reserve_view(request, pk):
         notvalidform =  validateReservationForm(form)
         if notvalidform:
             messages.error(request, "Selected Meeting room already reserved at this date and time ,please correct your information and then submit")
-            #return redirect(reverse('reserve-update', reserve-update.pk))
-            #return redirect(reverse('reserve-update')) 
-            #raise ValidationError(_('Selected Meeting room already reserved at this date and time'))
-            #return render (request, "MeetingRoom/reserveerrorl.html")
-        else:
+        elif form.is_valid():
             form.save()
             messages.success(request, "You successfully reserve this meeting room at this time and date")
-            #return redirect('reserve-update', reserve-update.pk)
-            #return redirect(('reserve-update.pk')) 
-            #return HttpResponseRedirect(reverse('reservationmeetingrooms'))
+            return HttpResponseRedirect(reverse('reservationmeetingrooms'))
     context = {
     'form' : form ,
     }
