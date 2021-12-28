@@ -30,20 +30,15 @@ class UserForm(forms.ModelForm):
 
 
 class AccountCreateForm(forms.ModelForm):
-    email = forms.EmailField(label='Email', min_length=4, max_length=150)
-    first_name = forms.CharField(label='First Name', min_length=4, max_length=150)
-    last_name = forms.CharField(label='Last Name', min_length=4, max_length=150)
-    username = forms.CharField(label='User Name', min_length=4, max_length=150)
-    #last_login = forms.DateField(widget=DateTimePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}),required=True)
-    #is_active= forms.BooleanField(label="Active", required= False, initial=False)
-    #is_staff= forms.BooleanField(label="Staff status" , required= False, initial=False)
-    #is_superuser= forms.BooleanField(label="Superuser status" , required= False ,initial=False)
+    email = forms.EmailField( widget=forms.TextInput(attrs={'readonly':'readonly'}),label='Email', min_length=4, max_length=150)
+    first_name = forms.CharField( widget=forms.TextInput(attrs={'readonly':'readonly'}),label='First Name', min_length=4, max_length=150)
+    last_name = forms.CharField( widget=forms.TextInput(attrs={'readonly':'readonly'}),label='Last Name', min_length=4, max_length=150)
+    username = forms.CharField( widget=forms.TextInput(attrs={'readonly':'readonly'}),label='User Name', min_length=4, max_length=150)
 
+    
     class Meta:
         model = User
-        fields = ('username','first_name','last_name','email')#, 'is_superuser', 'is_active', 'is_staff')
-        #'last_login',
-        readonly = ('username','first_name','last_name','email')
+        exclude  = ('password','last_login','is_superuser', 'is_active', 'is_staff','date_joined',)
     
 
         def clean_username(self):
@@ -81,11 +76,11 @@ class AccountCreateForm(forms.ModelForm):
                 raise  ValidationError("last_name already exists")
             return last_name
             
-'''
+
         def clean(self):
                 if self.is_valid():
                     #first_name = self.cleaned_data['first_name']
-                    last_name = self.cleaned_data['last_name']
+                    #last_name = self.cleaned_data['last_name']
                     #email = self.cleaned_data['email']
                     #username = self.cleaned_data['username']
                     #last_login = self.cleaned_data['last_login']
@@ -93,5 +88,6 @@ class AccountCreateForm(forms.ModelForm):
                     is_staff = self.cleaned_data['is_staff']
                     is_superuser = self.cleaned_data['is_superuser']
 
-    ''' 
+
+
     

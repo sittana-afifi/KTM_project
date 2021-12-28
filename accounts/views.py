@@ -1,5 +1,6 @@
 from urllib import request
 from django.db import connection
+from django.db.models import fields
 from django.forms import formsets
 from django.forms.forms import Form
 from django.forms.widgets import FILE_INPUT_CONTRADICTION
@@ -15,8 +16,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required, permission_required
+from accounts.models import Account
 from django_auth_ldap.backend import LDAPBackend
-from .forms import UserForm , AccountCreateForm 
+from .forms import  UserForm , AccountCreateForm 
 from django.shortcuts import render
 from django.contrib.auth import authenticate as authenticate_django
 from pathlib import Path
@@ -25,6 +27,7 @@ from django.contrib import messages
 
 
 
+<<<<<<< HEAD
 # Logging view in Django:
 # First import the logging library from Python's standard library:
 import os 
@@ -38,6 +41,8 @@ logger = logging.getLogger(__file__)
 from django.utils.log import DEFAULT_LOGGING
 
 
+=======
+>>>>>>> 008ca10 (Update)
 @login_required
 def index(request):
     """View function for home page of site."""
@@ -75,9 +80,7 @@ def getUserInfoFromLDAP(request):
         'first_name' : user.first_name,
         'last_name' : user.last_name,
         'email' :  user.email,
-        #'is_active' : 'True',
-        #'is_staff':'True',
-        #'is_superuser':'True',
+
         }
     # add the dictionary during initialization    
     u_form = AccountCreateForm( initial = init)
@@ -106,7 +109,6 @@ def createUser(request):
         
         try:
             u_form = getUserInfoFromLDAP(request) 
-            print('user : ',u_form)
             return render(request, 'user_create.html', {'u_form' :u_form}) 
 
         except Exception as e:
@@ -133,10 +135,11 @@ class UserDetailView(LoginRequiredMixin,generic.DetailView):
 
 # update specific user with specific fields.
 class UserUpdate(LoginRequiredMixin,UpdateView):
+    
     model = User
-    fields =['is_active','is_staff','is_superuser','groups','user_permissions']
-    #def get_success_url(self):
-     #   return reverse('user-detail',args= [str(self.object.id)]) 
+    #exclude  = ('password','last_login','is_superuser', 'is_active','date_joined', )
+    form_class = AccountCreateForm
+    #fields = ['username','first_name','last_name','email',]
 
 
 
