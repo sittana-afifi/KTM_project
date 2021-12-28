@@ -83,7 +83,7 @@ INSTALLED_APPS = [
     'bootstrap_datepicker_plus',
     #'flatpickr',
     'bootstrap4',
-    #"django_readonly_field",
+    "django_readonly_field",
     
 ]
 
@@ -212,7 +212,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
-'''
+
 # LDAP CONFIGRATION START HERE !
 
 
@@ -252,7 +252,7 @@ ldap.OPT_REFERRALS: 0,
 
 
 # LDAP CONFIGRATION ENDS HERE !
-'''
+
 #Mail service
 
 
