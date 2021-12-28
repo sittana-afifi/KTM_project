@@ -27,7 +27,6 @@ from django.contrib import messages
 
 
 
-<<<<<<< HEAD
 # Logging view in Django:
 # First import the logging library from Python's standard library:
 import os 
@@ -41,8 +40,6 @@ logger = logging.getLogger(__file__)
 from django.utils.log import DEFAULT_LOGGING
 
 
-=======
->>>>>>> 008ca10 (Update)
 @login_required
 def index(request):
     """View function for home page of site."""
