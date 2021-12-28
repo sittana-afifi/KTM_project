@@ -18,14 +18,6 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
-import os 
-import logging
-from django.http import HttpResponse
-# or Get an instance of a logger:
-logger = logging.getLogger(__name__)
-import logging.config
-logger = logging.getLogger(__file__)
-from django.utils.log import DEFAULT_LOGGING
 
 
 
@@ -119,6 +111,26 @@ def update_reserve_view(request, pk):
     reservation = ReservationMeetingRoom.objects.get(pk=pk)
     form = UpdateReservationForm(request.POST or None,instance=reservation)
     if request.method == "POST":
+        if form.is_valid():   
+            form= form.save(commit= False)
+            case_1 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=form.meeting_room,reservation_date=form.reservation_date, reservation_from_time__lte=form.reservation_from_time, reservation_to_time__gte=form.reservation_to_time).exists()
+            case_2 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=form.meeting_room,reservation_date=form.reservation_date, reservation_from_time__lte=form.reservation_to_time, reservation_to_time__gte=form.reservation_to_time).exists()
+            case_3 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=form.meeting_room,reservation_date=form.reservation_date, reservation_from_time__gte=form.reservation_from_time, reservation_to_time__lte=form.reservation_to_time).exists()                # if either of these is true, abort and render the error
+            if case_1 or case_2 or case_3:
+                messages.error(request, "Selected Meeting room already reserved at this date and time ,please correct your information and then submit")     
+            form.save()
+            messages.success(request, "You successfully reserve this meeting room at this time and date")
+            return HttpResponseRedirect(reverse('reservationmeetingrooms'))
+    context = {
+    'form' : form ,
+    }
+    return render(request, 'MeetingRoom/update_reserve_view.html', context)
+
+
+
+
+
+'''
         notvalidform =  validateReservationForm(form)
         if notvalidform:
             messages.error(request, "Selected Meeting room already reserved at this date and time ,please correct your information and then submit")
@@ -131,3 +143,4 @@ def update_reserve_view(request, pk):
     }
     return render(request, 'MeetingRoom/update_reserve_view.html', context)
 
+'''
