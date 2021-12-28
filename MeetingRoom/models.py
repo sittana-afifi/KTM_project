@@ -39,12 +39,13 @@ class ReservationMeetingRoom(models.Model):
         return date
     def clean(self, *args, **kwargs):
         cleaned_data = super().clean(*args, **kwargs)
-        case_1 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__lte=self.reservation_from_time, reservation_to_time__gte=self.reservation_to_time).exists()
-        case_2 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__lte=self.reservation_to_time, reservation_to_time__gte=self.reservation_to_time).exists()
-        case_3 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__gte=self.reservation_from_time, reservation_to_time__lte=self.reservation_to_time).exists()                # if either of these is true, abort and render the error
-        if case_1 or case_2 or case_3:
-            #messages.error(request, "Selected Meeting room already reserved at this date and time ,please correct your information and then submit")
-            raise ValidationError(('Invalid date - Date cannot be in the past'))
+        if self.pk:
+            case_1 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__lte=self.reservation_from_time, reservation_to_time__gte=self.reservation_to_time).exists()
+            case_2 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__lte=self.reservation_to_time, reservation_to_time__gte=self.reservation_to_time).exists()
+            case_3 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__gte=self.reservation_from_time, reservation_to_time__lte=self.reservation_to_time).exists()                # if either of these is true, abort and render the error
+            if case_1 or case_2 or case_3:
+                #messages.error(request, "Selected Meeting room already reserved at this date and time ,please correct your information and then submit")
+                raise ValidationError(('Selected Meeting room already reserved at this date and time ,please correct your information and then submit'))
         return cleaned_data
     
     def __str__(self):
