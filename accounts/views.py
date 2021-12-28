@@ -49,6 +49,7 @@ def getUserInfoFromLDAP(request):
     try:
         user = LDAPBackend().populate_user(username)
         if user is None:
+            
             raise Exception("User Already Exit")
         user.delete()
     except AttributeError as e:
@@ -83,19 +84,23 @@ def createUser(request):
         return render(request, 'get_user_info.html', context) 
     if request.method == 'POST' :
         username = request.POST.get('username')
+
         isExist = User.objects.filter(username = username).exists()
         if isExist:
                 messages.error(request, 'User Already Exist')
                 return redirect( 'get_user_info') 
-        #else:
+        
         try:
             u_form = getUserInfoFromLDAP(request) 
+            print('user : ',u_form)
             return render(request, 'user_create.html', {'u_form' :u_form}) 
+
         except Exception as e:
             messages.error(request, 'User Doesn\'t exist in Active Directory')
-            #raise Exception("No user named ", username)
             u_form = UserForm()
             return render(request, 'get_user_info.html', {'u_form' :u_form}) 
+            #return render(request, 'user_create.html', {'u_form' :u_form}) 
+
 
 # view the list of the users.
 
