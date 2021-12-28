@@ -103,8 +103,6 @@ def reserve_view(request):
             messages.success(request, "You successfully reserve this meeting room at this time and date")
             return redirect('reserve')
             #return HttpResponseRedirect(reverse('reservationmeetingrooms') )
-    else:
-        print('Error please correct your information and then submit')
     context = {
     'form' : form ,
     }
