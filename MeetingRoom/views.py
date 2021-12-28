@@ -18,6 +18,14 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
+import os 
+import logging
+from django.http import HttpResponse
+# or Get an instance of a logger:
+logger = logging.getLogger(__name__)
+import logging.config
+logger = logging.getLogger(__file__)
+from django.utils.log import DEFAULT_LOGGING
 
 
 

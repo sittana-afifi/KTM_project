@@ -13,6 +13,15 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
+import os 
+import logging
+from django.http import HttpResponse
+# or Get an instance of a logger:
+logger = logging.getLogger(__name__)
+import logging.config
+logger = logging.getLogger(__file__)
+from django.utils.log import DEFAULT_LOGGING
+
 
 # view a list of all employees.
 class EmployeesListView(LoginRequiredMixin,generic.ListView):
