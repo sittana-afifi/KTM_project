@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 from urllib import request
 from django.db import connection
 from django.forms import formsets
@@ -7,7 +5,6 @@ from django.forms.forms import Form
 from django.forms.widgets import FILE_INPUT_CONTRADICTION
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.urls.base import is_valid_path, reverse
->>>>>>> e560c87a172267158317c0ce425136123f8df475
 from django.views import generic
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import User
