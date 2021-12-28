@@ -19,7 +19,6 @@ from django.forms.utils import ErrorList
 class ReservationForm(forms.ModelForm):
     class Meta:
         model = ReservationMeetingRoom
-        #fields = '__all__' 
         fields = ['meeting_room', 'id','meeting_project_name', 'task_name' ,'reservation_date', 'reservation_from_time', 'reservation_to_time', 'team']
     meeting_room = forms.ModelChoiceField(queryset = Meeting.objects.all())
     reservation_date = forms.DateField(required=True, widget=DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}))
@@ -31,12 +30,10 @@ class ReservationForm(forms.ModelForm):
 
     def clean_reservation_from_time(self):
         data = self.cleaned_data['reservation_from_time']
-        # Check if the time is not in the past.   
         return data
 
     def clean_reservation_to_time(self):
         data = self.cleaned_data['reservation_to_time']
-        # Check if the time is not in the past.
         return data
 
     def clean_meeting_room(self):
@@ -55,7 +52,6 @@ class ReservationForm(forms.ModelForm):
     
     def clean_meeting_project_name(self):
         data = self.cleaned_data['meeting_project_name']
-        # Check if the time is not in the past.
         return data
 
     def clean_task_name(self):
@@ -69,7 +65,6 @@ class ReservationForm(forms.ModelForm):
 class UpdateReservationForm(forms.ModelForm):
     class Meta:
         model = ReservationMeetingRoom
-        #fields = '__all__' 
         fields = ['meeting_room', 'id','meeting_project_name','task_name', 'reservation_date', 'reservation_from_time', 'reservation_to_time', 'team', 'meeting_outcomes']
     meeting_room = forms.ModelChoiceField(queryset = Meeting.objects.all())
     reservation_date = forms.DateField(widget=DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}), required=True )
@@ -82,12 +77,10 @@ class UpdateReservationForm(forms.ModelForm):
     
     def clean_reservation_from_time(self):
         data = self.cleaned_data['reservation_from_time']
-        # Check if the time is not in the past.   
         return data
 
     def clean_reservation_to_time(self):
         data = self.cleaned_data['reservation_to_time']
-        # Check if the time is not in the past.
         return data
 
     def clean_meeting_room(self):
@@ -116,3 +109,15 @@ class UpdateReservationForm(forms.ModelForm):
     def clean_meeting_outcomes(self):
         data = self.cleaned_data['meeting_outcomes']
         return data
+
+    def clean_validation(self, *args, **kwargs):
+        cleaned_data = super().clean(*args, **kwargs)
+        case_1 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__lte=self.reservation_from_time, reservation_to_time__gte=self.reservation_to_time).exists()
+        case_2 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__lte=self.reservation_to_time, reservation_to_time__gte=self.reservation_to_time).exists()
+        case_3 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__gte=self.reservation_from_time, reservation_to_time__lte=self.reservation_to_time).exists()                # if either of these is true, abort and render the error
+        if case_1 or case_2 or case_3:
+            messages.error(request, "Selected Meeting room already reserved at this date and time ,please correct your information and then submit")
+        return cleaned_data
+    class Meta:
+        model = ReservationMeetingRoom
+        fields = ['meeting_room', 'id','meeting_project_name','task_name', 'reservation_date', 'reservation_from_time', 'reservation_to_time', 'team', 'meeting_outcomes']
