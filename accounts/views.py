@@ -28,11 +28,23 @@ from django.contrib import messages
 
 
 
+# Logging view in Django:
+# First import the logging library from Python's standard library:
+import os 
+import logging
+from django.http import HttpResponse
+# Create a logger for this file or the name of the log level:
+# or Get an instance of a logger:
+logger = logging.getLogger(__name__)
+import logging.config
+logger = logging.getLogger(__file__)
+from django.utils.log import DEFAULT_LOGGING
 
 
 @login_required
 def index(request):
     """View function for home page of site."""
+    logger.info("enter index function.")
     num_visits = request.session.get('num_visits', 0)
     request.session['num_visits'] = num_visits + 1
     context = {
@@ -40,6 +52,8 @@ def index(request):
     }
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'index.html', context=context)
+    logger.info("enter index function.")
+
 
 
 
@@ -107,6 +121,7 @@ def createUser(request):
 # view the list of the users.
 
 class usersListView(LoginRequiredMixin,generic.ListView):
+    logger.info("enter index function.")
     model = User
     template_name ='accounts/user_list.html'
 

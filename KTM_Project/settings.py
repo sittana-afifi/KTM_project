@@ -27,6 +27,7 @@ import os
 import logging.config
 import logging # must be imported in view.py also.
 from django.utils.log import DEFAULT_LOGGING
+logger = logging.getLogger(__name__)
 
 # Internationalization
 
@@ -71,19 +72,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # configure the accounts app 
     'accounts.apps.AccountsConfig',
-    #'rosetta',  # Rosetta Translation Interface
+    'TaskManagement.apps.TaskManagementConfig',
+    'MeetingRoom.apps.MeetingRoomConfig',
+    'rosetta',  # Rosetta Translation Interface
     'parler', #Translating Models with django-parler
     # Custom for contact application
     #'contact',
     # 3rd party apps
     'crispy_forms',
-    'TaskManagement.apps.TaskManagementConfig',
-     # configure the MeetingRoom app 
-    'MeetingRoom.apps.MeetingRoomConfig',
     'bootstrap_datepicker_plus',
-    #'flatpickr',
+    'flatpickr',
     'bootstrap4',
-    "django_readonly_field",
+    'django_readonly_field',
     
 ]
 
@@ -273,7 +273,6 @@ EMAIL_HOST_PASSWORD =env('EMAIL_HOST_PASSWORD')
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-   #"root": {"level": "DEBUG", "handlers": ["console"]},
     "handlers": {
         "console": {
             "level": "INFO",
