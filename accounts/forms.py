@@ -43,6 +43,7 @@ class AccountCreateForm(forms.ModelForm):
         model = User
         fields = ('username','first_name','last_name','email')#, 'is_superuser', 'is_active', 'is_staff')
         #'last_login',
+        #readonly = ('username','first_name','last_name','email')
     
 
         def clean_username(self):

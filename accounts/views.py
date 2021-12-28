@@ -116,7 +116,6 @@ class UserDetailView(LoginRequiredMixin,generic.DetailView):
 class UserUpdate(LoginRequiredMixin,UpdateView):
     model = User
     fields =['is_active','is_staff','is_superuser','groups','user_permissions']
-    #success_url = reverse_lazy('user-detail')
     #def get_success_url(self):
      #   return reverse('user-detail',args= [str(self.object.id)]) 
 
