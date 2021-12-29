@@ -115,8 +115,8 @@ class UpdateReservationForm(forms.ModelForm):
         case_2 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__gte=self.reservation_from_time, reservation_to_time__gte=self.reservation_to_time).exists()
         case_3 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__lte=self.reservation_from_time, reservation_to_time__gte=self.reservation_to_time).exists()
         case_4 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__gte=self.reservation_from_time, reservation_to_time__lte=self.reservation_to_time).exists()
-        case_5 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__lte=self.reservation_from_time, reservation_to_time__lte=self.reservation_to_time).exists()
-        if case_1 or case_2 or case_3 or case_4 or case_5:
+        #case_5 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__lte=self.reservation_from_time, reservation_to_time__lte=self.reservation_to_time).exists()
+        if case_1 or case_2 or case_3 or case_4 :
             messages.error(request, "Selected Meeting room already reserved at this date and time ,please correct your information and then submit")
         return cleaned_data
     class Meta:
