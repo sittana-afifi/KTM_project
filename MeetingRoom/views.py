@@ -96,7 +96,7 @@ def validateReservationForm(form):
             case_1 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room,reservation_date=reservation_date, reservation_from_time__lte=reservation_from_time, reservation_to_time__gte=reservation_to_time).exists()
             # case 2: a room is booked before the requested check_out date and check_out date is after requested check_out date
             case_2 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room,reservation_date=reservation_date, reservation_from_time__lte=reservation_to_time, reservation_to_time__gte=reservation_to_time).exists()
-            case_3 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room,reservation_date=reservation_date, reservation_from_time__gte=reservation_from_time, reservation_to_time__lte=reservation_to_time).exists()
+            case_3 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room,reservation_date=reservation_date, reservation_from_time__gte=reservation_from_time, reservation_to_time__gte=reservation_to_time).exists()
             # if either of these is true, abort and render the error
             return case_1 or case_2 or case_3
 
@@ -138,7 +138,7 @@ def update_reserve_view(request, pk):
             form= form.save(commit= False)
             case_1 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=form.meeting_room,reservation_date=form.reservation_date, reservation_from_time__lte=form.reservation_from_time, reservation_to_time__gte=form.reservation_to_time).exists()
             case_2 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=form.meeting_room,reservation_date=form.reservation_date, reservation_from_time__lte=form.reservation_to_time, reservation_to_time__gte=form.reservation_to_time).exists()
-            case_3 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=form.meeting_room,reservation_date=form.reservation_date, reservation_from_time__gte=form.reservation_from_time, reservation_to_time__lte=form.reservation_to_time).exists()                # if either of these is true, abort and render the error
+            case_3 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=form.meeting_room,reservation_date=form.reservation_date, reservation_from_time__gte=form.reservation_from_time, reservation_to_time__gte=form.reservation_to_time).exists()                # if either of these is true, abort and render the error
             if case_1 or case_2 or case_3:
                 logger.info("case_1 or case_2 or case_3 is TRUE.")
 
