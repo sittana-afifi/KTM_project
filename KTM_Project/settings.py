@@ -27,7 +27,6 @@ import os
 import logging.config
 import logging # must be imported in view.py also.
 from django.utils.log import DEFAULT_LOGGING
-logger = logging.getLogger(__name__)
 
 # Internationalization
 
@@ -72,18 +71,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # configure the accounts app 
     'accounts.apps.AccountsConfig',
-    'TaskManagement.apps.TaskManagementConfig',
-    'MeetingRoom.apps.MeetingRoomConfig',
     'rosetta',  # Rosetta Translation Interface
     'parler', #Translating Models with django-parler
     # Custom for contact application
     #'contact',
     # 3rd party apps
     'crispy_forms',
+    'TaskManagement.apps.TaskManagementConfig',
+     # configure the MeetingRoom app 
+    'MeetingRoom.apps.MeetingRoomConfig',
     'bootstrap_datepicker_plus',
     'flatpickr',
     'bootstrap4',
-    'django_readonly_field',
+    "django_readonly_field",
     
 ]
 
@@ -290,8 +290,9 @@ LOGGING = {
     "formatters": {
         "test_format": {
             "format": (
-                u"[%(asctime)s] [%(levelname)-4s]  [%(name)-12s] "
-                "(%(module)s.%(funcName)s) %(message)s"
+               "%(name)-12s %(levelname)-8s %(message)s" 
+               # u"[%(asctime)s] [%(levelname)-4s]  [%(name)-12s] "
+                #"(%(module)s.%(funcName)s) %(message)s"
             ),
             "datefmt": "%Y-%m-%d %H:%M:%S %p %Z %z",
         },
