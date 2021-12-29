@@ -136,11 +136,11 @@ def update_reserve_view(request, pk):
         if form.is_valid():   
             logger.info("form is valid")
             form= form.save(commit= False)
-            case_1 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__lte=self.reservation_from_time, reservation_to_time__gte=self.reservation_to_time).exists()
-            case_2 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__gte=self.reservation_from_time, reservation_to_time__gte=self.reservation_to_time).exists()
-            case_3 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__lte=self.reservation_from_time, reservation_to_time__gte=self.reservation_to_time).exists()
-            case_4 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__gte=self.reservation_from_time, reservation_to_time__lte=self.reservation_to_time).exists()
-            case_5 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__lte=self.reservation_from_time, reservation_to_time__lte=self.reservation_to_time).exists()
+            case_1 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=reservation.meeting_room,reservation_date=reservation.reservation_date, reservation_from_time__lte=reservation.reservation_from_time, reservation_to_time__gte=reservation.reservation_to_time).exists()
+            case_2 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=reservation.meeting_room,reservation_date=reservation.reservation_date, reservation_from_time__gte=reservation.reservation_from_time, reservation_to_time__gte=reservation.reservation_to_time).exists()
+            case_3 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=reservation.meeting_room,reservation_date=reservation.reservation_date, reservation_from_time__lte=reservation.reservation_from_time, reservation_to_time__gte=reservation.reservation_to_time).exists()
+            case_4 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=reservation.meeting_room,reservation_date=reservation.reservation_date, reservation_from_time__gte=reservation.reservation_from_time, reservation_to_time__lte=reservation.reservation_to_time).exists()
+            case_5 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=reservation.meeting_room,reservation_date=reservation.reservation_date, reservation_from_time__lte=reservation.reservation_from_time, reservation_to_time__lte=reservation.reservation_to_time).exists()
             if case_1 or case_2 or case_3 or case_4 or case_5:
                 logger.info("case_1 or case_2 or case_3 is TRUE.")
                 messages.error(request, "Selected Meeting room already reserved at this date and time ,please correct your information and then submit")     
