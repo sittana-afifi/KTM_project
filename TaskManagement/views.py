@@ -12,6 +12,7 @@ import datetime
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput, MonthPickerInput, YearPickerInput
 from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 import os 
 import logging
@@ -139,6 +140,10 @@ class TaskmanagmentCreate(LoginRequiredMixin,CreateView):
     logger.info("Enter TaskmanagmentCreate.")
     model = Taskmanagment
     fields = '__all__'
+    widgets = {
+    'start_date' : DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}),
+    'end_date' : DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}),
+    }
 
 
 # Update a specific taskmanagment:
@@ -160,7 +165,7 @@ class TaskmanagmentDelete(LoginRequiredMixin,DeleteView):
 @login_required
 def assign_task_view(request):
     logger.info("Enter assign_task_view.")
-    form = AssignTaskForm(request.POST)
+    form = AssignTaskForm()
     if request.method == "POST":
         logger.info("The request is POST.")
         form = AssignTaskForm(request.POST)

@@ -107,8 +107,7 @@ def validateReservationForm(form):
 @login_required
 def reserve_view(request):
     logger.info("Enter reserve_view.")
-
-    form = ReservationForm(request.POST)
+    form = ReservationForm()
     if request.method == "POST":
         form = ReservationForm(request.POST)
         notvalidform =  validateReservationForm(form)

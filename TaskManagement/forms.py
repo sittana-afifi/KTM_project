@@ -25,8 +25,8 @@ class AssignTaskForm(forms.ModelForm):
     )
     priority = forms.ChoiceField(choices=TASK_PRIORITY)
     comment = forms.CharField()
-    start_date = forms.DateField(widget=DatePickerInput())
-    end_date = forms.DateField(widget=DatePickerInput())
+    start_date = forms.DateField(widget=DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}))
+    end_date = forms.DateField(widget=DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}))
 
     def clean_assignee(self):
         data = self.cleaned_data['assignee']

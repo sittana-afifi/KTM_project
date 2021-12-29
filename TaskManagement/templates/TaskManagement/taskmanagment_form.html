@@ -13,6 +13,7 @@
     {% csrf_token %}
     <table>
     {{ form | crispy }}
+    {{ form.media }}  {# Adds all flatpickr JS/CSS files from CDN #}
     </table>
     <input class="btn btn-success my-3" type="submit" value="Submit">
     <a href="{% url 'taskmanagments' %}" class="btn btn-danger my-3">Cancel</a>

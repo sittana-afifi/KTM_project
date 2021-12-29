@@ -23,11 +23,10 @@ class ReservationForm(forms.ModelForm):
     meeting_room = forms.ModelChoiceField(queryset = Meeting.objects.all())
     reservation_date = forms.DateField(required=True, widget=DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}))
     team = forms.ModelMultipleChoiceField(queryset =Employee.objects.all(),blank=True,required=False) 
-    reservation_from_time = forms.TimeField()
-    reservation_to_time = forms.TimeField()
+    reservation_from_time = forms.TimeField(widget=TimePickerInput(options={"format": "hh:mm","autoclose": True}))
+    reservation_to_time = forms.TimeField(widget=TimePickerInput(options={"format": "hh:mm","autoclose": True}))
     meeting_project_name = forms.ModelChoiceField(queryset = Project.objects.all(), required=False)
     task_name = forms.ModelChoiceField(queryset = Task.objects.all(), required=False)
-
     def clean_reservation_from_time(self):
         data = self.cleaned_data['reservation_from_time']
         return data
@@ -69,8 +68,8 @@ class UpdateReservationForm(forms.ModelForm):
     meeting_room = forms.ModelChoiceField(queryset = Meeting.objects.all())
     reservation_date = forms.DateField(widget=DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}), required=True )
     team = forms.ModelMultipleChoiceField(queryset =Employee.objects.all(),blank=True,required=False) 
-    reservation_from_time = forms.TimeField()
-    reservation_to_time = forms.TimeField()
+    reservation_from_time = forms.TimeField(widget=TimePickerInput(options={"format": "hh:mm","autoclose": True}))
+    reservation_to_time = forms.TimeField(widget=TimePickerInput(options={"format": "hh:mm","autoclose": True}))
     meeting_project_name = forms.ModelChoiceField(queryset = Project.objects.all(), required=False)
     task_name = forms.ModelChoiceField(queryset = Task.objects.all(), required=False)
     meeting_outcomes = forms.CharField(max_length=1000, help_text='Enter the meeting outcomes', widget=forms.Textarea)
