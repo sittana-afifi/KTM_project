@@ -94,11 +94,11 @@ def validateReservationForm(form):
             team = form.cleaned_data['team']
             form = form.save(commit=False)
             case_1 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room,reservation_date=reservation_date, reservation_from_time__lte=reservation_from_time, reservation_to_time__gte=reservation_to_time).exists()
-            # case 2: a room is booked before the requested check_out date and check_out date is after requested check_out date
-            case_2 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room,reservation_date=reservation_date, reservation_from_time__lte=reservation_to_time, reservation_to_time__gte=reservation_to_time).exists()
-            case_3 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room,reservation_date=reservation_date, reservation_from_time__gte=reservation_from_time, reservation_to_time__gte=reservation_to_time).exists()
+            case_2 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room,reservation_date=reservation_date, reservation_from_time__gte=reservation_from_time, reservation_to_time__gte=reservation_to_time).exists()
+            case_3 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room,reservation_date=reservation_date, reservation_from_time__lte=reservation_from_time, reservation_to_time__gte=reservation_to_time).exists()
+            case_4 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room,reservation_date=reservation_date, reservation_from_time__gte=reservation_from_time, reservation_to_time__lte=reservation_to_time).exists()
             # if either of these is true, abort and render the error
-            return case_1 or case_2 or case_3
+            return case_1 or case_2 or case_3 or case_4
 
 #####################################################
 
@@ -136,12 +136,12 @@ def update_reserve_view(request, pk):
         if form.is_valid():   
             logger.info("form is valid")
             form= form.save(commit= False)
-            case_1 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=form.meeting_room,reservation_date=form.reservation_date, reservation_from_time__lte=form.reservation_from_time, reservation_to_time__gte=form.reservation_to_time).exists()
-            case_2 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=form.meeting_room,reservation_date=form.reservation_date, reservation_from_time__lte=form.reservation_to_time, reservation_to_time__gte=form.reservation_to_time).exists()
-            case_3 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=form.meeting_room,reservation_date=form.reservation_date, reservation_from_time__gte=form.reservation_from_time, reservation_to_time__gte=form.reservation_to_time).exists()                # if either of these is true, abort and render the error
-            if case_1 or case_2 or case_3:
+            case_1 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__lte=self.reservation_from_time, reservation_to_time__gte=self.reservation_to_time).exists()
+            case_2 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__gte=self.reservation_from_time, reservation_to_time__gte=self.reservation_to_time).exists()
+            case_3 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__lte=self.reservation_from_time, reservation_to_time__gte=self.reservation_to_time).exists()
+            case_4 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__gte=self.reservation_from_time, reservation_to_time__lte=self.reservation_to_time).exists()
+            if case_1 or case_2 or case_3 or case_4:
                 logger.info("case_1 or case_2 or case_3 is TRUE.")
-
                 messages.error(request, "Selected Meeting room already reserved at this date and time ,please correct your information and then submit")     
             form.save()
             messages.success(request, "You successfully reserve this meeting room at this time and date")
