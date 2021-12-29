@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.fields import DateField
 from django.urls.base import reverse
 from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
+from flatpickr.utils import GenericViewWidgetMixin
 
 
 

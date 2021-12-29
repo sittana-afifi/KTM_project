@@ -14,6 +14,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput, MonthPickerInput, YearPickerInput
 from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
+from flatpickr.utils import GenericViewWidgetMixin
 import os 
 import logging
 from django.http import HttpResponse
@@ -150,8 +151,12 @@ class TaskmanagmentCreate(LoginRequiredMixin,CreateView):
 class TaskmanagmentUpdate(LoginRequiredMixin,UpdateView):
     logger.info("Enter TaskmanagmentUpdate.")
     model = Taskmanagment
-    fields = '__all__' # Not recommended (potential security issue if more fields added)
-
+    fields = ['assignee' , 'assigneedTo' , 'task_managment' , 'status' , 'priority' , 'comment' , 'start_date' , 'end_date' ]
+    #fields = '__all__' # Not recommended (potential security issue if more fields added)
+    widgets = {
+    'start_date' : DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}),
+    'end_date' : DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}),
+    }
 
 # Delete a specific taskmanagment:
 class TaskmanagmentDelete(LoginRequiredMixin,DeleteView):
@@ -161,7 +166,7 @@ class TaskmanagmentDelete(LoginRequiredMixin,DeleteView):
 
 #######################################################
 
-# Define Assign Task Form View : 
+# Define Assign Task Form Create View : 
 @login_required
 def assign_task_view(request):
     logger.info("Enter assign_task_view.")
@@ -178,3 +183,22 @@ def assign_task_view(request):
         }
     return render(request, "TaskManagement/assign_task.html", context)
 
+
+###############################################
+# Define Assign Task Form Update View : 
+@login_required
+def update_assign_task_view(request, pk):
+    logger.info("Enter assign_task_view.")
+    assign = Taskmanagment.objects.get(pk=pk)
+    form = AssignTaskForm(request.POST or None,instance=assign)
+    if request.method == "POST":
+        logger.info("The request is POST.")
+        form = AssignTaskForm(request.POST)
+        if form.is_valid():
+            logger.info("Enter is valid.")
+            form.save()
+            return HttpResponseRedirect(reverse('taskmanagments') )
+    context = {
+        'form' : form ,
+        }
+    return render(request, "TaskManagement/update_assign_task.html", context)
