@@ -117,7 +117,7 @@ def reserve_view(request):
         elif form.is_valid():
             form.save()
             messages.success(request, "You successfully reserve this meeting room at this time and date")
-            return HttpResponseRedirect(reverse('reservationmeetingrooms') )
+            #return HttpResponseRedirect(reverse('reservationmeetingrooms') )
     context = {
     'form' : form ,
     }
@@ -145,7 +145,7 @@ def update_reserve_view(request, pk):
                 messages.error(request, "Selected Meeting room already reserved at this date and time ,please correct your information and then submit")     
             form.save()
             messages.success(request, "You successfully reserve this meeting room at this time and date")
-            return HttpResponseRedirect(reverse('reservationmeetingrooms'))
+            #return HttpResponseRedirect(reverse('reservationmeetingrooms'))
     context = {
     'form' : form ,
     }
