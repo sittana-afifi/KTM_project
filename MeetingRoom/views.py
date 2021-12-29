@@ -18,49 +18,65 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
-
+import logging
+from django.http import HttpResponse
+# or Get an instance of a logger:
+logger = logging.getLogger(__name__)
+import logging.config
+logger = logging.getLogger(__file__)
+from django.utils.log import DEFAULT_LOGGING
 
 
 # Create your views here.
 class MeetingListView(LoginRequiredMixin,generic.ListView):
+    logger.info("Enter MeetingListView.")
     model = Meeting
     template_name = 'MeetingRoom/meeting_list.html'
 
 class MeetingDetailView(LoginRequiredMixin,generic.DetailView):
+    logger.info("Enter MeetingDetailView.")
     model = Meeting
     template_name = 'MeetingRoom/meeting_detail.html'
 
 class MeetingCreate(LoginRequiredMixin,CreateView):
+    logger.info("Enter MeetingCreate.")
     model = Meeting
     fields = '__all__'
 
 class MeetingUpdate(LoginRequiredMixin,UpdateView):
+    logger.info("Enter MeetingUpdate.")
     model = Meeting
     fields = '__all__' # Not recommended (potential security issue if more fields added)
 
 class MeetingDelete(LoginRequiredMixin,DeleteView):
+    logger.info("Enter MeetingDelete.")
     model = Meeting
     success_url = reverse_lazy('meetings')
 
 ######################################################
 # ReservationMeetingRoom CRUD:
 class ReservationMeetingRoomListView(LoginRequiredMixin,generic.ListView):
+    logger.info("Enter ReservationMeetingRoomListView.")
     model = ReservationMeetingRoom
     template_name = 'MeetingRoom/reservationmeetingroom_list.html'
 
 class ReservationMeetingRoomDetailView(LoginRequiredMixin,generic.DetailView):
+    logger.info("Enter ReservationMeetingRoomDetailView.")
     model = ReservationMeetingRoom
     template_name = 'MeetingRoom/reservationmeetingroom_detail.html'
 
 class ReservationMeetingRoomCreate(LoginRequiredMixin,CreateView):
+    logger.info("Enter ReservationMeetingRoomCreate.")
     model = ReservationMeetingRoom
     fields = '__all__'
 
 class ReservationMeetingRoomUpdate(LoginRequiredMixin,UpdateView):
+    logger.info("Enter ReservationMeetingRoomUpdate.")
     model = ReservationMeetingRoom
     fields = '__all__' # Not recommended (potential security issue if more fields added)
 
 class ReservationMeetingRoomDelete(LoginRequiredMixin,DeleteView):
+    logger.info("Enter ReservationMeetingRoomDelete.")
     model = ReservationMeetingRoom
     success_url = reverse_lazy('reservationmeetingrooms')
 
@@ -68,7 +84,9 @@ class ReservationMeetingRoomDelete(LoginRequiredMixin,DeleteView):
 
 # Validation Reservation Meeting Room Requests Function:
 def validateReservationForm(form):
+    logger.info("Enter validateReservationForm.")
     if form.is_valid():
+            logger.info("Enter form.is_valid.")
             meeting_room = form.cleaned_data['meeting_room']
             reservation_date = form.cleaned_data['reservation_date']
             reservation_from_time = form.cleaned_data['reservation_from_time']
@@ -87,6 +105,8 @@ def validateReservationForm(form):
 # Reservation Form Create View:
 @login_required
 def reserve_view(request):
+    logger.info("Enter reserve_view.")
+
     form = ReservationForm(request.POST)
     if request.method == "POST":
         form = ReservationForm(request.POST)
@@ -108,15 +128,20 @@ def reserve_view(request):
 # Reservation Form Update View :
 @login_required
 def update_reserve_view(request, pk):
+    logger.info("Enter update_reserve_view.")
     reservation = ReservationMeetingRoom.objects.get(pk=pk)
     form = UpdateReservationForm(request.POST or None,instance=reservation)
     if request.method == "POST":
+        logger.info("Enter request.method == POST")
         if form.is_valid():   
+            logger.info("form is valid")
             form= form.save(commit= False)
             case_1 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=form.meeting_room,reservation_date=form.reservation_date, reservation_from_time__lte=form.reservation_from_time, reservation_to_time__gte=form.reservation_to_time).exists()
             case_2 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=form.meeting_room,reservation_date=form.reservation_date, reservation_from_time__lte=form.reservation_to_time, reservation_to_time__gte=form.reservation_to_time).exists()
             case_3 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=form.meeting_room,reservation_date=form.reservation_date, reservation_from_time__gte=form.reservation_from_time, reservation_to_time__lte=form.reservation_to_time).exists()                # if either of these is true, abort and render the error
             if case_1 or case_2 or case_3:
+                logger.info("case_1 or case_2 or case_3 is TRUE.")
+
                 messages.error(request, "Selected Meeting room already reserved at this date and time ,please correct your information and then submit")     
             form.save()
             messages.success(request, "You successfully reserve this meeting room at this time and date")
