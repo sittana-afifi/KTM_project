@@ -51,7 +51,6 @@ def index(request):
     }
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'index.html', context=context)
-    logger.info("enter index function.")
 
 
 
@@ -61,11 +60,16 @@ def index(request):
 
 def getUserInfoFromLDAP(request):
     '''Get User Info from LDAP'''
+    logger.info("enter getUserInfoFromLDAP function.")
+
     username = request.POST.get('username')
     try:
+        logger.info("enter TRY inside getUserInfoFromLDAP function.")
+
+    
         user = LDAPBackend().populate_user(username)
         if user is None:
-            
+            logger.info("User fron ldap is None.")
             raise Exception("User Already Exit")
         user.delete()
     except AttributeError as e:
@@ -84,31 +88,40 @@ def getUserInfoFromLDAP(request):
     return u_form
 
 def submitUserForm(request):
+    logger.info("enter submitUserForm function.")
+
     u_form = AccountCreateForm( request.POST)  
     if u_form.is_valid() :
+        logger.info("u_form is  Valid.")
         u_form.save()
         return redirect( 'user_list') 
     #return render(request, 'usersubmitform.html')
 
 def createUser(request):
+    logger.info("enter createUser function.")
+
     context = {}
     if request.method == 'GET' :
+        logger.info("The Request is GET.")
         u_form = UserForm()
         context ['u_form' ]= u_form
         return render(request, 'get_user_info.html', context) 
     if request.method == 'POST' :
+        logger.info("The Request is POST.")
         username = request.POST.get('username')
-
         isExist = User.objects.filter(username = username).exists()
         if isExist:
+                logger.info("Enter isExist.")
                 messages.error(request, 'User Already Exist')
                 return redirect( 'get_user_info') 
         
         try:
+            logger.info("Enter TRY.")
             u_form = getUserInfoFromLDAP(request) 
             return render(request, 'user_create.html', {'u_form' :u_form}) 
 
         except Exception as e:
+            logger.info("Enter Exception.")
             messages.error(request, 'User Doesn\'t exist in Active Directory')
             u_form = UserForm()
             return render(request, 'get_user_info.html', {'u_form' :u_form}) 
@@ -117,7 +130,7 @@ def createUser(request):
 # view the list of the users.
 
 class usersListView(LoginRequiredMixin,generic.ListView):
-    logger.info("enter index function.")
+    logger.info("Enter usersListView.")
     model = User
     template_name ='accounts/user_list.html'
 
@@ -125,6 +138,7 @@ class usersListView(LoginRequiredMixin,generic.ListView):
 
 # view details of the specific user.
 class UserDetailView(LoginRequiredMixin,generic.DetailView):
+    logger.info("Enter UserDetailView.")
     model = User
     template_name ='accounts/user_detail.html'
 
@@ -132,7 +146,7 @@ class UserDetailView(LoginRequiredMixin,generic.DetailView):
 
 # update specific user with specific fields.
 class UserUpdate(LoginRequiredMixin,UpdateView):
-    
+    logger.info("Enter UserUpdate.")
     model = User
     #exclude  = ('password','last_login','is_superuser', 'is_active','date_joined', )
     form_class = AccountCreateForm
@@ -143,6 +157,7 @@ class UserUpdate(LoginRequiredMixin,UpdateView):
 
 # delete specific user.
 class UserDelete(LoginRequiredMixin,DeleteView):
+    logger.info("Enter UserDelete.")
     model = User
     success_url = reverse_lazy('user_list')
 
