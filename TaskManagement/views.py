@@ -54,6 +54,11 @@ class EmployeeCreateView(CreateView):
     model = Employee
     fields = ['user','Employee_id', 'Phone_number', 'date_joined']
     success_url = reverse_lazy('employee_list')
+    def get_form(self):
+        form = super().get_form()
+        form.fields['date_joined'].widget = DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True})
+        return form
+
 
 
 
@@ -64,7 +69,12 @@ class EmployeeUpdateView(UpdateView):
     fields = ['Employee_id', 'Phone_number', 'date_joined']
     def get_success_url(self):
         logger.info("Enter get_success_url.")
-        return reverse('employee-detail',args= [str(self.object.id)]) 
+        return reverse('employee-detail',args= [str(self.object.id)])
+    def get_form(self):
+        form = super().get_form()
+        form.fields['date_joined'].widget = DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True})
+        return form
+
 
     
 
@@ -141,22 +151,22 @@ class TaskmanagmentCreate(LoginRequiredMixin,CreateView):
     logger.info("Enter TaskmanagmentCreate.")
     model = Taskmanagment
     fields = '__all__'
-    widgets = {
-    'start_date' : DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}),
-    'end_date' : DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}),
-    }
-
-
+    def get_form(self):
+        form = super().get_form()
+        form.fields['start_date'].widget = DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True})
+        form.fields['end_date'].widget = DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True})
+        return form
+        
 # Update a specific taskmanagment:
 class TaskmanagmentUpdate(LoginRequiredMixin,UpdateView):
     logger.info("Enter TaskmanagmentUpdate.")
     model = Taskmanagment
     fields = ['assignee' , 'assigneedTo' , 'task_managment' , 'status' , 'priority' , 'comment' , 'start_date' , 'end_date' ]
-    #fields = '__all__' # Not recommended (potential security issue if more fields added)
-    widgets = {
-    'start_date' : DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}),
-    'end_date' : DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}),
-    }
+    def get_form(self):
+        form = super().get_form()
+        form.fields['start_date'].widget = DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True})
+        form.fields['end_date'].widget = DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True})
+        return form
 
 # Delete a specific taskmanagment:
 class TaskmanagmentDelete(LoginRequiredMixin,DeleteView):
