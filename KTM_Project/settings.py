@@ -274,6 +274,7 @@ EMAIL_HOST_PASSWORD =env('EMAIL_HOST_PASSWORD')
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "root": {"level": "INFO", "handlers": ["console"]},
     "handlers": {
         "console": {
             "level": "INFO",
@@ -291,10 +292,10 @@ LOGGING = {
     "formatters": {
         "test_format": {
             "format": (
-               " [%(levelname)-4s] %(message)s" 
+                #" [%(levelname)-4s] %(message)s" 
                #"%(name)-12s %(levelname)-8s %(message)s" 
-               # u"[%(asctime)s] [%(levelname)-4s]  [%(name)-12s] "
-                #"(%(module)s.%(funcName)s) %(message)s"
+                u"[%(asctime)s] [%(levelname)-4s]  [%(name)-12s] "
+                "(%(module)s.%(funcName)s) %(message)s"
             ),
             "datefmt": "%Y-%m-%d %H:%M:%S %p %Z %z",
         },
