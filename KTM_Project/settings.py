@@ -297,7 +297,7 @@ LOGGING = {
                 u"[%(asctime)s] [%(levelname)-4s]  [%(name)-12s] "
                 "(%(module)s.%(funcName)s) %(message)s"
             ),
-            "datefmt": "%Y-%m-%d %H:%M:%S %p %Z %z",
+            "datefmt": "%Y-%m-%d %H:%M:%S %p",
         },
     }, 
 }
