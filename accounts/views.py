@@ -23,27 +23,22 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate as authenticate_django
 from pathlib import Path
 from django.contrib import messages
-
-
-
-
-# Logging view in Django:
-# First import the logging library from Python's standard library:
-import os 
-import logging
+import os, logging, logging.config # Logging view in Django:
 from django.http import HttpResponse
-# Create a logger for this file or the name of the log level:
-# or Get an instance of a logger:
-logger = logging.getLogger(__name__)
-import logging.config
+logger = logging.getLogger(__name__) # Create a logger for this file or the name of the log level or Get an instance of a logger
 logger = logging.getLogger(__file__)
-from django.utils.log import DEFAULT_LOGGING
 
 
 @login_required
 def index(request):
     """View function for home page of site."""
-    logger.info("enter index function.")
+    logger.info('info This logs an info message.')
+    logger.debug(' debug This logs an info message.')
+    logger.error(' error This logs an info message.')
+    logger.warning('warning This logs an info message.')
+    logger.critical('critical This logs an info message.')
+    logger.info("This logs an info message.")
+    logger.error("enter index function.")
     num_visits = request.session.get('num_visits', 0)
     request.session['num_visits'] = num_visits + 1
     context = {

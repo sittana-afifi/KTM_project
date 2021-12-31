@@ -18,14 +18,11 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
-import logging
 from django.http import HttpResponse
-# or Get an instance of a logger:
-logger = logging.getLogger(__name__)
-import logging.config
+import os, logging, logging.config # Logging view in Django:
+from django.http import HttpResponse
+logger = logging.getLogger(__name__) # Create a logger for this file or the name of the log level or Get an instance of a logger
 logger = logging.getLogger(__file__)
-from django.utils.log import DEFAULT_LOGGING
-
 
 # Create your views here.
 class MeetingListView(LoginRequiredMixin,generic.ListView):

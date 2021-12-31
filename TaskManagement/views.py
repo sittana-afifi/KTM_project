@@ -15,14 +15,10 @@ from django.urls import reverse
 from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput, MonthPickerInput, YearPickerInput
 from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 from flatpickr.utils import GenericViewWidgetMixin
-import os 
-import logging
+import os, logging, logging.config # Logging view in Django:
 from django.http import HttpResponse
-# or Get an instance of a logger:
-logger = logging.getLogger(__name__)
-import logging.config
+logger = logging.getLogger(__name__) # Create a logger for this file or the name of the log level or Get an instance of a logger
 logger = logging.getLogger(__file__)
-from django.utils.log import DEFAULT_LOGGING
 
 
 # view a list of all employees.
