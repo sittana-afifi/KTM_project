@@ -97,9 +97,6 @@ class UpdateReservationForm(forms.ModelForm):
 
     def clean_reservation_date(self):
         data = self.cleaned_data['reservation_date']
-        # Check if a date is not in the past.
-        if data < datetime.date.today():
-            raise ValidationError(_('Invalid date - Date cannot be in the past'))
         return data
 
     def clean_team(self):

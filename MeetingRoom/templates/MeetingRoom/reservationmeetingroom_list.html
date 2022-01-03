@@ -1,28 +1,34 @@
 {% extends "base_generic.html" %}
-
 {% block content %}
-  <h2>Reservation Meeting Room
-    <a href="{% url 'reserve' %}"> 
-      <i data-feather="plus-circle" style="width:25px;height:25px;" ></i>  
-    </a>
-  </h2>
-  
+  <h2>Reservation Meeting Room<a href="{% url 'reserve' %}"><i data-feather="plus-circle" style="width:25px;height:25px;" ></i></a></h2>
   {% if reservationmeetingroom_list %}
-  <ul>
-    {% for reservationmeetingroom in reservationmeetingroom_list %}
-      <li>
-        <a href="{{ reservationmeetingroom.get_absolute_url }}">{{ reservationmeetingroom.meeting_room}}</a> 
-        
-        <a href="{% url 'reserve-update' reservationmeetingroom.id %}"> 
-          <i data-feather="edit-3" style="width:20px" ></i>
-        </a>
-        <a href="{% url 'reservationmeetingroom-delete' reservationmeetingroom.id %}">
-          <i data-feather="trash-2" style="width:20px" ></i>  
-        </a>
-      </li>
-    {% endfor %}
-  </ul>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          {# <th scope="col">No</th>#}
+          <th scope="col">Room Name</th>
+          <th scope="col">Reservation Date</th>
+          <th scope="col">Start Time</th>
+          <th scope="col">End Time</th>
+          <th scope="col">Edit</th>
+          <th scope="col">Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          {% for reservationmeetingroom in reservationmeetingroom_list %}
+          {# <th scope="row">1</th> #}
+          <td><a href="{{ reservationmeetingroom.get_absolute_url }}">{{ reservationmeetingroom.meeting_room}}</a></td>
+          <td>{{ reservationmeetingroom.reservation_date }}</td>
+          <td>{{ reservationmeetingroom.reservation_from_time }}</td>
+          <td>{{ reservationmeetingroom.reservation_to_time }}</td>
+          <td><a href="{% url 'reserve-update' reservationmeetingroom.id %}"><button class="btn btn-success my-3">Update</button></a></td>
+          <td><a href="{% url 'reservationmeetingroom-delete' reservationmeetingroom.id %}"><input class="btn btn-danger" type="submit" value="Delete."></a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   {% else %}
-    <p>There are no tasks in the library.</p>
+    <p>There are no Reservation Request in the library.</p>
   {% endif %}
 {% endblock %}
