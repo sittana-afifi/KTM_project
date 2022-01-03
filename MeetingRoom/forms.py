@@ -81,7 +81,7 @@ class UpdateReservationForm(forms.ModelForm):
     reservation_to_time = forms.TimeField(widget=TimePickerInput(options={"format": "hh:mm","autoclose": True}))
     meeting_project_name = forms.ModelChoiceField(queryset = Project.objects.all(), required=False)
     task_name = forms.ModelChoiceField(queryset = Task.objects.all(), required=False)
-    meeting_outcomes = forms.CharField(max_length=1000, help_text='Enter the meeting outcomes', widget=forms.Textarea)
+    meeting_outcomes = forms.CharField(max_length=1000, required=False, help_text='Enter the meeting outcomes', widget=forms.Textarea)
     
     def clean_reservation_from_time(self):
         data = self.cleaned_data['reservation_from_time']
