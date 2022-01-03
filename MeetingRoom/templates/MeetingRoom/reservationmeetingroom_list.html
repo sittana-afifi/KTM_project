@@ -5,7 +5,7 @@
     <table class="table">
       <thead class="thead-dark">
         <tr>
-          {# <th scope="col">No</th>#}
+          <th scope="col">No</th>
           <th scope="col">Room Name</th>
           <th scope="col">Reservation Date</th>
           <th scope="col">Start Time</th>
@@ -17,7 +17,8 @@
       <tbody>
         <tr>
           {% for reservationmeetingroom in reservationmeetingroom_list %}
-          {# <th scope="row">1</th> #}
+          
+          <th scope="row">{{ forloop.counter }} </th> 
           <td><a href="{{ reservationmeetingroom.get_absolute_url }}">{{ reservationmeetingroom.meeting_room}}</a></td>
           <td>{{ reservationmeetingroom.reservation_date }}</td>
           <td>{{ reservationmeetingroom.reservation_from_time }}</td>
