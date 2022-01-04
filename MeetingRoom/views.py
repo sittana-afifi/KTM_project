@@ -99,7 +99,6 @@ def validateReservationForm(form):
             case_6 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room, reservation_date=reservation_date, reservation_from_time__lt=(reservation_from_time and reservation_to_time), reservation_to_time__gt=(reservation_to_time and reservation_from_time)).exists()
             # if either of these is true, abort and render the error
             return case_1 or case_2 or case_3 or case_4 or case_6
-            #or case_2 or case_3 
 
 #####################################################
 
@@ -113,7 +112,6 @@ def reserve_view(request):
         notvalidform =  validateReservationForm(form)
         if notvalidform:  
             messages.error(request, "Selected Meeting room already reserved at this date and time ,please correct your information and then submit")
-            return redirect(reverse('reserve'))                  
         elif form.is_valid():
             form.save()
             messages.success(request, "You successfully reserve this meeting room at this time and date")

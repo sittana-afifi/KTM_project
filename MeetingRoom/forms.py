@@ -6,8 +6,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from TaskManagement.models import  Employee, Task, Project, Taskmanagment
 from django.shortcuts import render
-from django.utils.translation import ugettext_lazy as _
-from django.core.exceptions import ValidationError
 from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 from .models import ReservationMeetingRoom, Meeting
 from django.utils import timezone
@@ -27,6 +25,7 @@ class ReservationForm(forms.ModelForm):
     reservation_to_time = forms.TimeField(widget=TimePickerInput(options={"format": "hh:mm","autoclose": True}))
     meeting_project_name = forms.ModelChoiceField(queryset = Project.objects.all(), required=False)
     task_name = forms.ModelChoiceField(queryset = Task.objects.all(), required=False)
+
     def clean_reservation_from_time(self):
         data = self.cleaned_data['reservation_from_time']
         return data
@@ -60,7 +59,7 @@ class ReservationForm(forms.ModelForm):
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.meeting_room}'
-        return f'{self.team.first_name}'
+        #return f'{self.team.first_name}'
 
     def get_absolute_url(self):
         """Returns the url to access a detail record for this project."""
@@ -128,8 +127,3 @@ class UpdateReservationForm(forms.ModelForm):
             raise ValidationError(('Selected Meeting room already reserved at this date and time ,please correct your information and then submit'))
             messages.error(request, "Selected Meeting room already reserved at this date and time ,please correct your information and then submit")
         return cleaned_data
-
-    class Meta:
-        model = ReservationMeetingRoom
-        fields = ['meeting_room', 'id','meeting_project_name','task_name', 'reservation_date', 'reservation_from_time', 'reservation_to_time', 'team', 'meeting_outcomes']
-        
