@@ -1,26 +1,18 @@
-from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required, permission_required
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views import generic
 from .models import Meeting, ReservationMeetingRoom
 from django.views.generic.edit import UpdateView , DeleteView , CreateView 
 from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput, MonthPickerInput, YearPickerInput
-from django.shortcuts import render 
 from .forms import ReservationForm, UpdateReservationForm
 from django.core.exceptions import ValidationError 
 from django.forms import ValidationError
-from .forms import ReservationForm
 from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 from django.contrib import messages
-from django.forms import ValidationError
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-from django.shortcuts import get_object_or_404
-from django.shortcuts import redirect
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
 import os, logging, logging.config # Logging view in Django:
-from django.http import HttpResponse
 logger = logging.getLogger(__name__) # Create a logger for this file or the name of the log level or Get an instance of a logger
 logger = logging.getLogger(__file__)
 
@@ -145,7 +137,7 @@ def update_reserve_view(request, pk):
                 logger.info("case_1 or case_2 or case_3 is TRUE.")
                 messages.error(request, "Selected Meeting room already reserved at this date and time ,please correct your information and then submit")     
             form.save()
-            messages.success(request, "You successfully reserve this meeting room at this time and date")
+            messages.success(request, "You successfully update reservation request for this meeting room at this time and date")
             return HttpResponseRedirect(reverse('reservationmeetingrooms'))
     context = {
     'form' : form ,
