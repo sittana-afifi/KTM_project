@@ -125,19 +125,8 @@ def update_reserve_view(request, pk):
         logger.info("Enter request.method == POST")
         if form.is_valid():   
             logger.info("form is valid")
-            form= form.save(commit= False)
-            case_1 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=reservation.meeting_room,reservation_date=reservation.reservation_date, reservation_from_time__gte= reservation.reservation_from_time, reservation_to_time= reservation.reservation_to_time).exists()
-            case_2 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=reservation.meeting_room,reservation_date=reservation.reservation_date, reservation_from_time__lte= reservation.reservation_from_time, reservation_to_time__gte= reservation.reservation_to_time).exists()
-            case_3 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=reservation.meeting_room,reservation_date=reservation.reservation_date, reservation_from_time__gte= reservation.reservation_from_time, reservation_to_time__lte=reservation.reservation_to_time).exists()
-            case_4 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=reservation.meeting_room,reservation_date=reservation.reservation_date, reservation_from_time__lte= reservation.reservation_from_time, reservation_to_time=reservation.reservation_to_time).exists()
-            case_5 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=reservation.meeting_room,reservation_date=reservation.reservation_date, reservation_from_time__gt=(reservation.reservation_from_time and reservation.reservation_to_time), reservation_to_time__lt=(reservation.reservation_to_time and reservation.reservation_from_time)).exists()
-            case_6 = ReservationMeetingRoom.objects.exclude(pk = reservation.pk).filter(meeting_room=reservation.meeting_room,reservation_date=reservation.reservation_date, reservation_from_time__lt=(reservation.reservation_from_time and reservation.reservation_to_time), reservation_to_time__gt=(reservation.reservation_to_time and reservation.reservation_from_time)).exists()
-            # if either of these is true, abort and render the error
-            if case_1 or case_2 or case_3 or case_4 or case_5 or case_6 :            
-                logger.info("case_1 or case_2 or case_3 is TRUE.")
-                messages.error(request, "Selected Meeting room already reserved at this date and time ,please correct your information and then submit")     
             form.save()
-            messages.success(request, "You successfully update reservation request for this meeting room at this time and date")
+            messages.success(request, "You Successfully update reservation request for this meeting room at this time and date")
             return HttpResponseRedirect(reverse('reservationmeetingrooms'))
     context = {
     'form' : form ,
