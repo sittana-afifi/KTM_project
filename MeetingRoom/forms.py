@@ -22,7 +22,7 @@ class ReservationForm(forms.ModelForm):
         fields = ['meeting_room', 'id','meeting_project_name', 'task_name' ,'reservation_date', 'reservation_from_time', 'reservation_to_time', 'team']
     meeting_room = forms.ModelChoiceField(queryset = Meeting.objects.all())
     reservation_date = forms.DateField(required=True, widget=DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}))
-    team = forms.ModelMultipleChoiceField(queryset =Employee.objects.all(),blank=True,required=False) 
+    team = forms.ModelMultipleChoiceField(queryset =Employee.objects.all(),blank=True,required=False, widget=forms.CheckboxSelectMultiple) 
     reservation_from_time = forms.TimeField(widget=TimePickerInput(options={"format": "hh:mm","autoclose": True,"use24hours": True}))
     reservation_to_time = forms.TimeField(widget=TimePickerInput(options={"format": "hh:mm","autoclose": True}))
     meeting_project_name = forms.ModelChoiceField(queryset = Project.objects.all(), required=False)
@@ -76,7 +76,7 @@ class UpdateReservationForm(forms.ModelForm):
         fields = ['meeting_room', 'id','meeting_project_name','task_name', 'reservation_date', 'reservation_from_time', 'reservation_to_time', 'team', 'meeting_outcomes']
     meeting_room = forms.ModelChoiceField(queryset = Meeting.objects.all())
     reservation_date = forms.DateField(widget=DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}), required=True )
-    team = forms.ModelMultipleChoiceField(queryset =Employee.objects.all(),blank=True,required=False) 
+    team = forms.ModelMultipleChoiceField(queryset =Employee.objects.all(),blank=True,required=False,widget=forms.CheckboxSelectMultiple) 
     reservation_from_time = forms.TimeField(widget=TimePickerInput(options={"format": "hh:mm","autoclose": True}))
     reservation_to_time = forms.TimeField(widget=TimePickerInput(options={"format": "hh:mm","autoclose": True}))
     meeting_project_name = forms.ModelChoiceField(queryset = Project.objects.all(), required=False)
