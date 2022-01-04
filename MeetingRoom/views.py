@@ -56,6 +56,7 @@ class ReservationMeetingRoomListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter ReservationMeetingRoomListView.")
     model = ReservationMeetingRoom
     template_name = 'MeetingRoom/reservationmeetingroom_list.html'
+    paginate_by = 5
 
 class ReservationMeetingRoomDetailView(LoginRequiredMixin,generic.DetailView):
     logger.info("Enter ReservationMeetingRoomDetailView.")
