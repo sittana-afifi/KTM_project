@@ -211,7 +211,7 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-
+'''
 
 # LDAP CONFIGRATION START HERE !
 
@@ -252,7 +252,7 @@ ldap.OPT_REFERRALS: 0,
 
 
 # LDAP CONFIGRATION ENDS HERE !
-
+'''
 #Mail service
 
 

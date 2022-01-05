@@ -1,6 +1,8 @@
 {% load i18n %} 
 {% load bootstrap4 %}
 {% load static %}
+{% block app %}
+    {% if user.is_authenticated %}
 <div id="main">
     <nav class="navbar navbar-header navbar-expand navbar-light">
         <a class="sidebar-toggler" href="#"><span class="navbar-toggler-icon"></span></a>
@@ -87,3 +89,4 @@
     </div> 
    
 </div> 
+{% endblock app %}

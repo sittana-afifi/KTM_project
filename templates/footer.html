@@ -1,6 +1,9 @@
 {% load i18n %} 
 {% load bootstrap4 %}
 {% load static %}
+{% block app %}
+{% if user.is_authenticated %}
+
 <footer style="background-color:#3b4042">
     <div class="footer clearfix mb-0 text-muted" >
         <div class="float-start">
@@ -14,3 +17,4 @@
         </div>
     </div>
 </footer>
+{% endblock app %}
