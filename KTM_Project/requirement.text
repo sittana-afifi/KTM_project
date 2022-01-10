@@ -94,4 +94,6 @@ pip3 install    django-flatpickr
 pip3 install    django-bootstrap-datepicker-plus
 pip3 install    django-bootstrap4
 pip3 install    django-rosetta
-pip install     django-readonly-field
+pip3 install    django-readonly-field
+pip3 install    django-tables2-bootstrap4
+pip3 install    django-filter

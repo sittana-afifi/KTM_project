@@ -85,6 +85,8 @@ INSTALLED_APPS = [
     'flatpickr',
     'bootstrap4',
     "django_readonly_field",
+    'django_tables2',
+    'django_filters',
     
 ]
 
@@ -116,6 +118,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },

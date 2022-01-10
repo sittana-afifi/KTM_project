@@ -2,7 +2,8 @@
 {% load i18n %}
 {% block content %}
 
-<style>
+<!-- 
+  <style>
     body {
       background-image: url('https://lists.office.com/Images/9188040d-6c67-4c5b-b112-36a304b66dad/00000000-0000-0000-0003-bffd093ecbe7/T3WVIOPND8QMLBQI7ZS2QN8EJW/300dcea7-bc3d-4d75-b483-a798da121ccc');
       background-repeat: no-repeat;
@@ -12,7 +13,50 @@
       background-attachment: scroll;
     }
     </style> 
+-->
 <h1>KSHC Team Managment Application Home page</h1>
 <p>You have visited this page {{ num_visits }} time{{ num_visits|pluralize }}.</p>
+
+<div class="accordion" id="accordionPricing">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          what is the KTM (KDF) Project?
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionPricing">
+      <div class="accordion-body">
+          KSH Development Framework (KDF) is a set of tools, technologies, practices and development standards, it is the core around which a range of software solutions will be developed. Once built, this framework will support provision of trustworthy software solutions that brings business value to KSH; KDF itself will be in continuous improvement
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingTwo">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          How to Use KTM project?
+      </button>
+    </h2>
+    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionPricing">
+      <div class="accordion-body">
+          Internal Digital Transformation (IDT)
+          ......................................
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingThree">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          About Buisness Development Team?
+      </button>
+    </h2>
+    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionPricing">
+      <div class="accordion-body">
+          Business Development and Transformation – Technical Section.
+          ......................................
+
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock  %}
