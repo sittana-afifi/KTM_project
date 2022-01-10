@@ -23,9 +23,10 @@ environ.Env.read_env()
 
 
 #import library to logging configuration : 
-import os
-import logging.config
-import logging # must be imported in view.py also.
+import os, logging, logging.config # Logging view in Django:
+from django.http import HttpResponse
+logger = logging.getLogger(__name__) # Create a logger for this file or the name of the log level or Get an instance of a logger
+logger = logging.getLogger(__file__)
 from django.utils.log import DEFAULT_LOGGING
 
 # Internationalization
@@ -71,7 +72,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # configure the accounts app 
     'accounts.apps.AccountsConfig',
-    #'rosetta',  # Rosetta Translation Interface
+    'rosetta',  # Rosetta Translation Interface
     'parler', #Translating Models with django-parler
     # Custom for contact application
     #'contact',
@@ -81,7 +82,7 @@ INSTALLED_APPS = [
      # configure the MeetingRoom app 
     'MeetingRoom.apps.MeetingRoomConfig',
     'bootstrap_datepicker_plus',
-    #'flatpickr',
+    'flatpickr',
     'bootstrap4',
     "django_readonly_field",
     
@@ -273,7 +274,7 @@ EMAIL_HOST_PASSWORD =env('EMAIL_HOST_PASSWORD')
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-   #"root": {"level": "DEBUG", "handlers": ["console"]},
+    "root": {"level": "INFO", "handlers": ["console"]},
     "handlers": {
         "console": {
             "level": "INFO",
@@ -291,15 +292,18 @@ LOGGING = {
     "formatters": {
         "test_format": {
             "format": (
+                #" [%(levelname)-4s] %(message)s" 
+               #"%(name)-12s %(levelname)-8s %(message)s" 
                 u"[%(asctime)s] [%(levelname)-4s]  [%(name)-12s] "
                 "(%(module)s.%(funcName)s) %(message)s"
             ),
-            "datefmt": "%Y-%m-%d %H:%M:%S %p %Z %z",
+            "datefmt": "%Y-%m-%d %H:%M:%S %p",
         },
     }, 
 }
 
 
+####################################################
 
 ABSOLUTE_URL_OVERRIDES = {
     'auth.user': lambda u: "../../detail/%s/" % u.id,

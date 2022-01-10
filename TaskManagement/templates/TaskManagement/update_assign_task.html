@@ -3,18 +3,20 @@
 
 {% block content %}
 {% if messages %}
-<div class="messages">
+<ul class="messages">
     {% for message in messages %}
-    <div {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
     {% endfor %}
-</div>
-{% endif %}
-  <form action="" method="post">
+</ul>
+{% endif %} 
+<form action="" method="post">
     {% csrf_token %}
     {{ form |crispy }}
     {{ form.media }}  {# Adds all flatpickr JS/CSS files from CDN #}
+    
     <input class="btn btn-success my-3" type="submit" value="Submit">
-    <a href="{% url 'reservationmeetingrooms' %}" class="btn btn-danger my-3">Cancel</a>
+    <a href="{% url 'taskmanagments' %}" class="btn btn-danger my-3">Cancel</a>
 
   </form>
 {% endblock %}
+

@@ -37,7 +37,21 @@ class ReservationMeetingRoom(models.Model):
         if date < datetime.date.today():
             raise ValidationError(_('Invalid date - Date cannot be in the past'))
         return date
-
+    def clean(self, *args, **kwargs):
+        cleaned_data = super().clean(*args, **kwargs)
+        if self.pk:
+            case_1 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__gte= self.reservation_from_time, reservation_to_time= self.reservation_to_time).exists()
+            case_2 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__lte= self.reservation_from_time, reservation_to_time__gte= self.reservation_to_time).exists()
+            case_3 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__gte= self.reservation_from_time, reservation_to_time__lte=self.reservation_to_time).exists()
+            case_4 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__lte= self.reservation_from_time, reservation_to_time=self.reservation_to_time).exists()
+            case_5 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__gt=(self.reservation_from_time and self.reservation_to_time), reservation_to_time__lt=(self.reservation_to_time and self.reservation_from_time)).exists()
+            case_6 = ReservationMeetingRoom.objects.exclude(pk = self.pk).filter(meeting_room=self.meeting_room,reservation_date=self.reservation_date, reservation_from_time__lt=(self.reservation_from_time and self.reservation_to_time), reservation_to_time__gt=(self.reservation_to_time and self.reservation_from_time)).exists()
+            # if either of these is true, abort and render the error
+            if case_1 or case_2 or case_3 or case_4 or case_5 or case_6 :
+                #messages.error(request, "Selected Meeting room already reserved at this date and time ,please correct your information and then submit")
+                raise ValidationError(('Selected Meeting room already reserved at this date and time ,please correct your information and then submit'))
+        return cleaned_data
+    
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.meeting_room}'
@@ -45,4 +59,3 @@ class ReservationMeetingRoom(models.Model):
     def get_absolute_url(self):
         """Returns the url to access a detail record for this project."""
         return reverse('reservationmeetingroom-detail', args=[str(self.id)])
-

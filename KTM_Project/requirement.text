@@ -20,7 +20,7 @@ pip3 install	dj-database-url==0.5.0
 pip3 install	Django==3.2.9
 pip3 install	django-auth-ldap==3.0.0
 pip3 install	django-crispy-forms==1.13.0
-pip3 install	django-environ==0.8.1
+pip3 install 	django-environ==0.8.1
 pip3 install	filelock==3.1.0
 pip3 install	gunicorn==20.1.0
 pip3 install	httplib2==0.9.2
@@ -87,7 +87,7 @@ pip3 install	virtualenv-clone==0.5.7
 pip3 install	virtualenvwrapper==4.8.4
 pip3 install	whitenoise==5.3.0
 pip3 install	zipp==3.5.1
-pip3 install	zope.interface==4.3.2
+pip3 install	zope.interface==4.3.
 pip3 install    django-crispy-forms
 pip3 install    django-parler
 pip3 install    django-flatpickr
