@@ -17,9 +17,10 @@ from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 from flatpickr.utils import GenericViewWidgetMixin
 import os, logging, logging.config # Logging view in Django:
 from django.http import HttpResponse
-logger = logging.getLogger(__name__) # Create a logger for this file or the name of the log level or Get an instance of a logger
-logger = logging.getLogger(__file__)
 
+# Create a logger for this file or the name of the log level or Get an instance of a logger
+logger = logging.getLogger(__name__) 
+logger = logging.getLogger(__file__)
 
 # view a list of all employees.
 class EmployeesListView(LoginRequiredMixin,generic.ListView):
@@ -27,15 +28,11 @@ class EmployeesListView(LoginRequiredMixin,generic.ListView):
     model = Employee
     template_name ='TaskManagement/employee_list.html'
 
-
-
 # view details of the specific employee.
 class EmployeeDetailView(generic.DetailView):
     logger.info("Enter EmployeeDetailView.")
     model = Employee
     template_name ='TaskManagement/employee_detail.html'
-
-
 
 # delete specific employee.
 class EmployeeDelete(DeleteView):
@@ -43,38 +40,34 @@ class EmployeeDelete(DeleteView):
     model = Employee
     success_url = reverse_lazy('employee_list')
 
-
 # Add specific employee.
 class EmployeeCreateView(CreateView):
     logger.info("Enter EmployeeCreateView.")
     model = Employee
     fields = ['user','Employee_id', 'Phone_number', 'date_joined']
     success_url = reverse_lazy('employee_list')
+
     def get_form(self):
         form = super().get_form()
         form.fields['date_joined'].widget = DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True})
         return form
-
-
-
 
 # update specific employee.
 class EmployeeUpdateView(UpdateView):
     logger.info("Enter EmployeeUpdateView.")
     model = Employee
     fields = ['Employee_id', 'Phone_number', 'date_joined']
+    
     def get_success_url(self):
         logger.info("Enter get_success_url.")
         return reverse('employee-detail',args= [str(self.object.id)])
+    
     def get_form(self):
         form = super().get_form()
         form.fields['date_joined'].widget = DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True})
         return form
 
 
-    
-
-#####################################################
 class ProjectListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter ProjectListView.")
     model = Project
@@ -100,7 +93,6 @@ class ProjectDelete(LoginRequiredMixin,DeleteView):
     model = Project
     success_url = reverse_lazy('projects')
 
-#####################################################
 class TaskListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter TaskListView.")
     model = Task
@@ -126,14 +118,11 @@ class TaskDelete(LoginRequiredMixin,DeleteView):
     model = Task
     success_url = reverse_lazy('tasks')
 
-#######################################################
-
 # Taskmanagment List View:
 class TaskmanagmentListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter TaskmanagmentListView.")
     model = Taskmanagment
     template_name ='TaskManagement/taskmanagment_list.html'
-
 
 # Taskmanagment Details View:
 class TaskmanagmentDetailView(LoginRequiredMixin,generic.DetailView):
@@ -141,12 +130,12 @@ class TaskmanagmentDetailView(LoginRequiredMixin,generic.DetailView):
     model = Taskmanagment
     template_name ='TaskManagement/taskmanagment_detail.html'
 
-
 # Create a specific taskmanagment:
 class TaskmanagmentCreate(LoginRequiredMixin,CreateView):
     logger.info("Enter TaskmanagmentCreate.")
     model = Taskmanagment
     fields = '__all__'
+    
     def get_form(self):
         form = super().get_form()
         form.fields['start_date'].widget = DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True})
@@ -158,6 +147,7 @@ class TaskmanagmentUpdate(LoginRequiredMixin,UpdateView):
     logger.info("Enter TaskmanagmentUpdate.")
     model = Taskmanagment
     fields = ['assignee' , 'assigneedTo' , 'task_managment' , 'status' , 'priority' , 'comment' , 'start_date' , 'end_date' ]
+    
     def get_form(self):
         form = super().get_form()
         form.fields['start_date'].widget = DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True})
@@ -169,8 +159,6 @@ class TaskmanagmentDelete(LoginRequiredMixin,DeleteView):
     logger.info("Enter TaskmanagmentDelete.")
     model = Taskmanagment
     success_url = reverse_lazy('taskmanagments')
-
-#######################################################
 
 # Define Assign Task Form Create View : 
 @login_required
@@ -189,8 +177,6 @@ def assign_task_view(request):
         }
     return render(request, "TaskManagement/assign_task.html", context)
 
-
-###############################################
 # Define Assign Task Form Update View : 
 @login_required
 def update_assign_task_view(request, pk):

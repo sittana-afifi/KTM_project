@@ -1,10 +1,7 @@
 {% extends "base_generic.html" %}
 {% load crispy_forms_tags %}
-
 {% block content %}
-
 <h1> Reservation Meeting Room Request Details:</h1>
-
 <h2>Request ID :{{ reservationmeetingroom.id}},{{ reservationmeetingroom.meeting_room}}</h2>
 <p style="margin-left:2.5em"><strong>Meeting Room Name:</strong>{{ reservationmeetingroom.meeting_room}}</p>
 <p style="margin-left:2.5em"><strong>Team Members</strong> {{ reservationmeetingroom.team }}</p>
@@ -13,9 +10,7 @@
 <p style="margin-left:2.5em"><strong>Meeting End Date:</strong> {{ reservationmeetingroom.reservation_to_time }}</p>
 <p style="margin-left:2.5em"><strong>Meeting Project Name:</strong> {{ reservationmeetingroom.meeting_project_name }}</p>
 <p style="margin-left:2.5em"><strong>Meeting Task Name:</strong> {{ reservationmeetingroom.task_name }}</p>
-<p style="margin-left:2.5em"><strong>Meeting Outcomes:</strong> {{ reservationmeetingroom.meeting_outcomes }}</p>
-
-
+<p style="margin-left:2.5em"><strong>Meeting Outcomes:</strong> {{ reservationmeetingroom.meeting_outcomes }}</p>s
 {{ form | crispy }}
   <a href="{% url 'reservationmeetingrooms' %}"><button class="btn btn-success my-3">ok</button></a>
 {% endblock %}

@@ -50,13 +50,10 @@ class AssignTaskForm(forms.ModelForm):
 
     def clean_start_date(self):
         data = self.cleaned_data['start_date']
-        
         if data < datetime.date.today():
-            raise ValidationError(('Invalid date - Start Date cannot be in the past'))
-        
+            raise ValidationError(('Invalid date - Start Date cannot be in the past'))        
         return data
 
     def clean_end_date(self):
         data = self.cleaned_data['end_date']
         return data
-        

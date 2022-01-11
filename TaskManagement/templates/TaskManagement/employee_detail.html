@@ -1,18 +1,10 @@
 {% extends "base_generic.html" %}
-
 {% load crispy_forms_tags %}
-
 {% block content %}
-
-
   <p> <strong>Employee ID:</strong> {{ employee.Employee_id}} </p>
-
   <p> <strong> Employee Phone Number:</strong> {{ employee.Phone_number}}</p>
-
   <p> <strong> Date Joined:</strong> {{ employee.date_joined}}</p>
-
   {{ form | crispy }}
   <a href="{% url 'employee_list' %}"><button class="btn btn-success my-3">ok</button></a>
   </form>
-  
 {% endblock %}

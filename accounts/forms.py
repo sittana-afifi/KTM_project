@@ -1,4 +1,3 @@
-
 from django import forms
 from django import forms
 from django.contrib.auth.models import User
@@ -9,10 +8,6 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from accounts.models import Account
 from flatpickr import DatePickerInput , DateTimePickerInput
-
-
-
-
 
 class UserForm(forms.ModelForm):
     username = forms.CharField(label='Enter Username', min_length=4, max_length=150)
@@ -27,19 +22,14 @@ class UserForm(forms.ModelForm):
                 raise ValidationError("User Already Exist")  
             return username  
 
-
-
 class AccountCreateForm(forms.ModelForm):
     email = forms.EmailField( widget=forms.TextInput(attrs={'readonly':'readonly'}),label='Email', min_length=4, max_length=150)
     first_name = forms.CharField( widget=forms.TextInput(attrs={'readonly':'readonly'}),label='First Name', min_length=4, max_length=150)
     last_name = forms.CharField( widget=forms.TextInput(attrs={'readonly':'readonly'}),label='Last Name', min_length=4, max_length=150)
-    username = forms.CharField( widget=forms.TextInput(attrs={'readonly':'readonly'}),label='User Name', min_length=4, max_length=150)
-
-    
+    username = forms.CharField( widget=forms.TextInput(attrs={'readonly':'readonly'}),label='User Name', min_length=4, max_length=150)    
     class Meta:
         model = User
-        exclude  = ('password','last_login','is_superuser', 'is_active', 'is_staff','date_joined',)
-    
+        exclude  = ('password','last_login','is_superuser', 'is_active', 'is_staff','date_joined',)    
 
         def clean_username(self):
                 print("entered is valid")
@@ -76,18 +66,8 @@ class AccountCreateForm(forms.ModelForm):
                 raise  ValidationError("last_name already exists")
             return last_name
             
-
         def clean(self):
                 if self.is_valid():
-                    #first_name = self.cleaned_data['first_name']
-                    #last_name = self.cleaned_data['last_name']
-                    #email = self.cleaned_data['email']
-                    #username = self.cleaned_data['username']
-                    #last_login = self.cleaned_data['last_login']
                     is_active = self.cleaned_data['is_active']
                     is_staff = self.cleaned_data['is_staff']
                     is_superuser = self.cleaned_data['is_superuser']
-
-
-
-    

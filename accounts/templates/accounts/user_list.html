@@ -1,24 +1,17 @@
 {% extends "base_generic.html" %}
-
 {% block content %}
-
-<h2>Users List<a href="{% url 'get_user_info' %}"> <i data-feather="plus-circle" style="width:25px;height:25px;" ></i><!-- <img src="https://www.iconsdb.com/icons/download/color/87BBFF/add-16.ico" alt="add new user" style="width:25px;height:25px;"></a>--></h2>
- 
- 
+<h2>Users List<a href="{% url 'get_user_info' %}"> <i data-feather="plus-circle" style="width:25px;height:25px;"></i></h2>
   {% if user_list %}
-  
   <ul>
     {% for user in user_list %}
       <li>
         <a href="{% url 'user-detail' user.id%}">{{ user.username }} </a>
         <a href=" {% url 'user-update' user.id%} "> <i data-feather="edit-3" style="width:20px" ></i>
             <a href=" {% url 'user-delete' user.id%}  "> <i data-feather="trash-2" style="width:20px" ></i>  
-              
       </li>
     {% endfor %}
   </ul>
   {% else %}
     <p>There are no users in the library.</p>
   {% endif %}
-    
 {% endblock content %}

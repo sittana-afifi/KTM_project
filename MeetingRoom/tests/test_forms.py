@@ -16,6 +16,7 @@ from django.urls import reverse_lazy, reverse
 
 # Create your tests here.
 class ReservationFormTest(TestCase):
+
     def test_form_field_label(self):
         form = ReservationForm()
         self.assertTrue(form.fields['meeting_room'].label is None or form.fields['meeting_room'].label == 'meeting room')
@@ -29,6 +30,7 @@ class ReservationFormTest(TestCase):
     def test_redirect_if_not_logged_in(self):
         response = self.client.get(reverse('reservationmeetingrooms'))
         self.assertRedirects(response, '/accounts/login/?next=/en/MeetingRoom/reservationmeetingrooms/')
+        
     def setUp(self):
         # Create two users
         test_user1 = User.objects.create_user(username='eman', password='admin123')

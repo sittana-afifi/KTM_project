@@ -12,8 +12,10 @@ from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-import os, logging, logging.config # Logging view in Django:
-logger = logging.getLogger(__name__) # Create a logger for this file or the name of the log level or Get an instance of a logger
+import os, logging, logging.config # Logging view in Django
+
+# Create a logger for this file or the name of the log level or Get an instance of a logger
+logger = logging.getLogger(__name__) 
 logger = logging.getLogger(__file__)
 
 # Create your views here.
@@ -42,7 +44,6 @@ class MeetingDelete(LoginRequiredMixin,DeleteView):
     model = Meeting
     success_url = reverse_lazy('meetings')
 
-######################################################
 # ReservationMeetingRoom CRUD:
 class ReservationMeetingRoomListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter ReservationMeetingRoomListView.")
@@ -70,8 +71,6 @@ class ReservationMeetingRoomDelete(LoginRequiredMixin,DeleteView):
     model = ReservationMeetingRoom
     success_url = reverse_lazy('reservationmeetingrooms')
 
-###############################################
-
 # Validation Reservation Meeting Room Requests Function:
 def validateReservationForm(form):
     logger.info("Enter validateReservationForm.")
@@ -92,8 +91,6 @@ def validateReservationForm(form):
             # if either of these is true, abort and render the error
             return case_1 or case_2 or case_3 or case_4 or case_6
 
-#####################################################
-
 # Reservation Form Create View:
 @login_required
 def reserve_view(request):
@@ -113,8 +110,6 @@ def reserve_view(request):
     }
     return render(request, "MeetingRoom/reserve.html", context)
 
-###########################################
-
 # Reservation Form Update View :
 @login_required
 def update_reserve_view(request, pk):
@@ -132,4 +127,3 @@ def update_reserve_view(request, pk):
     'form' : form ,
     }
     return render(request, 'MeetingRoom/update_reserve_view.html', context)
-    

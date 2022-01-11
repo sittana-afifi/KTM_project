@@ -1,5 +1,4 @@
 {% extends "base_generic.html" %}
-
 {% block content %}
   <h2>Assign Task
     <a href="{% url 'taskmanagment-create' %}"> 
@@ -12,16 +11,12 @@
       <li>
         <a href="{{ taskmanagment.get_absolute_url }}">
           {{ taskmanagment.id}}, {{ taskmanagment.task_managment}}</a> 
-       
-        
-
         <a href="{% url 'taskmanagment-update' taskmanagment.id %}">
           <i data-feather="edit-3" style="width:20px" ></i>
         </a>
         <a href="{% url 'taskmanagment-delete' taskmanagment.id %}">
           <i data-feather="trash-2" style="width:20px" ></i>
         </a>
-
       </li>
     {% endfor %}
   </ul>

@@ -1,5 +1,4 @@
 {% extends "base_generic.html" %}
-
 {% block content %}
   <h2>Meetings List
       <a href="{% url 'meeting-create' %}"> 
@@ -17,7 +16,6 @@
         <a href="{% url 'meeting-delete' meeting.id %}">
           <i data-feather="trash-2" style="width:20px" ></i> 
         </a>
-        
       </li>
     {% endfor %}
   </ul>
@@ -25,4 +23,3 @@
     <p>There are no meetings.</p>
   {% endif %}
 {% endblock %}
-

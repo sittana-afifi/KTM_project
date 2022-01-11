@@ -1,6 +1,5 @@
 {% extends "base_generic.html" %}
 {% load crispy_forms_tags %}
-
 {% block content %}
 {% if messages %}
 <ul class="messages">
@@ -13,10 +12,8 @@
     {% csrf_token %}
     {{ form |crispy }}
     {{ form.media }}  {# Adds all flatpickr JS/CSS files from CDN #}
-    
     <input class="btn btn-success my-3" type="submit" value="Submit">
     <a href="{% url 'taskmanagments' %}" class="btn btn-danger my-3">Cancel</a>
-
-  </form>
+</form>
 {% endblock %}
 

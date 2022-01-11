@@ -1,8 +1,8 @@
 from django.urls import include, path
 from TaskManagement import views
 
-
 urlpatterns = [
+
     path('employee', views.EmployeesListView.as_view(), name='employee_list'),
     path('employee/detail/<int:pk>/', views.EmployeeDetailView.as_view(), name='employee-detail'),
     path('employee/<int:pk>/update/', views.EmployeeUpdateView.as_view(), name='employee-update'),

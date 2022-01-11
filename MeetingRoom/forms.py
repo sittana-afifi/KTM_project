@@ -11,10 +11,9 @@ from .models import ReservationMeetingRoom, Meeting
 from django.utils import timezone
 from django.forms.utils import ErrorList
 
-#############################################
-
 # Create Reservation Meeting room form:
 class ReservationForm(forms.ModelForm):
+
     class Meta:
         model = ReservationMeetingRoom
         fields = ['meeting_room', 'id','meeting_project_name', 'task_name' ,'reservation_date', 'reservation_from_time', 'reservation_to_time', 'team']
@@ -59,17 +58,14 @@ class ReservationForm(forms.ModelForm):
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.meeting_room}'
-        #return f'{self.team.first_name}'
 
     def get_absolute_url(self):
         """Returns the url to access a detail record for this project."""
         return reverse('reservationmeetingroom-detail', args=[str(self.id)])
 
-##################################################
-
 # Update Reservation Meeting room form:
-
 class UpdateReservationForm(forms.ModelForm):
+    
     class Meta:
         model = ReservationMeetingRoom
         fields = ['meeting_room', 'id','meeting_project_name','task_name', 'reservation_date', 'reservation_from_time', 'reservation_to_time', 'team', 'meeting_outcomes']

@@ -1,5 +1,4 @@
 {% extends "base_generic.html" %}
-
 {% block content %}
   <h2>Projects List
       <a href="{% url 'project-create' %}"> 
@@ -11,7 +10,6 @@
     {% for project in project_list %}
       <li  display:inline;>
         <a href="{{ project.get_absolute_url }}">{{ project.name }}</a>
-       
         <a href="{% url 'project-update' project.id %}">
           <i data-feather="edit-3" style="width:20px" ></i> <!--<img alt="Update" src="https://www.iconsdb.com/icons/download/orange/edit-2-16.png">-->
         </a>
@@ -25,4 +23,3 @@
     <p>There are no projects.</p>
   {% endif %}
 {% endblock %}
-

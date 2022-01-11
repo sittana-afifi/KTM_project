@@ -1,12 +1,8 @@
-
 {% extends "base_generic.html" %}
-
 {% load crispy_forms_tags %}
-
 {% block content %}
 <p></p>
 <h1>TaskManagment Details: {{ taskmanagment.id}},{{ taskmanagment.task_managment}}</h1>
-
 <p style="margin-left:2.5em">About the TaskManagment:</p>
 <p style="margin-left:2.5em"><strong>Assignee Employee Name:</strong> {{ taskmanagment.assignee }}</p>
 <p style="margin-left:2.5em"><strong>Assigneeed to Employee Name:</strong> {{ taskmanagment.assigneedTo }}</p>
@@ -15,10 +11,7 @@
 <p style="margin-left:2.5em"><strong>Task Duration Period:</strong> {{taskmanagment.due_date}}</p>
 <p style="margin-left:2.5em"><strong>Task Start Date:</strong> {{ taskmanagment.start_date }}</p>
 <p style="margin-left:2.5em"><strong>End Date:</strong> {{ taskmanagment.end_date }}</p>
-
-
 {{ form | crispy }}
 <a href="{% url 'taskmanagments' %}"><button class="btn btn-success my-3">ok</button></a>
 </form>
-
 {% endblock %}

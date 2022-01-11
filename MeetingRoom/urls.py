@@ -1,7 +1,6 @@
 from django.urls import include, path
 from MeetingRoom import views
 
-
 urlpatterns = [
    
     path('meetings/', views.MeetingListView.as_view(), name='meetings'),

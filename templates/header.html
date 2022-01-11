@@ -17,19 +17,15 @@
                         <div class="d-lg-inline-block">
                             <i data-feather="bell"></i>
                         </div>
-                    </a>
-                    
+                    </a>                    
                 </li>
-               
                 <li class="dropdown">
-                    
                     {% if user.is_authenticated %}
                     <a href="#" data-bs-toggle="dropdown"
                         class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                         <div class="avatar me-1">
                             <i data-feather="user" ></i>   
                         </div>
-                        
                         <div class="d-none d-md-block d-lg-inline-block"> Hello {{ user.get_username }} </div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
@@ -38,15 +34,10 @@
                         <a class="dropdown-item" href="{% url 'logout'%}?next={{request.path}}"><i data-feather="log-out"></i> Logout</a>
                         {% else %}
                         <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
-                        
-                                                                                  
                     </div>
                     {% endif %}
-              
-
                 </li>
              <!--langgaues selections-->
-
             <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                 <div class="avatar me-1">
                     <i class="bi bi-translate"></i>
@@ -70,20 +61,15 @@
                 </li>
                 {% endfor %}
                </div>
-
                 <!--end of langgaues selections-->
             </ul>
         </div>
-        
     </nav>
-    
     <div class="main-content container-fluid">
         <div class="page-title">
             <div class="col-sm-20 ">{% block content %}{% endblock %} </div>
         </div>
-        <section class="section">
-            
+        <section class="section">  
         </section>
     </div> 
-   
 </div> 

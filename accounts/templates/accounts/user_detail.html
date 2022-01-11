@@ -1,25 +1,13 @@
 {% extends "base_generic.html" %}
-
 {% load crispy_forms_tags %}
-
 {% block content %}
-
-
   <p> <strong>User Name:</strong> {{ user.username}} </p>
-
   <p> <strong> User Email:</strong> {{ user.email}}</p>
-  
   <p> <strong> Is Staff:</strong>  {%if  user.is_staff %} Yes {% else %} No {% endif %}</p>
-
   <p> <strong> Is Active:</strong>  {%if  user.is_active %} Yes {% else %} No {% endif %}</p>
-
   <p> <strong> Date Joined:</strong> {{ user.date_joined}}</p>
-
   <p> <strong> Is SupperUser:</strong>  {%if user.is_superuser %} Yes {% else %} No {% endif %}</p>
-  
-
   {{ form | crispy }}
 <a href="{% url 'user_list' %}"><button class="btn btn-success my-3">ok</button></a>
 </form>
- 
 {% endblock %}

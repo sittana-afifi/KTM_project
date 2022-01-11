@@ -5,21 +5,17 @@ from django.urls.base import reverse
 from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 from flatpickr.utils import GenericViewWidgetMixin
 
-
-
-
-
 #create new model (employee) to extend user model and add one-to-one link between them.
 class Employee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     Employee_id = models.CharField(max_length=4,  blank=True)
     Phone_number = models.CharField( max_length=10,  blank=True)
     date_joined = models.DateField(null=True, blank=True,)
+
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.user}'
         
-#################################################
 # Create a project model :
 class Project(models.Model):
     """Model representing a project."""
@@ -29,14 +25,12 @@ class Project(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return self.name
+
     def get_absolute_url(self):
         """Returns the url to access a detail record for this project."""
         return reverse('project-detail', args=[str(self.id)])
 
-
-#####################################################
 # Create Task model :
-
 class Task(models.Model):
     """Model representing a specific task in a project."""
     project = models.ForeignKey('Project', on_delete=models.SET_NULL, null=True, blank=True)
@@ -45,17 +39,16 @@ class Task(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return self.task_name
+
     def get_absolute_url(self):
         """Returns the url to access a detail record for this project."""
         return reverse('task-detail', args=[str(self.id)])
 
-#####################################################
 # Create taskmanagment model :
 class Taskmanagment(models.Model):
     assignee = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=False, related_name='Taskmanagment')
     assigneedTo = models.ManyToManyField(Employee)
     task_managment = models.ForeignKey('Task', on_delete=models.SET_NULL, null=True,blank=False)
-
     TASK_STATUS = (
         ('TD', 'To do'),
         ('IP', 'In Progress'),
@@ -73,7 +66,6 @@ class Taskmanagment(models.Model):
         ('M', 'Meduim'),
         ('L', 'Low'),    
     )
-
     priority = models.CharField(
         max_length=1,
         choices=TASK_PRIORITY,
