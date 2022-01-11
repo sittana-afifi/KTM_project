@@ -13,6 +13,8 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 import os, logging, logging.config # Logging view in Django
+from .filters import ReservationMeetingRoomFilter
+from .tables import ReservationMeetingRoomTable
 
 # Create a logger for this file or the name of the log level or Get an instance of a logger
 logger = logging.getLogger(__name__) 
@@ -46,11 +48,18 @@ class MeetingDelete(LoginRequiredMixin,DeleteView):
     success_url = reverse_lazy('meetings')
 
 # ReservationMeetingRoom CRUD:
+def search(request):
+    reservation_list = ReservationMeetingRoom.objects.all()
+    reservation_filter = ReservationMeetingRoomFilter(request.GET, queryset= reservation_list)
+    return render(request, 'MeetingRoom/reservationmeetingroom_list.html', {'filter': reservation_filter})
+
 class ReservationMeetingRoomListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter ReservationMeetingRoomListView.")
     model = ReservationMeetingRoom
     template_name = 'MeetingRoom/reservationmeetingroom_list.html'
     paginate_by = 5
+    table_class  = ReservationMeetingRoomTable
+    filter_class = ReservationMeetingRoomFilter
 
 class ReservationMeetingRoomDetailView(LoginRequiredMixin,generic.DetailView):
     logger.info("Enter ReservationMeetingRoomDetailView.")

@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     'django_readonly_field',
     'django_tables2',
     'django_filters',
+    'widget_tweaks',
 ]
 
 # Indicates the frontend framework django crispy forms use

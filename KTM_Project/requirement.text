@@ -97,3 +97,4 @@ django-rosetta
 django-readonly-field
 django-tables2-bootstrap4
 django-filter
+django-widget-tweaks==1.4.11
