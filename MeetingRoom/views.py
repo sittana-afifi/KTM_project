@@ -23,6 +23,7 @@ class MeetingListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter MeetingListView.")
     model = Meeting
     template_name = 'MeetingRoom/meeting_list.html'
+    paginate_by = 5
 
 class MeetingDetailView(LoginRequiredMixin,generic.DetailView):
     logger.info("Enter MeetingDetailView.")

@@ -6,7 +6,7 @@
 <p style="margin-left:2.5em">About the Meeting:</p>
 <p style="margin-left:2.5em"><strong>Meeting ID:</strong> {{ meeting.id}}</p>
 <p style="margin-left:2.5em"><strong>Meeting Name:</strong> {{ meeting.name }}</p>
-<p style="margin-left:2.5em"><strong>Meeting Details:</strong> {{ meeting.location }}</p>
+<p style="margin-left:2.5em"><strong>Meeting Details:</strong> {{ meeting.description }}</p>
 {{ form | crispy }}
 <a href="{% url 'meetings' %}"><button class="btn btn-success my-3">ok</button></a>
 </form>

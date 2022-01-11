@@ -27,6 +27,7 @@ class EmployeesListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter EmployeesListView.")
     model = Employee
     template_name ='TaskManagement/employee_list.html'
+    paginate_by = 5
 
 # view details of the specific employee.
 class EmployeeDetailView(generic.DetailView):
@@ -72,6 +73,7 @@ class ProjectListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter ProjectListView.")
     model = Project
     template_name = 'TaskManagement/project_list.html'
+    paginate_by = 5
 
 class ProjectDetailView(LoginRequiredMixin,generic.DetailView):
     logger.info("Enter ProjectDetailView.")
@@ -97,6 +99,7 @@ class TaskListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter TaskListView.")
     model = Task
     template_name = 'TaskManagement/task_list.html'
+    paginate_by = 5
 
 class TaskDetailView(LoginRequiredMixin,generic.DetailView):
     logger.info("Enter TaskDetailView.")
@@ -123,7 +126,8 @@ class TaskmanagmentListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter TaskmanagmentListView.")
     model = Taskmanagment
     template_name ='TaskManagement/taskmanagment_list.html'
-
+    paginate_by = 5
+    
 # Taskmanagment Details View:
 class TaskmanagmentDetailView(LoginRequiredMixin,generic.DetailView):
     logger.info("Enter TaskmanagmentDetailView.")
