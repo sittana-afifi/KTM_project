@@ -10,7 +10,7 @@
 <p style="margin-left:2.5em"><strong>Meeting End Date:</strong> {{ reservationmeetingroom.reservation_to_time }}</p>
 <p style="margin-left:2.5em"><strong>Meeting Project Name:</strong> {{ reservationmeetingroom.meeting_project_name }}</p>
 <p style="margin-left:2.5em"><strong>Meeting Task Name:</strong> {{ reservationmeetingroom.task_name }}</p>
-<p style="margin-left:2.5em"><strong>Meeting Outcomes:</strong> {{ reservationmeetingroom.meeting_outcomes }}</p>s
+<p style="margin-left:2.5em"><strong>Meeting Outcomes:</strong> {{ reservationmeetingroom.meeting_outcomes }}</p>
 {{ form | crispy }}
   <a href="{% url 'reservationmeetingrooms' %}"><button class="btn btn-success my-3">ok</button></a>
 {% endblock %}
