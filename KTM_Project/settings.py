@@ -63,8 +63,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'rosetta',  # Rosetta Translation Interface
     'parler', #Translating Models with django-parler
-    # 3rd party apps
-    'crispy_forms',
+    'crispy_forms',# 3rd party apps
     'TaskManagement.apps.TaskManagementConfig',
     # configure the MeetingRoom app 
     'MeetingRoom.apps.MeetingRoomConfig',

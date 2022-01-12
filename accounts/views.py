@@ -19,29 +19,31 @@ from django.contrib.auth.decorators import login_required, permission_required
 from accounts.models import Account
 from django_auth_ldap.backend import LDAPBackend
 from .forms import  UserForm , AccountCreateForm 
-from django.shortcuts import render
 from django.contrib.auth import authenticate as authenticate_django
 from pathlib import Path
 from django.contrib import messages
-# Logging view in Django:
-import os, logging, logging.config 
-from django.http import HttpResponse
+import os, logging, logging.config # Logging view in Django.
 
 # Create a logger for this file or the name of the log level or Get an instance of a logger
 logger = logging.getLogger(__name__)
 logger = logging.getLogger(__file__)
 
-#Home Page View:
+# -----------------------------------------------------------
+# View function for home page of site.
+# display the Number of times visited this page.
+# and contians details about the web application and how to use it.
+# created by : Eman 
+# creation date : 20-Dec-2021
+# update date : 10-Jan-2022
+# parameters : Number (integer)
+# output: Number Integer + static conent
+# -----------------------------------------------------------
+
 @login_required
 def index(request):
     """View function for home page of site."""
     logger.info('info This logs an info message.')
     logger.debug(' debug This logs an info message.')
-    logger.error(' error This logs an info message.')
-    logger.warning('warning This logs an info message.')
-    logger.critical('critical This logs an info message.')
-    logger.info("This logs an info message.")
-    logger.error("enter index function.")
     num_visits = request.session.get('num_visits', 0)
     request.session['num_visits'] = num_visits + 1
     context = {

@@ -8,7 +8,7 @@ from parler.models import TranslatableModel, TranslatedFields
 # Create your models here.
 class Meeting(models.Model):
     """Model representing a Meeting."""
-    name = models.CharField(max_length=200, help_text='Enter a Meeting name (e.g. Meeting Room App)')
+    name = models.CharField(max_length=200, help_text='Enter a Meeting name (e.g. Meeting Room )')
     description = models.TextField(max_length=1000, help_text='Enter a brief location of the meeting')
 
     def __str__(self):
@@ -20,7 +20,7 @@ class Meeting(models.Model):
 
 # ReservationMeetingRoom Model:
 class ReservationMeetingRoom(models.Model):
-    """Model representing a project."""
+    """Model representing a reservation meeting room."""
     meeting_room = models.ForeignKey(Meeting, on_delete=models.SET_NULL, null=True, blank=False)
     reservation_date = models.DateField(null=False, blank=False)
     reservation_from_time = models.TimeField(auto_now=False, auto_now_add=False)

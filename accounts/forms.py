@@ -1,5 +1,4 @@
 from django import forms
-from django import forms
 from django.contrib.auth.models import User
 from django.db.models.query import QuerySet
 from django.forms.fields import BooleanField

@@ -47,12 +47,7 @@ class MeetingDelete(LoginRequiredMixin,DeleteView):
     model = Meeting
     success_url = reverse_lazy('meetings')
 
-# ReservationMeetingRoom CRUD:
-def search(request):
-    reservation_list = ReservationMeetingRoom.objects.all()
-    reservation_filter = ReservationMeetingRoomFilter(request.GET, queryset= reservation_list)
-    return render(request, 'MeetingRoom/reservationmeetingroom_list.html', {'filter': reservation_filter})
-
+# ReservationMeetingRoom CRUD View:
 class ReservationMeetingRoomListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter ReservationMeetingRoomListView.")
     model = ReservationMeetingRoom
@@ -81,7 +76,24 @@ class ReservationMeetingRoomDelete(LoginRequiredMixin,DeleteView):
     model = ReservationMeetingRoom
     success_url = reverse_lazy('reservationmeetingrooms')
 
+# Reservation Meeting Rooms Filter View:    
+def search(request):
+    reservation_list = ReservationMeetingRoom.objects.all()
+    reservation_filter = ReservationMeetingRoomFilter(request.GET, queryset= reservation_list)
+    return render(request, 'MeetingRoom/reservationmeetingroom_list.html', {'filter': reservation_filter})
+
+# -----------------------------------------------------------
 # Validation Reservation Meeting Room Requests Function:
+# validate the reservation request in the database .
+# to make sure that there is no reservation for same meeting duplicated at same time  
+# created by : Mohammed Almoiz
+# creation date : -Dec-2021
+# update date : -Dec-2022
+# parameters : input of reservation form and check cases.
+# meeting room name, reservation date , the involved team in the meeting finally resrvation from and to time. 
+# output: Boolean (true or false)
+# -----------------------------------------------------------
+
 def validateReservationForm(form):
     logger.info("Enter validateReservationForm.")
     if form.is_valid():

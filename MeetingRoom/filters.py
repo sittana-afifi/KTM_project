@@ -4,7 +4,6 @@ from .models import *
 from django import forms
 from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 
-
 class ReservationMeetingRoomFilter(django_filters.FilterSet):
     team = django_filters.ModelMultipleChoiceFilter(queryset=Employee.objects.all(),
         widget=forms.CheckboxSelectMultiple)

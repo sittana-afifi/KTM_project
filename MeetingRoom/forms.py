@@ -11,12 +11,19 @@ from .models import ReservationMeetingRoom, Meeting
 from django.utils import timezone
 from django.forms.utils import ErrorList
 
-# Create Reservation Meeting room form:
-class ReservationForm(forms.ModelForm):
+# -----------------------------------------------------------
+# Reservation Request Form  for Metting Room.
+# display the attributes of form.
+# and ask user to enter all requirements to reserve meeting room.
+# created by : Eman 
+# creation date : -Dec-2021
+# update date : -Dec-2022
+# parameters : modelchoice , datefield input , timefield , multiple choices for team
+# meeting room name, reservation date , the involved team in the meeting finally resrvation from and to time. 
+# output: details of the reservation request and the staus if it success or failed
+# -----------------------------------------------------------
 
-    class Meta:
-        model = ReservationMeetingRoom
-        fields = ['meeting_room', 'id','meeting_project_name', 'task_name' ,'reservation_date', 'reservation_from_time', 'reservation_to_time', 'team']
+class ReservationForm(forms.ModelForm):
     meeting_room = forms.ModelChoiceField(queryset = Meeting.objects.all())
     reservation_date = forms.DateField(required=True, widget=DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}))
     team = forms.ModelMultipleChoiceField(queryset =Employee.objects.all(),blank=True,required=False, widget=forms.CheckboxSelectMultiple) 
@@ -25,6 +32,10 @@ class ReservationForm(forms.ModelForm):
     meeting_project_name = forms.ModelChoiceField(queryset = Project.objects.all(), required=False)
     task_name = forms.ModelChoiceField(queryset = Task.objects.all(), required=False)
 
+    class Meta:
+        model = ReservationMeetingRoom
+        fields = ['meeting_room', 'id','meeting_project_name', 'task_name' ,'reservation_date', 'reservation_from_time', 'reservation_to_time', 'team']
+   
     def clean_reservation_from_time(self):
         data = self.cleaned_data['reservation_from_time']
         return data
@@ -63,12 +74,20 @@ class ReservationForm(forms.ModelForm):
         """Returns the url to access a detail record for this project."""
         return reverse('reservationmeetingroom-detail', args=[str(self.id)])
 
-# Update Reservation Meeting room form:
+# -----------------------------------------------------------
+# Update Reservation Request Form  for Metting Room.
+# display the attributes of form.
+# and ask user to enter all requirements to reserve meeting room.
+# created by : Eman 
+# creation date : -Dec-2021
+# update date : -Dec-2022
+# parameters : modelchoice , datefield input , timefield , multiple choices for team , charfiled 
+# meeting room name, reservation date , the involved team in the meeting finally resrvation from and to time. 
+# output: details of the reservation request and the staus if it success or failed , add meeting outcomes
+# also execlude the self reservation request from validation.
+# -----------------------------------------------------------
+
 class UpdateReservationForm(forms.ModelForm):
-    
-    class Meta:
-        model = ReservationMeetingRoom
-        fields = ['meeting_room', 'id','meeting_project_name','task_name', 'reservation_date', 'reservation_from_time', 'reservation_to_time', 'team', 'meeting_outcomes']
     meeting_room = forms.ModelChoiceField(queryset = Meeting.objects.all())
     reservation_date = forms.DateField(widget=DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}), required=True )
     team = forms.ModelMultipleChoiceField(queryset =Employee.objects.all(),blank=True,required=False,widget=forms.CheckboxSelectMultiple) 
@@ -77,6 +96,10 @@ class UpdateReservationForm(forms.ModelForm):
     meeting_project_name = forms.ModelChoiceField(queryset = Project.objects.all(), required=False)
     task_name = forms.ModelChoiceField(queryset = Task.objects.all(), required=False)
     meeting_outcomes = forms.CharField(max_length=1000, required=False, help_text='Enter the meeting outcomes', widget=forms.Textarea)
+    
+    class Meta:
+        model = ReservationMeetingRoom
+        fields = ['meeting_room', 'id','meeting_project_name','task_name', 'reservation_date', 'reservation_from_time', 'reservation_to_time', 'team', 'meeting_outcomes']
     
     def clean_reservation_from_time(self):
         data = self.cleaned_data['reservation_from_time']

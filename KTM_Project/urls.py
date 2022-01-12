@@ -28,8 +28,7 @@ from TaskManagement import views
 from MeetingRoom import views
 from django.contrib import admin
 from django.urls import path
-from django.views.generic import RedirectView
-from django.views.generic import TemplateView
+from django.views.generic import RedirectView, TemplateView
 from accounts import views
 
 urlpatterns = i18n_patterns(
