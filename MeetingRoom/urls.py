@@ -13,6 +13,6 @@ urlpatterns = [
     path('reservationmeetingroom/<int:pk>/delete/', views.ReservationMeetingRoomDelete.as_view(), name='reservationmeetingroom-delete'),
     path('reservationmeetingroom/reserve/', views.reserve_view, name='reserve'),
     path('reservationmeetingroom/reserve/<int:pk>/update/', views.update_reserve_view, name='reserve-update'),
-    path('reservationmeetingrooms/search/', views.search, name='search'),
+    path('reservationmeetingrooms/filter/', views.ReservationFilter, name='filter'),
    
 ]

@@ -74,10 +74,10 @@ class ReservationMeetingRoomUpdate(LoginRequiredMixin,UpdateView):
 class ReservationMeetingRoomDelete(LoginRequiredMixin,DeleteView):
     logger.info("Enter ReservationMeetingRoomDelete.")
     model = ReservationMeetingRoom
-    success_url = reverse_lazy('reservationmeetingrooms')
+    success_url = reverse_lazy('filter')
 
 # Reservation Meeting Rooms Filter View:    
-def search(request):
+def ReservationFilter(request):
     reservation_list = ReservationMeetingRoom.objects.all()
     reservation_filter = ReservationMeetingRoomFilter(request.GET, queryset= reservation_list)
     return render(request, 'MeetingRoom/reservationmeetingroom_list.html', {'filter': reservation_filter})
@@ -137,7 +137,7 @@ def reserve_view(request):
         elif form.is_valid():
             form.save()
             messages.success(request, "You successfully reserve this meeting room at this time and date")
-            return HttpResponseRedirect(reverse('reservationmeetingrooms') )
+            return HttpResponseRedirect(reverse('filter') )
     context = {
     'form' : form ,
     }
@@ -167,7 +167,7 @@ def update_reserve_view(request, pk):
             logger.info("form is valid")
             form.save()
             messages.success(request, "You Successfully update reservation request for this meeting room at this time and date")
-            return HttpResponseRedirect(reverse('reservationmeetingrooms'))
+            return HttpResponseRedirect(reverse('filter'))
     context = {
     'form' : form ,
     }
