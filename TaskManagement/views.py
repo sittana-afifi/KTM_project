@@ -1,22 +1,18 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.urls import reverse_lazy, reverse
 from django.views import generic
-from .models import Employee , Taskmanagment
+from .models import Employee , Taskmanagment, Project, Task
 from django.views.generic.edit import UpdateView , DeleteView , CreateView 
-from .models import Project, Task, Taskmanagment
 from django.contrib.auth.decorators import login_required, permission_required
 from django import forms
 from .forms import AssignTaskForm
 import datetime
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.http import HttpResponseRedirect, HttpResponse
 from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput, MonthPickerInput, YearPickerInput
 from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 from flatpickr.utils import GenericViewWidgetMixin
 import os, logging, logging.config # Logging view in Django:
-from django.http import HttpResponse
 
 # Create a logger for this file or the name of the log level or Get an instance of a logger
 logger = logging.getLogger(__name__) 
@@ -139,7 +135,8 @@ class TaskmanagmentCreate(LoginRequiredMixin,CreateView):
     logger.info("Enter TaskmanagmentCreate.")
     model = Taskmanagment
     fields = '__all__'
-    
+
+    """ add datepicker to the form """
     def get_form(self):
         form = super().get_form()
         form.fields['start_date'].widget = DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True})
@@ -152,6 +149,7 @@ class TaskmanagmentUpdate(LoginRequiredMixin,UpdateView):
     model = Taskmanagment
     fields = ['assignee' , 'assigneedTo' , 'task_managment' , 'status' , 'priority' , 'comment' , 'start_date' , 'end_date' ]
     
+    """ add datepicker to the form """
     def get_form(self):
         form = super().get_form()
         form.fields['start_date'].widget = DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True})
@@ -164,7 +162,18 @@ class TaskmanagmentDelete(LoginRequiredMixin,DeleteView):
     model = Taskmanagment
     success_url = reverse_lazy('taskmanagments')
 
-# Define Assign Task Form Create View : 
+# -----------------------------------------------------------
+# Assign Task to the Team Form create view  for Metting Room.
+# display the attributes of form and ask user to enter all requirements to assign task.
+# created by : Eman 
+# creation date : -Dec-2021
+# update date : -Dec-2022
+# parameters : modelchoice , datefield input , multiple choices for team , charfiled 
+# task creater , assignees of the task  , task name if it addhoc tasks or project name
+# task status and the priority of it , start and end date of the task finally addtional comments.
+# output: details of the assigned tasks request and the staus if it success or failed.
+# -----------------------------------------------------------
+
 @login_required
 def assign_task_view(request):
     logger.info("Enter assign_task_view.")
@@ -181,7 +190,18 @@ def assign_task_view(request):
         }
     return render(request, "TaskManagement/assign_task.html", context)
 
-# Define Assign Task Form Update View : 
+# -----------------------------------------------------------
+# Assign Task to the Team Form update view  for Metting Room.
+# display the attributes of form and ask user to enter all requirements to assign task.
+# created by : Eman 
+# creation date : -Dec-2021
+# update date : -Dec-2022
+# parameters : modelchoice , datefield input , multiple choices for team , charfiled 
+# task creater , assignees of the task  , task name if it addhoc tasks or project name
+# task status and the priority of it , start and end date of the task finally addtional comments.
+# output: details of the assigned tasks request and the staus if it success or failed.
+# -----------------------------------------------------------
+
 @login_required
 def update_assign_task_view(request, pk):
     logger.info("Enter assign_task_view.")

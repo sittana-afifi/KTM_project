@@ -113,7 +113,18 @@ def validateReservationForm(form):
             # if either of these is true, abort and render the error
             return case_1 or case_2 or case_3 or case_4 or case_6
 
-# Reservation Form Create View:
+# -----------------------------------------------------------
+# Validation Reservation Meeting Room Requests Create View:
+# for a reservation Form and validate the reservation request in the database .
+# to make sure that there is no reservation for same meeting duplicated at same time  
+# created by : Eman
+# creation date : -Dec-2021
+# update date : -Dec-2022
+# parameters : 
+# meeting room name, reservation date , the involved team in the meeting finally resrvation from and to time. 
+# output: reservation request details.
+# -----------------------------------------------------------
+
 @login_required
 def reserve_view(request):
     logger.info("Enter reserve_view.")
@@ -132,7 +143,19 @@ def reserve_view(request):
     }
     return render(request, "MeetingRoom/reserve.html", context)
 
-# Reservation Form Update View :
+# -----------------------------------------------------------
+# Update Reservation Request View  for Metting Room.
+# display the attributes of form.
+# and ask user to enter all requirements to reserve meeting room.
+# created by : Eman 
+# creation date : -Dec-2021
+# update date : -Dec-2022
+# parameters : modelchoice , datefield input , timefield , multiple choices for team , charfiled 
+# meeting room name, reservation date , the involved team in the meeting finally resrvation from and to time. 
+# output: details of the reservation request and the staus if it success or failed , add meeting outcomes
+# also execlude the self reservation request from validation.
+# -----------------------------------------------------------
+
 @login_required
 def update_reserve_view(request, pk):
     logger.info("Enter update_reserve_view.")
