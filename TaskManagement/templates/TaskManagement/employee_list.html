@@ -1,23 +1,37 @@
 {% extends "base_generic.html" %}
-
+{% load render_table from django_tables2 %}
+{% load widget_tweaks %}
 {% block content %}
 
 <h2>Employees<a href="{% url 'employee-create' %}"> <i data-feather="plus-circle" style="width:25px;height:25px;" ></i><!--<img src="https://www.iconsdb.com/icons/download/color/87BBFF/add-16.ico" alt="add new employeer" style="width:25px;height:25px;"> --></a></h2>
- 
- 
   {% if employee_list %}
-  
-  <ul>
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">No</th>
+        <th scope="col">Employee Name</th>
+        <th scope="col">ID</th>
+        <th scope="col">Phone Number</th>
+        <th scope="col">Date Joined</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
     {% for employee in employee_list %}
-      <li>
-        <a href="{% url 'employee-detail' employee.id%}">{{ employee.user }} </a>
-            <a href=" {% url 'employee-update' employee.id %}  "><i data-feather="edit-3" style="width:20px" ></i> <!-- <img src="https://www.iconsdb.com/icons/download/color/87BBFF/delete-16.ico" 
-              alt="delete employee" style="width:20px;height:22px;"> -->
-              <a href=" {%  url 'employee-delete' employee.id %}"><i data-feather="trash-2" style="width:20px" ></i> <!-- <img src="https://www.iconsdb.com/icons/download/color/8ABDFF/edit-9-16.ico"  
-                alt="update employee" style="width:30px;height:20px;"> -->
-      </li>
-    {% endfor %}
-  </ul>
+
+    <th scope="row">{{ forloop.counter }} </th> 
+    <td><a href="{%  url 'employee-detail' employee.id %}">{{ employee.user }}</a></td>
+    <td>{{ employee.Employee_id }}</td>
+    <td> {{ employee.Phone_number}}</td>
+    <td>{{ employee.date_joined }}</td>
+    <td><a href="{% url 'employee-update' employee.id %}"><button class="btn btn-success my-3">Update</button></a></td>
+    <td><a href="{% url 'employee-delete' employee.id %}"><input class="btn btn-danger my-3" type="submit" value="Delete."></a></td>
+  </tr>
+  {% endfor %}
+</tbody>
+</table>
   {% else %}
     <p>There are no employees in the library.</p>
   {% endif %}
