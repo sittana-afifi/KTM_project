@@ -54,7 +54,7 @@ def index(request):
 
 # Add new user.
 def getUserInfoFromLDAP(request):
-    '''Get User Info from LDAP'''
+    #Get User Info from LDAP
     logger.info("enter getUserInfoFromLDAP function.")
     username = request.POST.get('username')
     try:
@@ -114,6 +114,7 @@ def createUser(request):
             u_form = UserForm()
             return render(request, 'get_user_info.html', {'u_form' :u_form}) 
 
+         
 # view the list of the users.
 class usersListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter usersListView.")
