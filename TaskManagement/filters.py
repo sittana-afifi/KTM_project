@@ -5,8 +5,8 @@ from django_filters import FilterSet, ChoiceFilter
 from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 
 class EmployeeFilter(django_filters.FilterSet):
-    #user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
-    #user = django_filters.CharFilter(lookup_expr=='icontains')
+    user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
+    #user = django_filters.CharFilter(lookup_expr='icontains')
     class Meta:
         model = Employee
         fields = ['user', 'Employee_id','Phone_number','date_joined',]
