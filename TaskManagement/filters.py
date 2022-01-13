@@ -1,11 +1,12 @@
 import django_filters
 from .models import *
 from django import forms
-from django_filters import FilterSet, ChoiceFilter
+from django_filters import FilterSet, ChoiceFilter, BooleanFilter,DateFromToRangeFilter
 from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 
 class EmployeeFilter(django_filters.FilterSet):
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
+    date_joined = django_filters.DateFromToRangeFilter()
     #user = django_filters.CharFilter(lookup_expr='icontains')
     class Meta:
         model = Employee
@@ -44,6 +45,8 @@ class TaskmanagmentFilter(django_filters.FilterSet):
     )
     status = django_filters.ChoiceFilter(choices=TASK_STATUS)
     priority = django_filters.ChoiceFilter(choices=TASK_PRIORITY)
+    start_date = django_filters.DateFromToRangeFilter()
+    end_date = django_filters.DateFromToRangeFilter()
 
     class Meta:
         model = Taskmanagment

@@ -1,11 +1,13 @@
 import django_filters
 from .models import *
 from django import forms
+from django_filters import FilterSet, ChoiceFilter, BooleanFilter,DateFromToRangeFilter
 from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 
 class ReservationMeetingRoomFilter(django_filters.FilterSet):
     team = django_filters.ModelMultipleChoiceFilter(queryset=Employee.objects.all(),
         widget=forms.CheckboxSelectMultiple)
+    reservation_date = django_filters.DateFromToRangeFilter()
         
     class Meta:
         model = ReservationMeetingRoom
