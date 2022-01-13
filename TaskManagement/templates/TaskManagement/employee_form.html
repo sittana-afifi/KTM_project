@@ -13,6 +13,6 @@
     {{ form| crispy }}
     {{ form.media }}  {# Adds all flatpickr JS/CSS files from CDN #}
     <button href="" class="btn btn-success my-3" type="submit">Save</button>
-    <a href="{% url 'employee_list' %}" class="btn btn-danger my-3">Cancel</a>
+    <a href="{% url 'employee-filter' %}" class="btn btn-danger my-3">Cancel</a>
   </form> 
   {% endblock %}

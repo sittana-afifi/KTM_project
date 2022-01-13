@@ -5,6 +5,6 @@
   <p> <strong> Employee Phone Number:</strong> {{ employee.Phone_number}}</p>
   <p> <strong> Date Joined:</strong> {{ employee.date_joined}}</p>
   {{ form | crispy }}
-  <a href="{% url 'employee_list' %}"><button class="btn btn-success my-3">ok</button></a>
+  <a href="{% url 'employee-filter' %}"><button class="btn btn-success my-3">ok</button></a>
   </form>
 {% endblock %}

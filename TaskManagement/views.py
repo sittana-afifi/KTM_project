@@ -25,6 +25,14 @@ class EmployeesListView(LoginRequiredMixin,generic.ListView):
     model = Employee
     template_name ='TaskManagement/employee_list.html'
     paginate_by = 5
+    filter_class = EmployeeFilter
+
+# Employee Filter View:    
+def EmployeeViewFilter(request):
+    employeef_list = Employee.objects.all()
+    employeef_filter = EmployeeFilter(request.GET, queryset= employeef_list)
+    return render(request, 'TaskManagement/employee_list.html', {'filter': employeef_filter})
+
 
 # view details of the specific employee.
 class EmployeeDetailView(generic.DetailView):
@@ -36,14 +44,14 @@ class EmployeeDetailView(generic.DetailView):
 class EmployeeDelete(DeleteView):
     logger.info("Enter EmployeeDelete.")
     model = Employee
-    success_url = reverse_lazy('employee_list')
+    success_url = reverse_lazy('employee-filter')
 
 # Add specific employee.
 class EmployeeCreateView(CreateView):
     logger.info("Enter EmployeeCreateView.")
     model = Employee
     fields = ['user','Employee_id', 'Phone_number', 'date_joined']
-    success_url = reverse_lazy('employee_list')
+    success_url = reverse_lazy('employee-filter')
 
     def get_form(self):
         form = super().get_form()

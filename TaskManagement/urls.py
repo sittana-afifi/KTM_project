@@ -4,6 +4,7 @@ from TaskManagement import views
 urlpatterns = [
 
     path('employee', views.EmployeesListView.as_view(), name='employee_list'),
+    path('employee/employeesfilter', views.EmployeeViewFilter, name='employee-filter'),
     path('employee/detail/<int:pk>/', views.EmployeeDetailView.as_view(), name='employee-detail'),
     path('employee/<int:pk>/update/', views.EmployeeUpdateView.as_view(), name='employee-update'),
     path('employee/<int:pk>/delete/', views.EmployeeDelete.as_view(), name='employee-delete'),
