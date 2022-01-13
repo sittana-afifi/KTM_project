@@ -140,4 +140,4 @@ dmypy.json
 docker-compose.yml
 Dockerfile
 #Docker Volumes
-./data/*
+data/*
