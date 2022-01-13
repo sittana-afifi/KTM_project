@@ -17,3 +17,4 @@ django-tables2
 django-filter
 django-widget-tweaks
 django-utils-six 
+django-import-export
