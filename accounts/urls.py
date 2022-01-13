@@ -8,6 +8,7 @@ from accounts import views , forms
 urlpatterns = [
 
     path('users', views.usersListView.as_view(), name='user_list'),
+    path('users/usersfilter/', views.AccountViewFilter, name='user-filter'),
     path('detail/<int:pk>/', views.UserDetailView.as_view(), name='user-detail'),
     path('<int:pk>/update/', views.UserUpdate.as_view(), name='user-update'),
     path('<int:pk>/delete/', views.UserDelete.as_view(), name='user-delete'),

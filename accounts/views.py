@@ -22,6 +22,7 @@ from .forms import  UserForm , AccountCreateForm
 from django.contrib.auth import authenticate as authenticate_django
 from pathlib import Path
 from django.contrib import messages
+from .filters import AccountFilter
 import os, logging, logging.config # Logging view in Django.
 
 # Create a logger for this file or the name of the log level or Get an instance of a logger
@@ -84,7 +85,7 @@ def submitUserForm(request):
     if u_form.is_valid() :
         logger.info("u_form is  Valid.")
         u_form.save()
-        return redirect( 'user_list') 
+        return redirect( 'user-filter') 
 
 def createUser(request):
     logger.info("enter createUser function.")
@@ -120,6 +121,14 @@ class usersListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter usersListView.")
     model = User
     template_name ='accounts/user_list.html'
+    filter_class = AccountFilter
+
+# UserFilter View:    
+def AccountViewFilter(request):
+    userf_list = User.objects.all()
+    userf_filter = AccountFilter(request.GET, queryset= userf_list)
+    return render(request, 'accounts/user_list.html', {'filter': userf_filter})
+
 
 # view details of the specific user.
 class UserDetailView(LoginRequiredMixin,generic.DetailView):
@@ -137,4 +146,4 @@ class UserUpdate(LoginRequiredMixin,UpdateView):
 class UserDelete(LoginRequiredMixin,DeleteView):
     logger.info("Enter UserDelete.")
     model = User
-    success_url = reverse_lazy('user_list')
+    success_url = reverse_lazy('user-filter')

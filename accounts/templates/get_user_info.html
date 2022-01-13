@@ -14,7 +14,7 @@
     {{ u_form | crispy }}
     </table>
     <input class="btn btn-success my-3" type="submit" value="Get">
-    <a href="{% url 'user_list' %}" class="btn btn-danger my-3">Cancel</a>
+    <a href="{% url 'user-filter' %}" class="btn btn-danger my-3">Cancel</a>
   </form>
 {{u_form.errors}}
 {% endblock %}

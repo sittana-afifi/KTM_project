@@ -8,6 +8,6 @@
   <p> <strong> Date Joined:</strong> {{ user.date_joined}}</p>
   <p> <strong> Is SupperUser:</strong>  {%if user.is_superuser %} Yes {% else %} No {% endif %}</p>
   {{ form | crispy }}
-<a href="{% url 'user_list' %}"><button class="btn btn-success my-3">ok</button></a>
+<a href="{% url 'user-filter' %}"><button class="btn btn-success my-3">ok</button></a>
 </form>
 {% endblock %}
