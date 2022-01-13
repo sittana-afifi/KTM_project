@@ -2,13 +2,12 @@ version: "3.9"
 services:
   web:
    build: .
-   container_name: ktm_django
    ports: 
     - 8000:8000
    command: >
-    sh -c  "python3 manage.py makemigrations &&
+    sh -c  "python3 manage.py makemigrations admin auth contenttypes sessions TaskManagement MeetingRoom  &&
             python3 manage.py migrate &&
-            python3 manage.py runserver 0.0.0.0:8000" 
+            python3 manage.py runserver 0.0.0.0:8000"
 
    depends_on:
     db:
@@ -16,14 +15,19 @@ services:
 
    environment:
     - DB_NAME=ktm
-    - DB_USER=sito
-    - DB_PASSWORD=sito
+    - DB_USER=moiz
+    - DB_PASSWORD=moiz
     - DB_HOST=db 
   db:
     image: mysql:8
     container_name: ktm_db
+    ports:
+     - 3306:3306
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=ktm
-      - MYSQL_USER=sito
-      - MYSQL_PASSWORD=sito
+      - MYSQL_USER=moiz
+      - MYSQL_PASSWORD=moiz
+
+    volumes:
+      - ./data/db:/var/lib/mysql

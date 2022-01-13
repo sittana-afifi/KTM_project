@@ -32,7 +32,7 @@ class AssignTaskForm(forms.ModelForm):
         ('L', 'Low'),    
     )
     priority = forms.ChoiceField(choices=TASK_PRIORITY)
-    comment = forms.CharField()
+    comment = forms.CharField(required=False)
     start_date = forms.DateField(widget=DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}))
     end_date = forms.DateField(widget=DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}))
     

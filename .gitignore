@@ -135,3 +135,9 @@ dmypy.json
 *.sqlite3
 
 */migrations/*
+
+#Docker files
+docker-compose.yml
+Dockerfile
+#Docker Volumes
+./data/*

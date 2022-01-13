@@ -1,6 +1,7 @@
 import django_filters
 from .models import *
 from django import forms
+from django_filters import FilterSet, ChoiceFilter
 from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 
 class EmployeeFilter(django_filters.FilterSet):
@@ -28,12 +29,21 @@ class TaskFilter(django_filters.FilterSet):
         fields = ['project', 'task_name', ]
 
 class TaskmanagmentFilter(django_filters.FilterSet):
-    name = django_filters.ModelChoiceFilter(queryset=Taskmanagment.objects.all())
+    task_managment = django_filters.ModelChoiceFilter(queryset=Task.objects.all())
     assignee = django_filters.ModelChoiceFilter(queryset=Employee.objects.all())
-    assigneedTo = django_filters.ModelMultipleChoiceFilter(queryset=Employee.objects.all(),
-        widget=forms.CheckboxSelectMultiple)
-    status = django_filters.ModelChoiceFilter()
-    priority = django_filters.ModelChoiceFilter()
+    assigneedTo = django_filters.ModelMultipleChoiceFilter(queryset=Employee.objects.all(),widget=forms.CheckboxSelectMultiple)
+    TASK_STATUS = (
+        ('TD', 'To do'),
+        ('IP', 'In Progress'),
+        ('C', 'Completed'),
+    )
+    TASK_PRIORITY = (
+        ('H', 'High'),
+        ('M', 'Meduim'),
+        ('L', 'Low'),    
+    )
+    status = django_filters.ChoiceFilter(choices=TASK_STATUS)
+    priority = django_filters.ChoiceFilter(choices=TASK_PRIORITY)
 
     class Meta:
         model = Taskmanagment

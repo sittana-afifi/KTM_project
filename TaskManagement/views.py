@@ -190,7 +190,7 @@ class TaskmanagmentUpdate(LoginRequiredMixin,UpdateView):
 class TaskmanagmentDelete(LoginRequiredMixin,DeleteView):
     logger.info("Enter TaskmanagmentDelete.")
     model = Taskmanagment
-    success_url = reverse_lazy('taskmanagments')
+    success_url = reverse_lazy('taskmanagment-filter')
 
 # -----------------------------------------------------------
 # Assign Task to the Team Form create view  for Metting Room.
@@ -214,7 +214,7 @@ def assign_task_view(request):
         if form.is_valid():
             logger.info("Enter is valid.")
             form.save()
-            return HttpResponseRedirect(reverse('taskmanagments') )
+            return HttpResponseRedirect(reverse('taskmanagment-filter') )
     context = {
         'form' : form ,
         }
@@ -243,7 +243,7 @@ def update_assign_task_view(request, pk):
         if form.is_valid():
             logger.info("Enter is valid.")
             form.save()
-            return HttpResponseRedirect(reverse('taskmanagments') )
+            return HttpResponseRedirect(reverse('taskmanagment-filter') )
     context = {
         'form' : form ,
         }

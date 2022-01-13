@@ -12,6 +12,6 @@
 <p style="margin-left:2.5em"><strong>Task Start Date:</strong> {{ taskmanagment.start_date }}</p>
 <p style="margin-left:2.5em"><strong>End Date:</strong> {{ taskmanagment.end_date }}</p>
 {{ form | crispy }}
-<a href="{% url 'taskmanagments' %}"><button class="btn btn-success my-3">ok</button></a>
+<a href="{% url 'taskmanagment-filter' %}"><button class="btn btn-success my-3">ok</button></a>
 </form>
 {% endblock %}

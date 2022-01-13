@@ -73,7 +73,7 @@ class Taskmanagment(models.Model):
         default='l',
         help_text='Tasks Priorities',
     )
-    comment = models.CharField(max_length=200)
+    comment = models.CharField(max_length=200,null=True,blank=True)
     start_date = models.DateField(null=True, blank=False)
     end_date = models.DateField(null=True, blank=False)
 
