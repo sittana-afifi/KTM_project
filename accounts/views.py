@@ -129,7 +129,6 @@ def AccountViewFilter(request):
     userf_filter = AccountFilter(request.GET, queryset= userf_list)
     return render(request, 'accounts/user_list.html', {'filter': userf_filter})
 
-
 # view details of the specific user.
 class UserDetailView(LoginRequiredMixin,generic.DetailView):
     logger.info("Enter UserDetailView.")

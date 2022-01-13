@@ -6,14 +6,14 @@ from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 
 class EmployeeFilter(django_filters.FilterSet):
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
-    date_joined = django_filters.DateFromToRangeFilter()
+    date_joined = django_filters.DateFromToRangeFilter(label='Date Joined Range', widget=django_filters.widgets.RangeWidget(attrs={'placeholder': 'yyyy/mm/dd'}))
     #user = django_filters.CharFilter(lookup_expr='icontains')
     class Meta:
         model = Employee
         fields = ['user', 'Employee_id','Phone_number','date_joined',]
         
 class ProjectFilter(django_filters.FilterSet):
-    name =django_filters.ModelChoiceFilter(queryset=Project.objects.all())
+    name = django_filters.ModelChoiceFilter(queryset=Project.objects.all())
     name = django_filters.CharFilter(lookup_expr='icontains')
 
     class Meta:
@@ -45,8 +45,8 @@ class TaskmanagmentFilter(django_filters.FilterSet):
     )
     status = django_filters.ChoiceFilter(choices=TASK_STATUS)
     priority = django_filters.ChoiceFilter(choices=TASK_PRIORITY)
-    start_date = django_filters.DateFromToRangeFilter()
-    end_date = django_filters.DateFromToRangeFilter()
+    start_date = django_filters.DateFromToRangeFilter(label='Task Start Date Range', widget=django_filters.widgets.RangeWidget(attrs={'placeholder': 'yyyy/mm/dd'}))
+    end_date = django_filters.DateFromToRangeFilter(label='Task End Date Range', widget=django_filters.widgets.RangeWidget(attrs={'placeholder': 'yyyy/mm/dd'}))
 
     class Meta:
         model = Taskmanagment
