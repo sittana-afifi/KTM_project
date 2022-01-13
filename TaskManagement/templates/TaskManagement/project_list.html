@@ -1,11 +1,32 @@
 {% extends "base_generic.html" %}
+{% load render_table from django_tables2 %}
+{% load widget_tweaks %}
 {% block content %}
   <h2>Projects List
       <a href="{% url 'project-create' %}"> 
         <i data-feather="plus-circle" style="width:25px;height:25px;" ></i> <!-- <img alt="Add project" src="https://www.iconsdb.com/icons/download/color/096647/add-file-16.png">-->
       </a>
   </h2>
-  {% if project_list %}
+  <form method="get">
+    <div class="well">
+      <h4 style="margin-top: 0">Filter</h4>
+      <div class="row">
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.name.label_tag }}
+          {% render_field filter.form.name class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.description.label_tag }}
+          {% render_field filter.form.description class="form-control" %}
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">
+        <span class="glyphicon glyphicon-search"></span> Search
+      </button>
+    </div>
+  </form> 
+ {# {% if project_list %}#}
+ {% if filter.qs%}
   <table class="table">
     <thead class="thead-dark">
       <tr>
@@ -18,7 +39,9 @@
     </thead>
     <tbody>
       <tr>
-    {% for project in project_list %}
+    {# {% for project in project_list %} #}
+    {% for project in filter.qs %}
+
           <th scope="row">{{ forloop.counter }} </th> 
           <td><a href="{{ project.get_absolute_url }}">{{ project.name }}</a></td>
           <td>{{ project.description  }}</td>

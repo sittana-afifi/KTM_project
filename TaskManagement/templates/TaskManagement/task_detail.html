@@ -8,6 +8,6 @@
 <p style="margin-left:2.5em"><strong>Task Name:</strong> {{ task.task_name }}</p>
 <p style="margin-left:2.5em"><strong>Task Details</strong> {{ task.task_description }}</p>
 {{ form | crispy }}
-<a href="{% url 'tasks' %}"><button class="btn btn-success my-3">ok</button></a>
+<a href="{% url 'task-filter' %}"><button class="btn btn-success my-3">ok</button></a>
 </form>
 {% endblock %}

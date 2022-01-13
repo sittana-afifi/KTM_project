@@ -8,6 +8,6 @@
 <p style="margin-left:2.5em"><strong>Project Name:</strong> {{ project.name }}</p>
 <p style="margin-left:2.5em"><strong>Project Details:</strong> {{ project.description }}</p>
 {{ form | crispy }}
-<a href="{% url 'projects' %}"><button class="btn btn-success my-3">ok</button></a>
+<a href="{% url 'project-filter' %}"><button class="btn btn-success my-3">ok</button></a>
 </form>
 {% endblock %}

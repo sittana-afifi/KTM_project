@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 import os, logging, logging.config # Logging view in Django
-from .filters import ReservationMeetingRoomFilter
+from .filters import ReservationMeetingRoomFilter, MeetingRoomFilter
 from .tables import ReservationMeetingRoomTable
 
 # Create a logger for this file or the name of the log level or Get an instance of a logger
@@ -26,6 +26,13 @@ class MeetingListView(LoginRequiredMixin,generic.ListView):
     model = Meeting
     template_name = 'MeetingRoom/meeting_list.html'
     paginate_by = 5
+    filter_class = MeetingRoomFilter
+
+# Meeting Rooms Filter View:    
+def MeetingFilter(request):
+    meeting_list = Meeting.objects.all()
+    meeting_filter = MeetingRoomFilter(request.GET, queryset= meeting_list)
+    return render(request, 'MeetingRoom/meeting_list.html', {'filter': meeting_filter})
 
 class MeetingDetailView(LoginRequiredMixin,generic.DetailView):
     logger.info("Enter MeetingDetailView.")
@@ -45,7 +52,7 @@ class MeetingUpdate(LoginRequiredMixin,UpdateView):
 class MeetingDelete(LoginRequiredMixin,DeleteView):
     logger.info("Enter MeetingDelete.")
     model = Meeting
-    success_url = reverse_lazy('meetings')
+    success_url = reverse_lazy('meetings-filter')
 
 # ReservationMeetingRoom CRUD View:
 class ReservationMeetingRoomListView(LoginRequiredMixin,generic.ListView):
@@ -74,7 +81,7 @@ class ReservationMeetingRoomUpdate(LoginRequiredMixin,UpdateView):
 class ReservationMeetingRoomDelete(LoginRequiredMixin,DeleteView):
     logger.info("Enter ReservationMeetingRoomDelete.")
     model = ReservationMeetingRoom
-    success_url = reverse_lazy('filter')
+    success_url = reverse_lazy('reserve-filter')
 
 # Reservation Meeting Rooms Filter View:    
 def ReservationFilter(request):
@@ -137,7 +144,7 @@ def reserve_view(request):
         elif form.is_valid():
             form.save()
             messages.success(request, "You successfully reserve this meeting room at this time and date")
-            return HttpResponseRedirect(reverse('filter') )
+            return HttpResponseRedirect(reverse('reserve-filter') )
     context = {
     'form' : form ,
     }
@@ -167,7 +174,7 @@ def update_reserve_view(request, pk):
             logger.info("form is valid")
             form.save()
             messages.success(request, "You Successfully update reservation request for this meeting room at this time and date")
-            return HttpResponseRedirect(reverse('filter'))
+            return HttpResponseRedirect(reverse('reserve-filter'))
     context = {
     'form' : form ,
     }

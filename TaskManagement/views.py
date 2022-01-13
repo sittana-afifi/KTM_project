@@ -12,7 +12,8 @@ from django.http import HttpResponseRedirect, HttpResponse
 from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput, MonthPickerInput, YearPickerInput
 from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 from flatpickr.utils import GenericViewWidgetMixin
-import os, logging, logging.config # Logging view in Django:
+import os, logging, logging.config # Logging view in Django.
+from TaskManagement.filters import EmployeeFilter, ProjectFilter, TaskFilter, TaskmanagmentFilter
 
 # Create a logger for this file or the name of the log level or Get an instance of a logger
 logger = logging.getLogger(__name__) 
@@ -70,6 +71,13 @@ class ProjectListView(LoginRequiredMixin,generic.ListView):
     model = Project
     template_name = 'TaskManagement/project_list.html'
     paginate_by = 5
+    filter_class = ProjectFilter
+
+# Project Filter View:    
+def ProjectViewFilter(request):
+    project_list = Project.objects.all()
+    project_filter = ProjectFilter(request.GET, queryset= project_list)
+    return render(request, 'TaskManagement/project_list.html', {'filter': project_filter})
 
 class ProjectDetailView(LoginRequiredMixin,generic.DetailView):
     logger.info("Enter ProjectDetailView.")
@@ -89,13 +97,20 @@ class ProjectUpdate(LoginRequiredMixin,UpdateView):
 class ProjectDelete(LoginRequiredMixin,DeleteView):
     logger.info("Enter ProjectDelete.")
     model = Project
-    success_url = reverse_lazy('projects')
+    success_url = reverse_lazy('project-filter')
 
 class TaskListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter TaskListView.")
     model = Task
     template_name = 'TaskManagement/task_list.html'
     paginate_by = 5
+    filter_class = TaskFilter
+
+# Project Filter View:    
+def TaskViewFilter(request):
+    task_list = Task.objects.all()
+    task_filter = TaskFilter(request.GET, queryset= task_list)
+    return render(request, 'TaskManagement/task_list.html', {'filter': task_filter})
 
 class TaskDetailView(LoginRequiredMixin,generic.DetailView):
     logger.info("Enter TaskDetailView.")
@@ -115,7 +130,7 @@ class TaskUpdate(LoginRequiredMixin,UpdateView):
 class TaskDelete(LoginRequiredMixin,DeleteView):
     logger.info("Enter TaskDelete.")
     model = Task
-    success_url = reverse_lazy('tasks')
+    success_url = reverse_lazy('task-filter')
 
 # Taskmanagment List View:
 class TaskmanagmentListView(LoginRequiredMixin,generic.ListView):
@@ -123,6 +138,13 @@ class TaskmanagmentListView(LoginRequiredMixin,generic.ListView):
     model = Taskmanagment
     template_name ='TaskManagement/taskmanagment_list.html'
     paginate_by = 5
+    filter_class = TaskmanagmentFilter
+
+# Project Filter View:    
+def TaskmanagmentViewFilter(request):
+    taskmanagment_list = Taskmanagment.objects.all()
+    taskmanagment_filter = TaskmanagmentFilter(request.GET, queryset= taskmanagment_list)
+    return render(request, 'TaskManagement/taskmanagment_list.html', {'filter': taskmanagment_filter})
     
 # Taskmanagment Details View:
 class TaskmanagmentDetailView(LoginRequiredMixin,generic.DetailView):
