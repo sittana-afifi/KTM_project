@@ -4,6 +4,7 @@ from .models import *
 from django import forms
 from django_filters import FilterSet, ChoiceFilter, BooleanFilter,DateFromToRangeFilter
 from django_filters.widgets import BooleanWidget
+from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput, MonthPickerInput, YearPickerInput
 from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 
 class CustomBooleanWidget(BooleanWidget):
@@ -18,7 +19,7 @@ class AccountFilter(django_filters.FilterSet):
     is_staff = django_filters.BooleanFilter(widget=CustomBooleanWidget)
     is_superuser = django_filters.BooleanFilter(widget=CustomBooleanWidget)
     is_active = django_filters.BooleanFilter(widget=CustomBooleanWidget)
-    date_joined = django_filters.DateFromToRangeFilter(label='Date Joined Range', widget=django_filters.widgets.RangeWidget(attrs={'placeholder': 'yyyy/mm/dd'}))
+    date_joined = django_filters.DateFromToRangeFilter(label='Date Joined Range', widget=django_filters.widgets.RangeWidget(attrs={'placeholder': 'yyyy/mm/dd','class': 'datepicker'}))
     #date_joined = django_filters.DateFromToRangeFilter()
 
     class Meta:
