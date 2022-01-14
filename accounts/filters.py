@@ -19,8 +19,7 @@ class AccountFilter(django_filters.FilterSet):
     is_staff = django_filters.BooleanFilter(widget=CustomBooleanWidget)
     is_superuser = django_filters.BooleanFilter(widget=CustomBooleanWidget)
     is_active = django_filters.BooleanFilter(widget=CustomBooleanWidget)
-    date_joined = django_filters.DateFromToRangeFilter(label='Date Joined Range', widget=django_filters.widgets.RangeWidget(attrs={'placeholder': 'yyyy/mm/dd','class': 'datepicker'}))
-    #date_joined = django_filters.DateFromToRangeFilter()
+    date_joined = django_filters.DateFromToRangeFilter(label='Date Joined Range', widget=django_filters.widgets.RangeWidget(attrs={'placeholder': 'yyyy/mm/dd','class': 'datepicker', 'type': 'date'}))
 
     class Meta:
         model = User

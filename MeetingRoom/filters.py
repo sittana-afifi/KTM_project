@@ -10,7 +10,7 @@ from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 class ReservationMeetingRoomFilter(django_filters.FilterSet):
     team = django_filters.ModelMultipleChoiceFilter(queryset=Employee.objects.all(),
         widget=forms.CheckboxSelectMultiple)
-    reservation_date = django_filters.DateFromToRangeFilter(label='Reservation Date Range', widget=django_filters.widgets.RangeWidget(attrs={'placeholder': 'yyyy/mm/dd'}))
+    reservation_date = django_filters.DateFromToRangeFilter(label='Reservation Date Range', widget=django_filters.widgets.RangeWidget(attrs={'placeholder': 'yyyy/mm/dd','class': 'datepicker', 'type': 'date'}))
         
     class Meta:
         model = ReservationMeetingRoom
