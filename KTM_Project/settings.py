@@ -62,7 +62,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # configure the accounts app 
     'accounts.apps.AccountsConfig',
-    'rosetta',  # Rosetta Translation Interface
+    #'rosetta',  # Rosetta Translation Interface
     'parler', #Translating Models with django-parler
     'crispy_forms',# 3rd party apps
     'TaskManagement.apps.TaskManagementConfig',
