@@ -50,5 +50,3 @@ class ReservationFormTest(TestCase):
 
         # Check we used correct template
         self.assertTemplateUsed(response, 'MeetingRoom/reservationmeetingroom_list.html')
-
-

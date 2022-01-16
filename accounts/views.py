@@ -120,8 +120,7 @@ def createUser(request):
             messages.error(request, 'User Doesn\'t exist in Active Directory')
             u_form = UserForm()
             return render(request, 'get_user_info.html', {'u_form' :u_form}) 
-
-         
+            
 # view the list of the users.
 class usersListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter usersListView.")

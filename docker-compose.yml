@@ -1,11 +1,115 @@
+<<<<<<< HEAD
+=======
+# version: '3'
+# services:
+#    db:
+#      image: postgres:10.3-alpine
+#      container_name: postgres01
+#    nginx:
+#      image: nginx:1.13-alpine
+#      container_name: nginx01
+#      ports:
+#        - "8000:8000"
+#      volumes:
+#        - ./project:/src
+#        - ./config/nginx:/etc/nginx/conf.d
+#      depends_on:
+#        - web
+#    web:
+#      build: .
+#      container_name: django01
+#      command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn hello_django.wsgi -b 0.0.0.0:8000"
+#      depends_on:
+#        - db
+#      volumes:
+#        - ./project:/src
+#      expose:
+#        - "8000"
+#      restart: always
+
+
+
+
+# version: "3.8"   
+# services:
+#   db:
+#     image: mysql:latest
+#     restart: always
+#     ports:
+#       - 3307:3306
+#     environment:
+#       MYSQL_ROOT_PASSWORD: root
+#       MYSQL_USER: sittana
+#       MYSQL_PASSWORD: Sittana@123#
+#       MYSQL_DATABASE: KTMdatatbases
+
+#     volumes:
+#       - ./data/db:/var/lib/mysql/data
+    
+#     # healthcheck:
+#     #       test: ["CMD", "curl", "-f", "http://localhost:8000"]
+#     #       interval: 30s
+#     #       timeout: 10s
+#     #       retries: 20
+#   web:
+#     #image: sittana/django_ktm:latest
+#     image: django_ktm:latest
+#     container_name: web
+#     command: bash -c "python3 manage.py runserver 0.0.0.0:8000
+#     ports:
+#       - "8000:8000"
+#     environment:    
+#       DB_USER: sittana
+#       DB_PASSWORD: Sittana@123#
+#       DB_DATABASE: KTMdatatbases
+#       DB_NAME: KTMdatatbases
+#       DB_HOST: db
+#       DB_PORT: 3306
+
+#     depends_on:
+#        db:
+#         condition: service_started
+
+
+
+#   migrations:
+#     image: django_ktm:latest
+#     container_name: migrations
+#     restart: always
+#     command : sh -c "python3 manage.py makemigrations &&
+#                     python3 manage.py migrate"
+#     environment: 
+#       DB_USER: sittana
+#       DB_PASSWORD: Sittana@123#
+#       DB_DATABASE: KTMdatatbases
+#       DB_NAME: KTMdatatbases
+#       DB_HOST: db
+#       DB_PORT: 3306
+
+#     depends_on:
+#       db:
+#         condition: service_started
+
+
+
+
+>>>>>>> 1b8f1c3 (add .env to Test VM)
 version: "3.9"   
 services:
   web:
    build: .
+<<<<<<< HEAD
    ports: 
     - 8000:8000
    command: >
     sh -c  "python3 manage.py makemigrations admin auth contenttypes sessions TaskManagement MeetingRoom  &&
+=======
+   container_name: django_ktm
+   ports: 
+    - 8000:8000
+   command: >
+    sh -c  "python3 manage.py makemigrations &&
+>>>>>>> 1b8f1c3 (add .env to Test VM)
             python3 manage.py migrate &&
             python3 manage.py runserver 0.0.0.0:8000"
 
@@ -14,6 +118,7 @@ services:
       condition: service_started
 
    environment:
+<<<<<<< HEAD
     - DB_NAME=ktm
     - DB_USER=moiz
     - DB_PASSWORD=moiz
@@ -31,3 +136,20 @@ services:
 
     volumes:
       - ./data/db:/var/lib/mysql
+=======
+      DB_USER: sittana
+      DB_PASSWORD: Sittana@123#
+      DB_DATABASE: KTMdatatbases
+      DB_NAME: KTMdatatbases
+      DB_HOST: db
+      DB_PORT: 3306
+  db:
+    image: mysql:8
+    container_name: ktm_db
+    environment:
+
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=KTMdatatbases
+      - MYSQL_USER=Sittana
+      - MYSQL_PASSWORD=Sittana@123#
+>>>>>>> 1b8f1c3 (add .env to Test VM)
