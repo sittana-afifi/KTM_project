@@ -39,7 +39,7 @@ urlpatterns = i18n_patterns(
     path('accounts/', include('django.contrib.auth.urls')),
     path('TaskManagement/', include('TaskManagement.urls')),
     path('MeetingRoom/', include('MeetingRoom.urls')),
-    path('rosetta/', include('rosetta.urls')),  
+    #path('rosetta/', include('rosetta.urls')),  
     path('bootstrap/',TemplateView.as_view(template_name='bootstrap/')),
 
  ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
