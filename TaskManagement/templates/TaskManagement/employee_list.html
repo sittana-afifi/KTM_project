@@ -2,7 +2,6 @@
 {% load render_table from django_tables2 %}
 {% load widget_tweaks %}
 {% block content %}
-
 <h2>Employees<a href="{% url 'employee-create' %}"> <i data-feather="plus-circle" style="width:25px;height:25px;" ></i><!--<img src="https://www.iconsdb.com/icons/download/color/87BBFF/add-16.ico" alt="add new employeer" style="width:25px;height:25px;"> --></a></h2>
 <form method="get">
     <div class="well">
@@ -33,7 +32,6 @@
   </form> 
 {#  {% if employee_list %}#}
   {% if filter.qs%}
-
   <table class="table">
     <thead class="thead-dark">
       <tr>
@@ -50,7 +48,6 @@
         <tr>
      {# {% for employee in employee_list %} #}
     {% for employee in filter.qs %}
-
     <th scope="row">{{ forloop.counter }} </th> 
     <td><a href="{%  url 'employee-detail' employee.id %}">{{ employee.user }}</a></td>
     <td>{{ employee.Employee_id }}</td>
@@ -65,6 +62,8 @@
   {% else %}
     <p>There are no employees in the library.</p>
   {% endif %}
+  <a href="{% url 'export_employees_xls' %}?{{request.GET.urlencode}}">
+    <button type="button" class="btn btn-primary my-3">Print File <span class="oi oi-data-transfer-download"></span></button></a>
      {% if is_paginated %}
     <nav aria-label="Page navigation">
         <ul class="pagination">

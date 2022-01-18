@@ -23,4 +23,4 @@ class AccountFilter(django_filters.FilterSet):
 
     class Meta:
         model = User
-        fields = ['username', 'date_joined','first_name', 'last_name','is_staff','is_superuser','is_active',]
+        fields = ['username', 'first_name', 'last_name', 'date_joined', 'email','is_superuser', 'is_active', 'is_staff',]

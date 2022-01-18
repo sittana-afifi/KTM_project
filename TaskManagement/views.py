@@ -14,6 +14,13 @@ from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 from flatpickr.utils import GenericViewWidgetMixin
 import os, logging, logging.config # Logging view in Django.
 from TaskManagement.filters import EmployeeFilter, ProjectFilter, TaskFilter, TaskmanagmentFilter
+import xlwt
+from django.http import HttpResponse
+from .resources import EmployeeResource, TaskResource, ProjectResource, TaskmanagmentResource
+from tablib import Dataset
+import _datetime
+
+today = _datetime.date.today()
 
 # Create a logger for this file or the name of the log level or Get an instance of a logger
 logger = logging.getLogger(__name__) 
@@ -32,7 +39,6 @@ def EmployeeViewFilter(request):
     employeef_list = Employee.objects.all()
     employeef_filter = EmployeeFilter(request.GET, queryset= employeef_list)
     return render(request, 'TaskManagement/employee_list.html', {'filter': employeef_filter})
-
 
 # view details of the specific employee.
 class EmployeeDetailView(generic.DetailView):
@@ -72,7 +78,6 @@ class EmployeeUpdateView(UpdateView):
         form = super().get_form()
         form.fields['date_joined'].widget = DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True})
         return form
-
 
 class ProjectListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter ProjectListView.")
@@ -248,3 +253,156 @@ def update_assign_task_view(request, pk):
         'form' : form ,
         }
     return render(request, "TaskManagement/update_assign_task.html", context)
+
+def export_employees_xls(request):
+    employeef_filter = EmployeeFilter(request.GET, queryset=Employee.objects.all())
+    dataset = EmployeeResource().export(employeef_filter.qs)
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment;filename={date}-Employees.xls'.format(date=today.strftime('%Y-%m-%d'),)  
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Employees')
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
+    time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
+
+    columns = ['User', 'Employee_id','Phone_Number', 'Date_Joined',]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    for row in dataset:
+        row_num += 1
+        for col_num in range(len(row)):
+            if isinstance(row[col_num], datetime.date):
+                ws.write(row_num, col_num, row[col_num], date_style)
+            elif isinstance(row[col_num], datetime.time):
+                ws.write(row_num, col_num, row[col_num], time_style)
+            else:
+                ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response
+
+def export_projects_xls(request):
+    project_filter = ProjectFilter(request.GET, queryset=Project.objects.all())
+    dataset = ProjectResource().export(project_filter.qs)
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment;filename={date}-Projects.xls'.format(date=today.strftime('%Y-%m-%d'),)  
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Projects')
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
+    time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
+
+    columns = ['Name', 'Description',]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    for row in dataset:
+        row_num += 1
+        for col_num in range(len(row)):
+            if isinstance(row[col_num], datetime.date):
+                ws.write(row_num, col_num, row[col_num], date_style)
+            elif isinstance(row[col_num], datetime.time):
+                ws.write(row_num, col_num, row[col_num], time_style)
+            else:
+                ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response
+
+def export_tasks_xls(request):
+    task_filter = TaskFilter(request.GET, queryset=Task.objects.all())
+    dataset = TaskResource().export(task_filter.qs)
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment;filename={date}-Tasks.xls'.format(date=today.strftime('%Y-%m-%d'),)  
+
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Tasks')
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
+    time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
+
+    columns = ['Project', 'Task_Name','Task_Description',]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    for row in dataset:
+        row_num += 1
+        for col_num in range(len(row)):
+            if isinstance(row[col_num], datetime.date):
+                ws.write(row_num, col_num, row[col_num], date_style)
+            elif isinstance(row[col_num], datetime.time):
+                ws.write(row_num, col_num, row[col_num], time_style)
+            else:
+                ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response
+
+def export_taskmanagment_xls(request):
+    taskmanagment_filter = TaskmanagmentFilter(request.GET, queryset=Taskmanagment.objects.all())
+    dataset = TaskmanagmentResource().export(taskmanagment_filter.qs)    
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment;filename={date}-Tasks_Managment.xls'.format(date=today.strftime('%Y-%m-%d'),)  
+
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Tasksmanagment')
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
+    time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
+
+    columns = ['Assignee', 'AssigneedTo','Task_Managment','Status','Priority','Start_Date', 'End_Date', 'Comment',]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    for row in dataset:
+        row_num += 1
+        for col_num in range(len(row)):
+            if isinstance(row[col_num], datetime.date):
+                ws.write(row_num, col_num, row[col_num], date_style)
+            elif isinstance(row[col_num], datetime.time):
+                ws.write(row_num, col_num, row[col_num], time_style)
+            else:
+                ws.write(row_num, col_num, row[col_num], font_style) 
+
+    wb.save(response)
+    return response

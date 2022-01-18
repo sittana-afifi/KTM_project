@@ -15,7 +15,14 @@ from django.shortcuts import get_object_or_404, redirect, render
 import os, logging, logging.config # Logging view in Django
 from .filters import ReservationMeetingRoomFilter, MeetingRoomFilter
 from .tables import ReservationMeetingRoomTable
+import datetime
+import xlwt
+from django.http import HttpResponse
+from .resources import MeetingResource, ReservationMeetingRoomResource
+from tablib import Dataset
+import _datetime
 
+today = _datetime.date.today()
 # Create a logger for this file or the name of the log level or Get an instance of a logger
 logger = logging.getLogger(__name__) 
 logger = logging.getLogger(__file__)
@@ -179,3 +186,79 @@ def update_reserve_view(request, pk):
     'form' : form ,
     }
     return render(request, 'MeetingRoom/update_reserve_view.html', context)
+
+def export_meetingrooms_xls(request):
+    meeting_filter = MeetingRoomFilter(request.GET, queryset=Meeting.objects.all())
+    dataset = MeetingResource().export(meeting_filter.qs)
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment;filename={date}-MeetingRooms.xls'.format(date=today.strftime('%Y-%m-%d'),)    
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Meetings')
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
+    time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
+
+    columns = ['Name', 'Description',]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+    
+    for row in dataset:
+        row_num += 1
+        for col_num in range(len(row)):
+            if isinstance(row[col_num], datetime.date):
+                ws.write(row_num, col_num, row[col_num], date_style)
+            elif isinstance(row[col_num], datetime.time):
+                ws.write(row_num, col_num, row[col_num], time_style)
+            else:
+                ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response
+
+def export_reservation_meeting_room_xls(request):
+    reservation_filter = ReservationMeetingRoomFilter(request.GET, queryset=ReservationMeetingRoom.objects.all())
+    dataset = ReservationMeetingRoomResource().export(reservation_filter.qs)
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment;filename={date}-Reservation_Meeting_Rooms.xls'.format(date=today.strftime('%Y-%m-%d'),)    
+
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('ReservationMeetingRoomsRequest')
+
+    # Sheet header, first row
+    row_num = 0
+
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
+    time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
+
+    columns = ['Meeting_Room', 'Reservation_Date','Reservation_From_Time', 'Reservation_To_Time','Team','Meeting_Outcomes','Meeting_Project_Name','Task_Name',]
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    # Sheet body, remaining rows
+    font_style = xlwt.XFStyle()
+
+    for row in dataset:
+        row_num += 1
+        for col_num in range(len(row)):
+            if isinstance(row[col_num], datetime.date):
+                ws.write(row_num, col_num, row[col_num], date_style)
+            elif isinstance(row[col_num], datetime.time):
+                ws.write(row_num, col_num, row[col_num], time_style)
+            else:
+                ws.write(row_num, col_num, row[col_num], font_style)
+
+    wb.save(response)
+    return response
