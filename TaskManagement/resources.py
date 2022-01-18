@@ -5,6 +5,23 @@ from import_export.fields import Field
 from import_export import resources,fields
 from django.contrib.auth.models import User
 
+class CustomManyToManyWidget(ManyToManyWidget):
+    def __init__(self, model, separator=None, field=None, *args, **kwargs):
+        self.lookup_field = kwargs.get('lookup_field', None)
+        super(CustomManyToManyWidget, self).__init__(model)
+        self.field=field
+
+    def clean(self, value, row=None, *args, **kwargs):
+        if not value:
+            return self.model.objects.none()
+        if isinstance(value, (float, int)):
+            ids = [int(value)]
+        else:
+            ids = value.split(self.separator)
+            ids = filter(None, [i.strip() for i in ids])
+
+        return self.model.objects.filter(**{"{}__{}__in".format(self.field,self.lookup_field):ids})
+
 class EmployeeResource(resources.ModelResource):
 
     def get_queryset(self):
@@ -33,6 +50,7 @@ class ProjectResource(resources.ModelResource):
         export_order = ('name', 'description')
 
 class TaskmanagmentResource(resources.ModelResource):
+    assigneedTo = fields.Field( attribute='assigneedTo', widget=CustomManyToManyWidget(model=Employee,field='user',lookup_field='user'))
 
     def get_queryset(self):
         return Taskmanagment.objects.filter(assignee=self.assignee, assigneedTo=self.assigneedTo,task_managment=self.task_managment,status=self.status,priority=self.priority,comment=self.comment,
