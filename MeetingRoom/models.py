@@ -36,7 +36,14 @@ class ReservationMeetingRoom(models.Model):
         if date < datetime.date.today():
             raise ValidationError(_('Invalid date - Date cannot be in the past'))
         return date
-
+    def get_team_values(self):
+        ret = ''
+        print(self.team.all())
+    # use models.ManyToMany field's all() method to return all the Team objects that this employee belongs to.
+        for team in self.team.all():
+            ret = ret + team.user.username + ','
+    # remove the last ',' and return the value.
+        return ret[:-1]
     def clean(self, *args, **kwargs):
         cleaned_data = super().clean(*args, **kwargs)
         if self.pk:

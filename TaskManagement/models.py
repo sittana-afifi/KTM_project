@@ -76,7 +76,14 @@ class Taskmanagment(models.Model):
     comment = models.CharField(max_length=200,null=True,blank=True)
     start_date = models.DateField(null=True, blank=False)
     end_date = models.DateField(null=True, blank=False)
-
+    def get_assigneedTo_values(self):
+        ret = ''
+        print(self.assigneedTo.all())
+    # use models.ManyToMany field's all() method to return all the assigneedTo objects that this employee belongs to.
+        for assigneedTo in self.assigneedTo.all():
+            ret = ret + assigneedTo.user.username + ','
+    # remove the last ',' and return the value.
+        return ret[:-1]
     @property
     def is_overdue(self):
         if self.end_date and DateField.today() > self.end_date:

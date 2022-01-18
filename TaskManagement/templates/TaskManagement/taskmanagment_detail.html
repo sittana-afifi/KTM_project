@@ -5,7 +5,7 @@
 <h1>TaskManagment Details: {{ taskmanagment.id}},{{ taskmanagment.task_managment}}</h1>
 <p style="margin-left:2.5em">About the TaskManagment:</p>
 <p style="margin-left:2.5em"><strong>Assignee Employee Name:</strong> {{ taskmanagment.assignee }}</p>
-<p style="margin-left:2.5em"><strong>Assigneeed to Employee Name:</strong> {{ taskmanagment.assigneedTo }}</p>
+<p style="margin-left:2.5em"><strong>Assigneeed to Employee Name:</strong> {{ taskmanagment.get_assigneedTo_values }}</p>
 <p style="margin-left:2.5em"><strong>Task Status:</strong> {{ taskmanagment.status }}</p>
 <p style="margin-left:2.5em"><strong>Tasks Additional Details:</strong> {{ taskmanagment.comment }}</p>
 <p style="margin-left:2.5em"><strong>Task priority:</strong> {{taskmanagment.priority}}</p>
