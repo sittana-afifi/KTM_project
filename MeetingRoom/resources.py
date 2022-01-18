@@ -4,8 +4,7 @@ from import_export.widgets import ManyToManyWidget
 from import_export.fields import Field
 from TaskManagement.models import Employee, Project, Task, Taskmanagment
 from import_export import resources,fields
-from import_export.widgets import JSONWidget, ManyToManyWidget, ForeignKeyWidget
-from import_export.widgets import ForeignKeyWidget, ManyToManyWidget,DateWidget
+from import_export.widgets import JSONWidget, ManyToManyWidget, ForeignKeyWidget, ForeignKeyWidget, ManyToManyWidget,DateWidget
 
 class CustomManyToManyWidget(ManyToManyWidget):
     def __init__(self, model, separator=None, field=None, *args, **kwargs):
