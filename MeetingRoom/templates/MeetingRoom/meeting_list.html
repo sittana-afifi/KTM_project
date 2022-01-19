@@ -50,9 +50,30 @@
   {% else %}
     <p>There are no meeting rooms.</p>
   {% endif %}
+  <br><br><br>
+<br><br><br>
+    <h3 class="card-title">Export Files</h3>
+      <form role="form" method="POST" action="{% url 'export_meetingrooms_xls' %}?{{request.GET.urlencode}}" enctype="multipart/form-data">
+        {% csrf_token %}
+          <div class="form-group">
+            <label>Choose Format Type</label>
+            <select class="custom-select" name="file-format">
+              {# <option value="" selected disabled hidden>Choose format...</option>#}
+              <option>XLS (Excel)</option>
+              <option>CSV</option>
+              <option>JSON</option>
+              <option>YAML</option>
+              {#<option>PDF</option>#}
+            </select>
+          </div> <br><br><br>
+        <button type="submit" class="btn btn-primary my-3">Export File <span class="oi oi-data-transfer-download"></span></button></a>
+      </form>
+  </div>
+  <!--
   <a href="{% url 'export_meetingrooms_xls' %}?{{request.GET.urlencode}}">
     <button type="button" class="btn btn-primary my-3">Print File <span class="oi oi-data-transfer-download"></span></button></a>
-  {% if is_paginated %}
+  -->
+    {% if is_paginated %}
     <nav aria-label="Page navigation">
         <ul class="pagination">
             <!-- << PREVIOUS PART -->

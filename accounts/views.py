@@ -24,6 +24,7 @@ from pathlib import Path
 from django.contrib import messages
 from .filters import AccountFilter
 import datetime
+import _datetime
 import csv
 from django.http import HttpResponse
 from django.contrib.auth.models import User
@@ -154,42 +155,63 @@ class UserDelete(LoginRequiredMixin,DeleteView):
     model = User
     success_url = reverse_lazy('user-filter')
 
-import _datetime
 today = _datetime.date.today()
-i = 10
+
 def export_users_xls(request):
+    file_format = request.POST['file-format']
     userf_filter = AccountFilter(request.GET, queryset=User.objects.all())
-    response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename={date}-Users-.xls'.format(date=today.strftime('%Y-%m-%d'),)
-    
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('Users')
-
-    # Sheet header, first row
-    row_num = 0
-
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-    date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
-    time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
-
-    columns = ['Username', 'First name', 'Last name', 'Email address', 'Is_SuperUser', 'Is_Active', 'Is_Staff','Date_Joined']
-
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
-
-    # Sheet body, remaining rows
-    font_style = xlwt.XFStyle()
     dataset = AccountResource().export(userf_filter.qs)
-    for row in dataset:
-        row_num += 1
-        for col_num in range(len(row)):
-            if isinstance(row[col_num], datetime.date):
-                ws.write(row_num, col_num, row[col_num], date_style)
-            elif isinstance(row[col_num], datetime.time):
-                ws.write(row_num, col_num, row[col_num], time_style)
-            else:
-                ws.write(row_num, col_num, row[col_num], font_style)
 
-    wb.save(response)
-    return response
+    if file_format == 'CSV':
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename={date}-Users.csv'.format(date=today.strftime('%Y-%m-%d'),)
+        writer = csv.writer(response)
+        writer.writerow(['Username', 'First name', 'Last name', 'Email address', 'Is_SuperUser', 'Is_Active', 'Is_Staff','Date_Joined'])
+        for std in dataset:
+            writer.writerow(std)
+        return response 
+
+    elif file_format == 'JSON':
+        response = HttpResponse(dataset.json, content_type='application/json')
+        response['Content-Disposition'] = 'attachment; filename={date}-Users.json'.format(date=today.strftime('%Y-%m-%d'),)
+        return response
+
+    elif file_format == 'YAML':
+        response = HttpResponse(dataset.yaml,content_type='application/x-yaml')
+        response['Content-Disposition'] = 'attachment; filename={date}-Users.yaml'.format(date=today.strftime('%Y-%m-%d'),)
+        return response
+
+    elif file_format == 'XLS (Excel)':
+        response = HttpResponse(content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename={date}-Users.xls'.format(date=today.strftime('%Y-%m-%d'),)
+    
+        wb = xlwt.Workbook(encoding='utf-8')
+        ws = wb.add_sheet('Users')
+
+        # Sheet header, first row
+        row_num = 0
+
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
+        time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
+
+        columns = ['Username', 'First name', 'Last name', 'Email address', 'Is_SuperUser', 'Is_Active', 'Is_Staff','Date_Joined']
+
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+
+        # Sheet body, remaining rows
+        font_style = xlwt.XFStyle()
+        for row in dataset:
+            row_num += 1
+            for col_num in range(len(row)):
+                if isinstance(row[col_num], datetime.date):
+                    ws.write(row_num, col_num, row[col_num], date_style)
+                elif isinstance(row[col_num], datetime.time):
+                    ws.write(row_num, col_num, row[col_num], time_style)
+                else:
+                    ws.write(row_num, col_num, row[col_num], font_style)
+
+        wb.save(response)
+        return response

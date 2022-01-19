@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django import forms
 from .forms import AssignTaskForm
 import datetime
+import csv
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput, MonthPickerInput, YearPickerInput
@@ -255,154 +256,238 @@ def update_assign_task_view(request, pk):
     return render(request, "TaskManagement/update_assign_task.html", context)
 
 def export_employees_xls(request):
+    file_format = request.POST['file-format']
     employeef_filter = EmployeeFilter(request.GET, queryset=Employee.objects.all())
     dataset = EmployeeResource().export(employeef_filter.qs)
-    response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment;filename={date}-Employees.xls'.format(date=today.strftime('%Y-%m-%d'),)  
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('Employees')
 
-    # Sheet header, first row
-    row_num = 0
+    if file_format == 'CSV':
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] ='attachment;filename={date}-Employees.csv'.format(date=today.strftime('%Y-%m-%d'),)  
+        writer = csv.writer(response)
+        writer.writerow(['User', 'Employee_id','Phone_Number', 'Date_Joined',])
+        for std in dataset:
+            writer.writerow(std)
+        return response 
 
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-    date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
-    time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
+    elif file_format == 'JSON':
+        response = HttpResponse(dataset.json, content_type='application/json')
+        response['Content-Disposition'] = 'attachment;filename={date}-Employees.json'.format(date=today.strftime('%Y-%m-%d'),)  
+        return response
+    
+    elif file_format == 'YAML':
+        response = HttpResponse(dataset.yaml,content_type='application/x-yaml')
+        response['Content-Disposition'] ='attachment;filename={date}-Employees.yaml'.format(date=today.strftime('%Y-%m-%d'),)  
+        return response
 
-    columns = ['User', 'Employee_id','Phone_Number', 'Date_Joined',]
+    elif file_format == 'XLS (Excel)':
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment;filename={date}-Employees.xls'.format(date=today.strftime('%Y-%m-%d'),)  
+        wb = xlwt.Workbook(encoding='utf-8')
+        ws = wb.add_sheet('Employees')
 
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
+        row_num = 0 # Sheet header, first row
 
-    # Sheet body, remaining rows
-    font_style = xlwt.XFStyle()
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
+        time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
 
-    for row in dataset:
-        row_num += 1
-        for col_num in range(len(row)):
-            if isinstance(row[col_num], datetime.date):
-                ws.write(row_num, col_num, row[col_num], date_style)
-            elif isinstance(row[col_num], datetime.time):
-                ws.write(row_num, col_num, row[col_num], time_style)
-            else:
-                ws.write(row_num, col_num, row[col_num], font_style)
+        columns = ['User', 'Employee_id','Phone_Number', 'Date_Joined',]
 
-    wb.save(response)
-    return response
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+
+        # Sheet body, remaining rows
+        font_style = xlwt.XFStyle()
+
+        for row in dataset:
+            row_num += 1
+            for col_num in range(len(row)):
+                if isinstance(row[col_num], datetime.date):
+                    ws.write(row_num, col_num, row[col_num], date_style)
+                elif isinstance(row[col_num], datetime.time):
+                    ws.write(row_num, col_num, row[col_num], time_style)
+                else:
+                    ws.write(row_num, col_num, row[col_num], font_style)
+
+        wb.save(response)
+        return response
 
 def export_projects_xls(request):
+    file_format = request.POST['file-format']
     project_filter = ProjectFilter(request.GET, queryset=Project.objects.all())
     dataset = ProjectResource().export(project_filter.qs)
-    response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment;filename={date}-Projects.xls'.format(date=today.strftime('%Y-%m-%d'),)  
+    
+    if file_format == 'CSV':
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] ='attachment;filename={date}-Projects.csv'.format(date=today.strftime('%Y-%m-%d'),)  
+        writer = csv.writer(response)
+        writer.writerow(['Name', 'Description',])
+        for std in dataset:
+            writer.writerow(std)
+        return response 
 
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('Projects')
+    elif file_format == 'JSON':
+        response = HttpResponse(dataset.json, content_type='application/json')
+        response['Content-Disposition'] = 'attachment;filename={date}-Projects.json'.format(date=today.strftime('%Y-%m-%d'),) 
+        return response
 
-    # Sheet header, first row
-    row_num = 0
+    elif file_format == 'YAML':
+        response = HttpResponse(dataset.yaml,content_type='application/x-yaml')
+        response['Content-Disposition'] = 'attachment; filename={date}-Projects.yaml'.format(date=today.strftime('%Y-%m-%d'),)
+        return response
 
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-    date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
-    time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
+    elif file_format == 'XLS (Excel)':
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment;filename={date}-Projects.xls'.format(date=today.strftime('%Y-%m-%d'),)  
 
-    columns = ['Name', 'Description',]
+        wb = xlwt.Workbook(encoding='utf-8')
+        ws = wb.add_sheet('Projects')
 
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
+        # Sheet header, first row
+        row_num = 0
 
-    # Sheet body, remaining rows
-    font_style = xlwt.XFStyle()
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
+        time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
 
-    for row in dataset:
-        row_num += 1
-        for col_num in range(len(row)):
-            if isinstance(row[col_num], datetime.date):
-                ws.write(row_num, col_num, row[col_num], date_style)
-            elif isinstance(row[col_num], datetime.time):
-                ws.write(row_num, col_num, row[col_num], time_style)
-            else:
-                ws.write(row_num, col_num, row[col_num], font_style)
+        columns = ['Name', 'Description',]
 
-    wb.save(response)
-    return response
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+
+        # Sheet body, remaining rows
+        font_style = xlwt.XFStyle()
+
+        for row in dataset:
+            row_num += 1
+            for col_num in range(len(row)):
+                if isinstance(row[col_num], datetime.date):
+                    ws.write(row_num, col_num, row[col_num], date_style)
+                elif isinstance(row[col_num], datetime.time):
+                    ws.write(row_num, col_num, row[col_num], time_style)
+                else:
+                    ws.write(row_num, col_num, row[col_num], font_style)
+
+        wb.save(response)
+        return response
 
 def export_tasks_xls(request):
+    file_format = request.POST['file-format']
     task_filter = TaskFilter(request.GET, queryset=Task.objects.all())
     dataset = TaskResource().export(task_filter.qs)
-    response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment;filename={date}-Tasks.xls'.format(date=today.strftime('%Y-%m-%d'),)  
+    
+    if file_format == 'CSV':
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] ='attachment;filename={date}-Tasks.csv'.format(date=today.strftime('%Y-%m-%d'),)  
+        writer = csv.writer(response)
+        writer.writerow(['Project', 'Task_Name','Task_Description',])
+        for std in dataset:
+            writer.writerow(std)
+        return response
 
+    elif file_format == 'JSON':
+        response = HttpResponse(dataset.json, content_type='application/json')
+        response['Content-Disposition'] = 'attachment; filename={date}-Tasks.json'.format(date=today.strftime('%Y-%m-%d'),)
+        return response
 
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('Tasks')
+    elif file_format == 'YAML':
+        response = HttpResponse(dataset.yaml,content_type='application/x-yaml')
+        response['Content-Disposition'] = 'attachment; filename={date}-Tasks.yaml'.format(date=today.strftime('%Y-%m-%d'),)
+        return response
+    
+    elif file_format == 'XLS (Excel)':
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment;filename={date}-Tasks.xls'.format(date=today.strftime('%Y-%m-%d'),)  
 
-    # Sheet header, first row
-    row_num = 0
+        wb = xlwt.Workbook(encoding='utf-8')
+        ws = wb.add_sheet('Tasks')
 
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-    date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
-    time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
+        # Sheet header, first row
+        row_num = 0
 
-    columns = ['Project', 'Task_Name','Task_Description',]
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
+        time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
 
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
+        columns = ['Project', 'Task_Name','Task_Description',]
 
-    # Sheet body, remaining rows
-    font_style = xlwt.XFStyle()
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
 
-    for row in dataset:
-        row_num += 1
-        for col_num in range(len(row)):
-            if isinstance(row[col_num], datetime.date):
-                ws.write(row_num, col_num, row[col_num], date_style)
-            elif isinstance(row[col_num], datetime.time):
-                ws.write(row_num, col_num, row[col_num], time_style)
-            else:
-                ws.write(row_num, col_num, row[col_num], font_style)
+        # Sheet body, remaining rows
+        font_style = xlwt.XFStyle()
 
-    wb.save(response)
-    return response
+        for row in dataset:
+            row_num += 1
+            for col_num in range(len(row)):
+                if isinstance(row[col_num], datetime.date):
+                    ws.write(row_num, col_num, row[col_num], date_style)
+                elif isinstance(row[col_num], datetime.time):
+                    ws.write(row_num, col_num, row[col_num], time_style)
+                else:
+                    ws.write(row_num, col_num, row[col_num], font_style)
+
+        wb.save(response)
+        return response
 
 def export_taskmanagment_xls(request):
+    file_format = request.POST['file-format']
     taskmanagment_filter = TaskmanagmentFilter(request.GET, queryset=Taskmanagment.objects.all())
     dataset = TaskmanagmentResource().export(taskmanagment_filter.qs)    
-    response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment;filename={date}-Tasks_Managment.xls'.format(date=today.strftime('%Y-%m-%d'),)  
+    
+    if file_format == 'CSV':
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] ='attachment;filename={date}-Tasks_Managment.csv'.format(date=today.strftime('%Y-%m-%d'),)  
+        writer = csv.writer(response)
+        writer.writerow(['Assignee', 'AssigneedTo','Task_Managment','Status','Priority','Start_Date', 'End_Date', 'Comment',])
+        for std in dataset:
+            writer.writerow(std)
+        return 
+    elif file_format == 'JSON':
+        response = HttpResponse(dataset.json, content_type='application/json')
+        response['Content-Disposition'] = 'attachment; filename={date}-Tasks_Managment.json'.format(date=today.strftime('%Y-%m-%d'),)
+        return response
 
+    elif file_format == 'YAML':
+        response = HttpResponse(dataset.yaml,content_type='application/x-yaml')
+        response['Content-Disposition'] = 'attachment; filename={date}-Tasks_Managment.yaml'.format(date=today.strftime('%Y-%m-%d'),)
+        return response
+    
+    elif file_format == 'XLS (Excel)':
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment;filename={date}-Tasks_Managment.xls'.format(date=today.strftime('%Y-%m-%d'),)  
 
-    wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('Tasksmanagment')
+        wb = xlwt.Workbook(encoding='utf-8')
+        ws = wb.add_sheet('Tasksmanagment')
 
-    # Sheet header, first row
-    row_num = 0
+        # Sheet header, first row
+        row_num = 0
 
-    font_style = xlwt.XFStyle()
-    font_style.font.bold = True
-    date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
-    time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
+        time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
 
-    columns = ['Assignee', 'AssigneedTo','Task_Managment','Status','Priority','Start_Date', 'End_Date', 'Comment',]
+        columns = ['Assignee', 'AssigneedTo','Task_Managment','Status','Priority','Start_Date', 'End_Date', 'Comment',]
 
-    for col_num in range(len(columns)):
-        ws.write(row_num, col_num, columns[col_num], font_style)
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
 
-    # Sheet body, remaining rows
-    font_style = xlwt.XFStyle()
+        # Sheet body, remaining rows
+        font_style = xlwt.XFStyle()
 
-    for row in dataset:
-        row_num += 1
-        for col_num in range(len(row)):
-            if isinstance(row[col_num], datetime.date):
-                ws.write(row_num, col_num, row[col_num], date_style)
-            elif isinstance(row[col_num], datetime.time):
-                ws.write(row_num, col_num, row[col_num], time_style)
-            else:
-                ws.write(row_num, col_num, row[col_num], font_style) 
+        for row in dataset:
+            row_num += 1
+            for col_num in range(len(row)):
+                if isinstance(row[col_num], datetime.date):
+                    ws.write(row_num, col_num, row[col_num], date_style)
+                elif isinstance(row[col_num], datetime.time):
+                    ws.write(row_num, col_num, row[col_num], time_style)
+                else:
+                    ws.write(row_num, col_num, row[col_num], font_style) 
 
-    wb.save(response)
-    return response
+        wb.save(response)
+        return response
