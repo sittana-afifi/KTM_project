@@ -23,9 +23,7 @@ from django.contrib.auth import authenticate as authenticate_django
 from pathlib import Path
 from django.contrib import messages
 from .filters import AccountFilter
-import datetime
-import _datetime
-import csv
+import datetime, _datetime, csv
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 import os, logging, logging.config # Logging view in Django.
@@ -155,14 +153,28 @@ class UserDelete(LoginRequiredMixin,DeleteView):
     model = User
     success_url = reverse_lazy('user-filter')
 
+# -----------------------------------------------------------
+# function for Export User list view with filter option.
+# display the different export format to choose from it.
+# and download report.
+# created by : Eman 
+# creation date : 15-Jan-2021
+# update date : 20-Jan-2022
+# parameters : first choose filter option from filter 
+# function and then export file
+# output: file with different format (csv, excel ,yaml)
+# -----------------------------------------------------------
+
 today = _datetime.date.today()
 
 def export_users_xls(request):
+    logger.info("Export Function.")
     file_format = request.POST['file-format']
     userf_filter = AccountFilter(request.GET, queryset=User.objects.all())
     dataset = AccountResource().export(userf_filter.qs)
 
     if file_format == 'CSV':
+        logger.info("Export csv file.")
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename={date}-Users.csv'.format(date=today.strftime('%Y-%m-%d'),)
         writer = csv.writer(response)
@@ -172,16 +184,19 @@ def export_users_xls(request):
         return response 
 
     elif file_format == 'JSON':
+        logger.info("export json file.")
         response = HttpResponse(dataset.json, content_type='application/json')
         response['Content-Disposition'] = 'attachment; filename={date}-Users.json'.format(date=today.strftime('%Y-%m-%d'),)
         return response
 
     elif file_format == 'YAML':
+        logger.info("Export yaml file.")
         response = HttpResponse(dataset.yaml,content_type='application/x-yaml')
         response['Content-Disposition'] = 'attachment; filename={date}-Users.yaml'.format(date=today.strftime('%Y-%m-%d'),)
         return response
 
-    elif file_format == 'XLS (Excel)':
+    elif file_format == 'Excel':
+        logger.info("Export excel file.")
         response = HttpResponse(content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'attachment; filename={date}-Users.xls'.format(date=today.strftime('%Y-%m-%d'),)
     
@@ -193,8 +208,6 @@ def export_users_xls(request):
 
         font_style = xlwt.XFStyle()
         font_style.font.bold = True
-        date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
-        time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
 
         columns = ['Username', 'First name', 'Last name', 'Email address', 'Is_SuperUser', 'Is_Active', 'Is_Staff','Date_Joined']
 
@@ -206,11 +219,6 @@ def export_users_xls(request):
         for row in dataset:
             row_num += 1
             for col_num in range(len(row)):
-                if isinstance(row[col_num], datetime.date):
-                    ws.write(row_num, col_num, row[col_num], date_style)
-                elif isinstance(row[col_num], datetime.time):
-                    ws.write(row_num, col_num, row[col_num], time_style)
-                else:
                     ws.write(row_num, col_num, row[col_num], font_style)
 
         wb.save(response)

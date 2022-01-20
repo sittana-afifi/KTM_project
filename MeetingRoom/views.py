@@ -23,7 +23,6 @@ from .resources import MeetingResource, ReservationMeetingRoomResource
 from tablib import Dataset
 import _datetime
 
-today = _datetime.date.today()
 # Create a logger for this file or the name of the log level or Get an instance of a logger
 logger = logging.getLogger(__name__) 
 logger = logging.getLogger(__file__)
@@ -188,12 +187,28 @@ def update_reserve_view(request, pk):
     }
     return render(request, 'MeetingRoom/update_reserve_view.html', context)
 
+# -----------------------------------------------------------
+# function for Export Meeting Rooms  list view with filter option.
+# display the different export format to choose from it.
+# and download report.
+# created by : Eman 
+# creation date : 15-Jan-2021
+# update date : 20-Jan-2022
+# parameters : first choose filter option from filter 
+# function and then export file
+# output: file with different format (csv, excel ,yaml)
+# -----------------------------------------------------------
+
+today = _datetime.date.today()
+
 def export_meetingrooms_xls(request):
+    logger.info("Export Function.")
     file_format = request.POST['file-format']
     meeting_filter = MeetingRoomFilter(request.GET, queryset=Meeting.objects.all())
     dataset = MeetingResource().export(meeting_filter.qs)
 
     if file_format == 'CSV':
+        logger.info("Export csv file format.")
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment;filename={date}-MeetingRooms.csv'.format(date=today.strftime('%Y-%m-%d'),)    
         writer = csv.writer(response)
@@ -203,16 +218,19 @@ def export_meetingrooms_xls(request):
         return response 
     
     elif  file_format == 'JSON':
+        logger.info("Export json file format.")
         response = HttpResponse(dataset.json, content_type='application/json')
         response['Content-Disposition'] = 'attachment;filename={date}-MeetingRooms.json'.format(date=today.strftime('%Y-%m-%d'),)    
         return response
 
     elif file_format == 'YAML':
+        logger.info("Export yaml file format.")
         response = HttpResponse(dataset.yaml,content_type='application/x-yaml')
         response['Content-Disposition'] = 'attachment;filename={date}-MeetingRooms.yaml'.format(date=today.strftime('%Y-%m-%d'),)    
         return response
 
-    elif file_format == 'XLS (Excel)':
+    elif file_format == 'Excel':
+        logger.info("Export excel file format.")
         response = HttpResponse(content_type='application/ms-excel')
         response['Content-Disposition'] = 'attachment;filename={date}-MeetingRooms.xls'.format(date=today.strftime('%Y-%m-%d'),)    
 
@@ -223,9 +241,7 @@ def export_meetingrooms_xls(request):
         row_num = 0
 
         font_style = xlwt.XFStyle()
-        font_style.font.bold = True
-        date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
-        time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
+        font_style.font.bold = True 
 
         columns = ['Name', 'Description',]
 
@@ -238,22 +254,31 @@ def export_meetingrooms_xls(request):
         for row in dataset:
             row_num += 1
             for col_num in range(len(row)):
-                if isinstance(row[col_num], datetime.date):
-                    ws.write(row_num, col_num, row[col_num], date_style)
-                elif isinstance(row[col_num], datetime.time):
-                    ws.write(row_num, col_num, row[col_num], time_style)
-                else:
-                    ws.write(row_num, col_num, row[col_num], font_style)
+                ws.write(row_num, col_num, row[col_num], font_style)
 
         wb.save(response)
         return response
 
+# -----------------------------------------------------------
+# function for Export Reservation Meeting Room Request  list view with filter option.
+# display the different export format to choose from it.
+# and download report.
+# created by : Eman 
+# creation date : 15-Jan-2021
+# update date : 20-Jan-2022
+# parameters : first choose filter option from filter 
+# function and then export file
+# output: file with different format (csv, excel ,yaml)
+# -----------------------------------------------------------
+
 def export_reservation_meeting_room_xls(request):
+    logger.info("Export Function.")
     file_format = request.POST['file-format']
     reservation_filter = ReservationMeetingRoomFilter(request.GET, queryset=ReservationMeetingRoom.objects.all())
     dataset = ReservationMeetingRoomResource().export(reservation_filter.qs)
     
     if file_format == 'CSV':
+        logger.info("Export csv file format.")
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] ='attachment;filename={date}-Reservation_Meeting_Rooms.csv'.format(date=today.strftime('%Y-%m-%d'),)    
         writer = csv.writer(response)
@@ -263,16 +288,19 @@ def export_reservation_meeting_room_xls(request):
         return response 
 
     elif  file_format == 'JSON':
+        logger.info("Export json file format.")
         response = HttpResponse(dataset.json, content_type='application/json')
         response['Content-Disposition'] = 'attachment;filename={date}-Reservation_Meeting_Rooms.json'.format(date=today.strftime('%Y-%m-%d'),)    
         return response
 
     elif file_format == 'YAML':
+        logger.info("Export yaml file format.")
         response = HttpResponse(dataset.yaml,content_type='application/x-yaml')
         response['Content-Disposition'] = 'attachment;filename={date}-Reservation_Meeting_Rooms.yaml'.format(date=today.strftime('%Y-%m-%d'),)    
         return response
 
-    elif file_format == 'XLS (Excel)':
+    elif file_format == 'Excel':
+        logger.info("Export excel file format.")
         response = HttpResponse(content_type='application/ms-excel')
         response['Content-Disposition'] = 'attachment;filename={date}-Reservation_Meeting_Rooms.xls'.format(date=today.strftime('%Y-%m-%d'),)    
 
@@ -284,8 +312,6 @@ def export_reservation_meeting_room_xls(request):
 
         font_style = xlwt.XFStyle()
         font_style.font.bold = True
-        date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
-        time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
 
         columns = ['Meeting_Room', 'Reservation_Date','Reservation_From_Time', 'Reservation_To_Time','Team','Meeting_Outcomes','Meeting_Project_Name','Task_Name',]
 
@@ -297,13 +323,8 @@ def export_reservation_meeting_room_xls(request):
 
         for row in dataset:
             row_num += 1
-            for col_num in range(len(row)):
-                if isinstance(row[col_num], datetime.date):
-                    ws.write(row_num, col_num, row[col_num], date_style)
-                elif isinstance(row[col_num], datetime.time):
-                    ws.write(row_num, col_num, row[col_num], time_style)
-                else:
-                    ws.write(row_num, col_num, row[col_num], font_style)
+            for col_num in range(len(row)):                
+                ws.write(row_num, col_num, row[col_num], font_style)
 
         wb.save(response)
         return response

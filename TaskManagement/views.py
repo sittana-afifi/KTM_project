@@ -21,8 +21,6 @@ from .resources import EmployeeResource, TaskResource, ProjectResource, Taskmana
 from tablib import Dataset
 import _datetime
 
-today = _datetime.date.today()
-
 # Create a logger for this file or the name of the log level or Get an instance of a logger
 logger = logging.getLogger(__name__) 
 logger = logging.getLogger(__file__)
@@ -154,7 +152,7 @@ class TaskmanagmentListView(LoginRequiredMixin,generic.ListView):
     paginate_by = 5
     filter_class = TaskmanagmentFilter
 
-# Project Filter View:    
+# Taskmanagment Filter View:    
 def TaskmanagmentViewFilter(request):
     taskmanagment_list = Taskmanagment.objects.all()
     taskmanagment_filter = TaskmanagmentFilter(request.GET, queryset= taskmanagment_list)
@@ -255,12 +253,28 @@ def update_assign_task_view(request, pk):
         }
     return render(request, "TaskManagement/update_assign_task.html", context)
 
+# -----------------------------------------------------------
+# function for Export Employee list view with filter option.
+# display the different export format to choose from it.
+# and download report.
+# created by : Eman 
+# creation date : 15-Jan-2021
+# update date : 20-Jan-2022
+# parameters : first choose filter option from filter 
+# function and then export file
+# output: file with different format (csv, excel ,yaml)
+# -----------------------------------------------------------
+
+today = _datetime.date.today()
+
 def export_employees_xls(request):
+    logger.info("Export Function.")
     file_format = request.POST['file-format']
     employeef_filter = EmployeeFilter(request.GET, queryset=Employee.objects.all())
     dataset = EmployeeResource().export(employeef_filter.qs)
 
     if file_format == 'CSV':
+        logger.info("Export csv file format.")
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] ='attachment;filename={date}-Employees.csv'.format(date=today.strftime('%Y-%m-%d'),)  
         writer = csv.writer(response)
@@ -270,16 +284,19 @@ def export_employees_xls(request):
         return response 
 
     elif file_format == 'JSON':
+        logger.info("Export json file format.")
         response = HttpResponse(dataset.json, content_type='application/json')
         response['Content-Disposition'] = 'attachment;filename={date}-Employees.json'.format(date=today.strftime('%Y-%m-%d'),)  
         return response
     
     elif file_format == 'YAML':
+        logger.info("Export yaml file format.")
         response = HttpResponse(dataset.yaml,content_type='application/x-yaml')
         response['Content-Disposition'] ='attachment;filename={date}-Employees.yaml'.format(date=today.strftime('%Y-%m-%d'),)  
         return response
 
-    elif file_format == 'XLS (Excel)':
+    elif file_format == 'Excel':
+        logger.info("Export excel file format.")
         response = HttpResponse(content_type='application/ms-excel')
         response['Content-Disposition'] = 'attachment;filename={date}-Employees.xls'.format(date=today.strftime('%Y-%m-%d'),)  
         wb = xlwt.Workbook(encoding='utf-8')
@@ -289,8 +306,6 @@ def export_employees_xls(request):
 
         font_style = xlwt.XFStyle()
         font_style.font.bold = True
-        date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
-        time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
 
         columns = ['User', 'Employee_id','Phone_Number', 'Date_Joined',]
 
@@ -303,22 +318,31 @@ def export_employees_xls(request):
         for row in dataset:
             row_num += 1
             for col_num in range(len(row)):
-                if isinstance(row[col_num], datetime.date):
-                    ws.write(row_num, col_num, row[col_num], date_style)
-                elif isinstance(row[col_num], datetime.time):
-                    ws.write(row_num, col_num, row[col_num], time_style)
-                else:
-                    ws.write(row_num, col_num, row[col_num], font_style)
+                ws.write(row_num, col_num, row[col_num], font_style)
 
         wb.save(response)
         return response
 
+# -----------------------------------------------------------
+# function for Export Project list view with filter option.
+# display the different export format to choose from it.
+# and download report.
+# created by : Eman 
+# creation date : 15-Jan-2021
+# update date : 20-Jan-2022
+# parameters : first choose filter option from filter 
+# function and then export file
+# output: file with different format (csv, excel ,yaml)
+# -----------------------------------------------------------
+
 def export_projects_xls(request):
+    logger.info("Export Function.")
     file_format = request.POST['file-format']
     project_filter = ProjectFilter(request.GET, queryset=Project.objects.all())
     dataset = ProjectResource().export(project_filter.qs)
     
     if file_format == 'CSV':
+        logger.info("Export csv file format.")
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] ='attachment;filename={date}-Projects.csv'.format(date=today.strftime('%Y-%m-%d'),)  
         writer = csv.writer(response)
@@ -328,16 +352,19 @@ def export_projects_xls(request):
         return response 
 
     elif file_format == 'JSON':
+        logger.info("Export json file format.")
         response = HttpResponse(dataset.json, content_type='application/json')
         response['Content-Disposition'] = 'attachment;filename={date}-Projects.json'.format(date=today.strftime('%Y-%m-%d'),) 
         return response
 
     elif file_format == 'YAML':
+        logger.info("Export yaml file format.")
         response = HttpResponse(dataset.yaml,content_type='application/x-yaml')
         response['Content-Disposition'] = 'attachment; filename={date}-Projects.yaml'.format(date=today.strftime('%Y-%m-%d'),)
         return response
 
-    elif file_format == 'XLS (Excel)':
+    elif file_format == 'Excel':
+        logger.info("Export excel file format.")
         response = HttpResponse(content_type='application/ms-excel')
         response['Content-Disposition'] = 'attachment;filename={date}-Projects.xls'.format(date=today.strftime('%Y-%m-%d'),)  
 
@@ -348,9 +375,7 @@ def export_projects_xls(request):
         row_num = 0
 
         font_style = xlwt.XFStyle()
-        font_style.font.bold = True
-        date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
-        time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
+        font_style.font.bold = True 
 
         columns = ['Name', 'Description',]
 
@@ -363,22 +388,31 @@ def export_projects_xls(request):
         for row in dataset:
             row_num += 1
             for col_num in range(len(row)):
-                if isinstance(row[col_num], datetime.date):
-                    ws.write(row_num, col_num, row[col_num], date_style)
-                elif isinstance(row[col_num], datetime.time):
-                    ws.write(row_num, col_num, row[col_num], time_style)
-                else:
-                    ws.write(row_num, col_num, row[col_num], font_style)
+                ws.write(row_num, col_num, row[col_num], font_style)
 
         wb.save(response)
         return response
 
+# -----------------------------------------------------------
+# function for Export Task list view with filter option.
+# display the different export format to choose from it.
+# and download report.
+# created by : Eman 
+# creation date : 15-Jan-2021
+# update date : 20-Jan-2022
+# parameters : first choose filter option from filter 
+# function and then export file
+# output: file with different format (csv, excel ,yaml)
+# -----------------------------------------------------------
+
 def export_tasks_xls(request):
+    logger.info("Export Function.")
     file_format = request.POST['file-format']
     task_filter = TaskFilter(request.GET, queryset=Task.objects.all())
     dataset = TaskResource().export(task_filter.qs)
     
     if file_format == 'CSV':
+        logger.info("Export csv file format.")
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] ='attachment;filename={date}-Tasks.csv'.format(date=today.strftime('%Y-%m-%d'),)  
         writer = csv.writer(response)
@@ -388,16 +422,19 @@ def export_tasks_xls(request):
         return response
 
     elif file_format == 'JSON':
+        logger.info("Export json file format.")
         response = HttpResponse(dataset.json, content_type='application/json')
         response['Content-Disposition'] = 'attachment; filename={date}-Tasks.json'.format(date=today.strftime('%Y-%m-%d'),)
         return response
 
     elif file_format == 'YAML':
+        logger.info("Export yaml file format.")
         response = HttpResponse(dataset.yaml,content_type='application/x-yaml')
         response['Content-Disposition'] = 'attachment; filename={date}-Tasks.yaml'.format(date=today.strftime('%Y-%m-%d'),)
         return response
     
-    elif file_format == 'XLS (Excel)':
+    elif file_format == 'Excel':
+        logger.info("Export excel file format.")
         response = HttpResponse(content_type='application/ms-excel')
         response['Content-Disposition'] = 'attachment;filename={date}-Tasks.xls'.format(date=today.strftime('%Y-%m-%d'),)  
 
@@ -409,8 +446,6 @@ def export_tasks_xls(request):
 
         font_style = xlwt.XFStyle()
         font_style.font.bold = True
-        date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
-        time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
 
         columns = ['Project', 'Task_Name','Task_Description',]
 
@@ -423,40 +458,53 @@ def export_tasks_xls(request):
         for row in dataset:
             row_num += 1
             for col_num in range(len(row)):
-                if isinstance(row[col_num], datetime.date):
-                    ws.write(row_num, col_num, row[col_num], date_style)
-                elif isinstance(row[col_num], datetime.time):
-                    ws.write(row_num, col_num, row[col_num], time_style)
-                else:
-                    ws.write(row_num, col_num, row[col_num], font_style)
+                ws.write(row_num, col_num, row[col_num], font_style)
 
         wb.save(response)
         return response
 
+# -----------------------------------------------------------
+# function for Export Tasks Managment list view with filter option.
+# display the different export format to choose from it.
+# and download report.
+# created by : Eman 
+# creation date : 15-Jan-2021
+# update date : 20-Jan-2022
+# parameters : first choose filter option from filter 
+# function and then export file
+# output: file with different format (csv, excel ,yaml)
+# -----------------------------------------------------------
+
 def export_taskmanagment_xls(request):
+    logger.info("Export Function.")
     file_format = request.POST['file-format']
     taskmanagment_filter = TaskmanagmentFilter(request.GET, queryset=Taskmanagment.objects.all())
     dataset = TaskmanagmentResource().export(taskmanagment_filter.qs)    
     
     if file_format == 'CSV':
+        logger.info("Export csv file format.")
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] ='attachment;filename={date}-Tasks_Managment.csv'.format(date=today.strftime('%Y-%m-%d'),)  
         writer = csv.writer(response)
         writer.writerow(['Assignee', 'AssigneedTo','Task_Managment','Status','Priority','Start_Date', 'End_Date', 'Comment',])
         for std in dataset:
             writer.writerow(std)
-        return 
+        return response
+
     elif file_format == 'JSON':
+        logger.info("Export json file format.")
         response = HttpResponse(dataset.json, content_type='application/json')
         response['Content-Disposition'] = 'attachment; filename={date}-Tasks_Managment.json'.format(date=today.strftime('%Y-%m-%d'),)
         return response
 
     elif file_format == 'YAML':
+        logger.info("Export yaml file format.")
         response = HttpResponse(dataset.yaml,content_type='application/x-yaml')
         response['Content-Disposition'] = 'attachment; filename={date}-Tasks_Managment.yaml'.format(date=today.strftime('%Y-%m-%d'),)
         return response
     
-    elif file_format == 'XLS (Excel)':
+    elif file_format == 'Excel':
+        logger.info("Export excel file format.")
         response = HttpResponse(content_type='application/ms-excel')
         response['Content-Disposition'] = 'attachment;filename={date}-Tasks_Managment.xls'.format(date=today.strftime('%Y-%m-%d'),)  
 
@@ -468,8 +516,6 @@ def export_taskmanagment_xls(request):
 
         font_style = xlwt.XFStyle()
         font_style.font.bold = True
-        date_style = xlwt.easyxf(num_format_str='DD/MM/YYYY')
-        time_style = xlwt.easyxf(num_format_str='HH:MM AM/PM') 
 
         columns = ['Assignee', 'AssigneedTo','Task_Managment','Status','Priority','Start_Date', 'End_Date', 'Comment',]
 
@@ -482,12 +528,7 @@ def export_taskmanagment_xls(request):
         for row in dataset:
             row_num += 1
             for col_num in range(len(row)):
-                if isinstance(row[col_num], datetime.date):
-                    ws.write(row_num, col_num, row[col_num], date_style)
-                elif isinstance(row[col_num], datetime.time):
-                    ws.write(row_num, col_num, row[col_num], time_style)
-                else:
-                    ws.write(row_num, col_num, row[col_num], font_style) 
+                ws.write(row_num, col_num, row[col_num], font_style) 
 
         wb.save(response)
         return response

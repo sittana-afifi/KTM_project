@@ -97,22 +97,26 @@
     <p>There are no taskmanagment.</p>
   {% endif %}
   <br><br><br>
-  <br><br><br>
-      <h3 class="card-title">Export Files</h3>
+  <style>
+    .tab {
+        display: inline-block;
+        margin-left: 40px;
+    }
+  </style>
         <form role="form" method="POST" action="{% url 'export_taskmanagment_xls' %}?{{request.GET.urlencode}}" enctype="multipart/form-data">
           {% csrf_token %}
             <div class="form-group">
-              <label>Choose Format Type</label>
+              <button type="submit" class="btn btn-primary my-3">Export<span class="oi oi-data-transfer-download"></span></button></a>
+              <span class="tab"></span>
               <select class="custom-select" name="file-format">
                 {# <option value="" selected disabled hidden>Choose format...</option>#}
-                <option>XLS (Excel)</option>
+                <option>Excel</option>
                 <option>CSV</option>
                 <option>JSON</option>
                 <option>YAML</option>
                 {#<option>PDF</option>#}
               </select>
-            </div> <br><br><br>
-          <button type="submit" class="btn btn-primary my-3">Export File <span class="oi oi-data-transfer-download"></span></button></a>
+            </div> 
         </form>
     </div>
     <!--
