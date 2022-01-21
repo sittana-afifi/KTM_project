@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 logger = logging.getLogger(__file__)
 
 """
-    A class used to represent an Account
+    A class used to represent an Account model
     ...
 
     Attributes

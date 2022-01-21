@@ -2,10 +2,43 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.fields import DateField
 from django.urls.base import reverse
-from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
-from flatpickr.utils import GenericViewWidgetMixin
+import logging, logging.config # Logging view in Django.
+# Create a logger for this file or the name of the log level or Get an instance of a logger
+logger = logging.getLogger(__name__)
+logger = logging.getLogger(__file__)
 
-#create new model (employee) to extend user model and add one-to-one link between them.
+"""
+    create new model (employee) to extend user model and add one-to-one link between them.
+    ...
+
+    Attributes
+    ----------
+    user : OneToOneField
+        user model with one_to_one mmap
+    Employee_id : CharField
+        Id for the employee
+    Phone_number : CharField
+        phone number for employee
+    date_joined : DateField
+        the joined date for employee
+
+    Methods
+    -------
+    def __str__(self)
+        tells Django what to print when it needs to print out an instance of Employee model
+
+    created by :
+    -------
+        Sittana Afifi
+
+    creation date : 
+    -------
+        06-Dec-2021
+
+    update date :
+    -------
+         21-Jan-2022
+"""
 class Employee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     Employee_id = models.CharField(max_length=4,  blank=True)
@@ -13,7 +46,18 @@ class Employee(models.Model):
     date_joined = models.DateField(null=True, blank=True,)
 
     def __str__(self):
-        """String for representing the Model object."""
+        """
+            Parameters
+            ----------
+            self : 
+                 self.instance is your current user
+
+            return:
+            ----------
+                String for representing the Model object.
+            
+            """
+        logger.info("Enter Employee model.")
         return f'{self.user}'
         
 # Create a project model :
