@@ -1,14 +1,12 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import  LoginRequiredMixin
+from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 from .models import Employee , Taskmanagment, Project, Task
 from django.views.generic.edit import UpdateView , DeleteView , CreateView 
 from django.contrib.auth.decorators import login_required, permission_required
-from django import forms
 from .forms import AssignTaskForm
-import datetime
 import csv
-from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput, MonthPickerInput, YearPickerInput
 from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
@@ -18,14 +16,37 @@ from TaskManagement.filters import EmployeeFilter, ProjectFilter, TaskFilter, Ta
 import xlwt
 from django.http import HttpResponse
 from .resources import EmployeeResource, TaskResource, ProjectResource, TaskmanagmentResource
-from tablib import Dataset
 import _datetime
 
 # Create a logger for this file or the name of the log level or Get an instance of a logger
 logger = logging.getLogger(__name__) 
 logger = logging.getLogger(__file__)
 
-# view a list of all employees.
+"""
+    A class used to view a list of all employees.
+    ...
+
+    Attributes
+    ----------
+    model : 
+        Employee
+    template_name :
+        'TaskManagement/employee_list.html'
+    filter_class : 
+        EmployeeFilter
+
+    created by :
+    -------
+        Sittana Afifi
+
+    creation date : 
+    -------
+        01-Dec-2021
+
+    update date :
+    -------
+         21-Jan-2022
+"""
 class EmployeesListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter EmployeesListView.")
     model = Employee
@@ -33,25 +54,113 @@ class EmployeesListView(LoginRequiredMixin,generic.ListView):
     paginate_by = 5
     filter_class = EmployeeFilter
 
-# Employee Filter View:    
 def EmployeeViewFilter(request):
+    """ Employee Filter View.
+        created by :
+        -------
+            Eman
+
+        creation date : 
+        -------
+            18-Dec-2021
+
+        update date :
+        -------
+            21-Jan-2022
+
+        Parameters
+        ----------
+        request : 
+            uses to pass state through the system
+
+        return:
+        ----------
+            Return an HttpResponseRedirect to 'TaskManagement/employee_list.html' for the arguments passed.
+        """
     employeef_list = Employee.objects.all()
     employeef_filter = EmployeeFilter(request.GET, queryset= employeef_list)
     return render(request, 'TaskManagement/employee_list.html', {'filter': employeef_filter})
 
-# view details of the specific employee.
+"""
+    A class used to view employee detail.
+    ...
+
+    Attributes
+    ----------
+    model : 
+        Employee
+    template_name :
+        'TaskManagement/employee_detail.html'
+
+    created by :
+    -------
+        Sittana Afifi
+
+    creation date : 
+    -------
+        06-Dec-2021
+
+    update date :
+    -------
+         21-Jan-2022
+"""
 class EmployeeDetailView(generic.DetailView):
     logger.info("Enter EmployeeDetailView.")
     model = Employee
     template_name ='TaskManagement/employee_detail.html'
 
-# delete specific employee.
+"""
+    A class used to delete employee.
+    ...
+
+    Attributes
+    ----------
+    model : 
+        Employee
+
+    created by :
+    -------
+        Sittana Afifi
+
+    creation date : 
+    -------
+        06-Dec-2021
+
+    update date :
+    -------
+         21-Jan-2022
+"""
 class EmployeeDelete(DeleteView):
     logger.info("Enter EmployeeDelete.")
     model = Employee
     success_url = reverse_lazy('employee-filter')
 
-# Add specific employee.
+""" 
+    add new employee.
+    ...
+
+    Attributes
+    ----------
+    model : 
+        Employee
+
+    Methods
+    ------- 
+    get_form(self)
+        "eman should update it"
+    
+    created by :
+    -------
+        Sittana Afifi
+
+    creation date : 
+    -------
+        01-Dec-2021
+
+    update date :
+    -------
+         21-Jan-2022
+"""
 class EmployeeCreateView(CreateView):
     logger.info("Enter EmployeeCreateView.")
     model = Employee
@@ -59,21 +168,115 @@ class EmployeeCreateView(CreateView):
     success_url = reverse_lazy('employee-filter')
 
     def get_form(self):
+        """ "eman should update it".
+        created by :
+        -------
+            Eman
+
+        creation date : 
+        -------
+            18-Dec-2021
+
+        update date :
+        -------
+            21-Jan-2022
+
+        Parameters
+        ----------
+        self : 
+            self.instance is your current employee
+
+        return:
+        ----------
+            Return form that contained "eman should update it".
+        """
+        logger.info("Enter get_form in EmployeeCreateView.")
         form = super().get_form()
         form.fields['date_joined'].widget = DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True})
         return form
 
-# update specific employee.
+""" 
+    update employee's information.
+    ...
+
+    Attributes
+    ----------
+    model : 
+        Employee
+
+    Methods
+    -------
+    get_success_url(self)
+        Determine the URL to redirect to when the form is successfully validated. 
+    get_form(self)
+        "eman should update it"
+    
+    created by :
+    -------
+        Sittana Afifi
+
+    creation date : 
+    -------
+        06-Dec-2021
+
+    update date :
+    -------
+         21-Jan-2022
+"""
 class EmployeeUpdateView(UpdateView):
     logger.info("Enter EmployeeUpdateView.")
     model = Employee
     fields = ['Employee_id', 'Phone_number', 'date_joined']
     
     def get_success_url(self):
+        """ Determine the URL to redirect to when the form is successfully validated.
+        created by :
+        -------
+            Sittana Afifi
+
+        creation date : 
+        -------
+            18-Dec-2021
+
+        update date :
+        -------
+            21-Jan-2022
+
+        Parameters
+        ----------
+        self : 
+            self.instance is your current employee
+
+        return:
+        ----------
+            Return resolving Django URL names into URL paths 'employee-detail'.
+        """
         logger.info("Enter get_success_url.")
         return reverse('employee-detail',args= [str(self.object.id)])
     
     def get_form(self):
+        """ "eman should update it".
+        created by :
+        -------
+            Eman
+
+        creation date : 
+        -------
+            18-Dec-2021
+
+        update date :
+        -------
+            21-Jan-2022
+
+        Parameters
+        ----------
+        self : 
+            self.instance is your current employee
+
+        return:
+        ----------
+            Return form that contained "eman should update it".
+        """
         form = super().get_form()
         form.fields['date_joined'].widget = DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True})
         return form

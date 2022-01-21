@@ -210,6 +210,7 @@ class usersListView(LoginRequiredMixin,generic.ListView):
     
 def AccountViewFilter(request):
     """ filter user list view.
+    created by :
     -------
         Eman
 
@@ -263,7 +264,7 @@ class UserDetailView(LoginRequiredMixin,generic.DetailView):
     template_name ='accounts/user_detail.html'
 
 """ 
-    update specific user information.
+    update user's information.
     ...
 
     Attributes
