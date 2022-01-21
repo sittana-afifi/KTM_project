@@ -1,13 +1,6 @@
-from urllib import request
-from django.db import connection
-from django.db.models import fields
-from django.forms import formsets
-from django.forms.forms import Form
-from django.forms.widgets import FILE_INPUT_CONTRADICTION
-from django.http.response import HttpResponse, HttpResponseRedirect
-from django.urls.base import is_valid_path, reverse
+
+from django.http.response import HttpResponse
 from django.views import generic
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.models import User
 from django.views.generic.edit import UpdateView , DeleteView , CreateView 
 from django.utils.translation import ugettext_lazy as _
