@@ -48,7 +48,7 @@ class UserForm(forms.ModelForm):
             Parameters
             ----------
             self : 
-                 self.instance is your current user
+                self.instance is your current user
 
             return:
             ----------
@@ -120,7 +120,7 @@ class AccountCreateForm(forms.ModelForm):
                 ----------
                 self : 
                     self.instance is your current user
-                    
+
                 return:
                 ----------
                     a dictionary of validated username field and it's value
