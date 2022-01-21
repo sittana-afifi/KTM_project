@@ -1,9 +1,5 @@
-from django.conf.urls import handler404
-from django.urls import include, path
-from django.views.generic import RedirectView
-from django.contrib import admin
-from TaskManagement import forms
-from accounts import views , forms
+from django.urls import path
+from accounts import views 
 
 urlpatterns = [
 

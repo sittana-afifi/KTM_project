@@ -1,9 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.shortcuts import  render
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
-import os, logging, logging.config # Logging view in Django.
+import logging, logging.config # Logging view in Django.
 
 # Create a logger for this file or the name of the log level or Get an instance of a logger
 logger = logging.getLogger(__name__)

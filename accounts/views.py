@@ -15,21 +15,17 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
-from django.contrib.auth.decorators import login_required, permission_required
-from accounts.models import Account
+from django.contrib.auth.decorators import login_required
 from django_auth_ldap.backend import LDAPBackend
 from .forms import  UserForm , AccountCreateForm 
-from django.contrib.auth import authenticate as authenticate_django
-from pathlib import Path
 from django.contrib import messages
 from .filters import AccountFilter
-import datetime, _datetime, csv
+import _datetime, csv
 from django.http import HttpResponse
 from django.contrib.auth.models import User
-import os, logging, logging.config # Logging view in Django.
+import logging, logging.config # Logging view in Django.
 import xlwt
 from .resources import AccountResource
-from tablib import Dataset
 
 # Create a logger for this file or the name of the log level or Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -59,9 +55,34 @@ def index(request):
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'index.html', context=context)
 
-# Add new user.
 def getUserInfoFromLDAP(request):
-    #Get User Info from LDAP
+    """ use to get user information from LDAP
+    created by :
+    -------
+        Sittana Afifi
+
+    creation date : 
+    -------
+        01-Dec-2021
+
+    update date :
+    -------
+         21-Jan-2022
+
+    Parameters
+    ----------
+    request : 
+        uses to pass state through the system
+
+    return:
+    ----------
+        A form contained user data from imported from LDAP
+
+    Raises
+    ------
+    Exception
+        If the user is already exist in the Database.
+    """
     logger.info("enter getUserInfoFromLDAP function.")
     username = request.POST.get('username')
     try:
@@ -73,8 +94,7 @@ def getUserInfoFromLDAP(request):
         user.delete()
     except AttributeError as e:
         print("Error")
-    # dictionary for initial data with 
-    # field names as keys
+    # dictionary for initial data with field names as keys
     init = {
         'username' : user.username,
         'first_name' : user.first_name,
@@ -86,14 +106,59 @@ def getUserInfoFromLDAP(request):
     return u_form
 
 def submitUserForm(request):
+    """ validate AccountCreateForm and save it.
+    created by :
+    -------
+        Sittana Afifi
+
+    creation date : 
+    -------
+        01-Dec-2021
+
+    update date :
+    -------
+         21-Jan-2022
+
+    Parameters
+    ----------
+    request : 
+        uses to pass state through the system
+
+    return:
+    ----------
+        Return an HttpResponseRedirect to 'user-filter' URL for the arguments passed.
+
+    """
     logger.info("enter submitUserForm function.")
     u_form = AccountCreateForm( request.POST)  
     if u_form.is_valid() :
-        logger.info("u_form is  Valid.")
+        logger.info("u_form is Valid.")
         u_form.save()
         return redirect( 'user-filter') 
 
 def createUser(request):
+    """ post UserForm content and get username as input.
+    created by :
+    -------
+        Sittana Afifi
+
+    creation date : 
+    -------
+        01-Dec-2021
+
+    update date :
+    -------
+         21-Jan-2022
+
+    Parameters
+    ----------
+    request : 
+        uses to pass state through the system
+
+    return:
+    ----------
+        Return an HttpResponseRedirect to 'get_user_info' URL for the arguments passed.
+    """
     logger.info("enter createUser function.")
     context = {}
     if request.method == 'GET' :
@@ -121,32 +186,138 @@ def createUser(request):
             u_form = UserForm()
             return render(request, 'get_user_info.html', {'u_form' :u_form}) 
             
-# view the list of the users.
+"""
+    A class used to view user list
+    ...
+
+    Attributes
+    ----------
+    model : 
+        User
+    template_name :
+        'accounts/user_list.html'
+
+    created by :
+    -------
+        Sittana Afifi
+
+    creation date : 
+    -------
+        01-Dec-2021
+
+    update date :
+    -------
+         21-Jan-2022
+"""
 class usersListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter usersListView.")
     model = User
     template_name ='accounts/user_list.html'
     filter_class = AccountFilter
-
-# UserFilter View:    
+    
 def AccountViewFilter(request):
+    """ filter user list view.
+    -------
+        Eman
+
+    creation date : 
+    -------
+        18-Dec-2021
+
+    update date :
+    -------
+         21-Jan-2022
+
+    Parameters
+    ----------
+    request : 
+        uses to pass state through the system
+
+    return:
+    ----------
+        Return an HttpResponseRedirect to 'accounts/user_list.html' for the arguments passed.
+    """
     userf_list = User.objects.all()
     userf_filter = AccountFilter(request.GET, queryset= userf_list)
     return render(request, 'accounts/user_list.html', {'filter': userf_filter})
 
-# view details of the specific user.
+"""
+    A class used to view user detail.
+    ...
+
+    Attributes
+    ----------
+    model : 
+        User
+    template_name :
+        'accounts/user_detail.html'
+
+    created by :
+    -------
+        Sittana Afifi
+
+    creation date : 
+    -------
+        01-Dec-2021
+
+    update date :
+    -------
+         21-Jan-2022
+"""
 class UserDetailView(LoginRequiredMixin,generic.DetailView):
     logger.info("Enter UserDetailView.")
     model = User
     template_name ='accounts/user_detail.html'
 
-# update specific user with specific fields.
+""" 
+    update specific user information.
+    ...
+
+    Attributes
+    ----------
+    model : 
+        User
+    form_class :
+        AccountCreateForm
+
+    created by :
+    -------
+        Sittana Afifi
+
+    creation date : 
+    -------
+        01-Dec-2021
+
+    update date :
+    -------
+         21-Jan-2022
+"""
 class UserUpdate(LoginRequiredMixin,UpdateView):
     logger.info("Enter UserUpdate.")
     model = User
     form_class = AccountCreateForm
 
-# delete specific user.
+""" 
+    delete specific user.
+    ...
+
+    Attributes
+    ----------
+    model : 
+        User
+
+    created by :
+    -------
+        Sittana Afifi
+
+    creation date : 
+    -------
+        01-Dec-2021
+
+    update date :
+    -------
+         21-Jan-2022
+"""
 class UserDelete(LoginRequiredMixin,DeleteView):
     logger.info("Enter UserDelete.")
     model = User
