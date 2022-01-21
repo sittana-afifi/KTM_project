@@ -44,6 +44,16 @@ class ReservationMeetingRoom(models.Model):
             ret = ret + team.user.username + ','
     # remove the last ',' and return the value.
         return ret[:-1]
+        
+    def get_team_emails(self):
+        ret = ''
+        print(self.team.all())
+    # use models.ManyToMany field's all() method to return all the Team objects that this employee belongs to.
+        for team in self.team.all():
+            ret = ret + team.user.email + ','
+    # remove the last ',' and return the value.
+        return ret[:-1]
+
     def clean(self, *args, **kwargs):
         cleaned_data = super().clean(*args, **kwargs)
         if self.pk:

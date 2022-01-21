@@ -84,6 +84,16 @@ class Taskmanagment(models.Model):
             ret = ret + assigneedTo.user.username + ','
     # remove the last ',' and return the value.
         return ret[:-1]
+
+    def get_assigneedTo_emails(self):
+        ret = ''
+        print(self.assigneedTo .all())
+    # use models.ManyToMany field's all() method to return all the Team objects that this employee belongs to.
+        for assigneedTo  in self.assigneedTo .all():
+            ret = ret + assigneedTo .user.email + ','
+    # remove the last ',' and return the value.
+        return ret[:-1]
+
     @property
     def is_overdue(self):
         if self.end_date and DateField.today() > self.end_date:
