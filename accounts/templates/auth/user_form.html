@@ -1,6 +1,5 @@
 {% extends "base_generic.html" %}
 {% load crispy_forms_tags %}
-
 {% block content %}
 {% if messages %}
 <div class="messages">
@@ -17,6 +16,6 @@
     </table>
     <button  class="btn btn-success my-3" type="submit">Save</button>
 
-    <a href="{% url 'user_list' %}" class="btn btn-danger my-3">Cancel</a>
+    <a href="{% url 'user-filter' %}" class="btn btn-danger my-3">Cancel</a>
   </form>
 {% endblock %}

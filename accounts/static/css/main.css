@@ -1,10 +1,5 @@
-
-
-
-
 /*//////////////////////////////////////////////////////////////////
 [ FONT ]*/
-
 @font-face {
     font-family: Raleway-Regular;
     src: url('../fonts/raleway/Raleway-Regular.ttf'); 
@@ -27,7 +22,6 @@
   
   /*//////////////////////////////////////////////////////////////////
   [ RESTYLE TAG ]*/
-  
   * {
       margin: 0px; 
       padding: 0px; 

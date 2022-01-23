@@ -9,17 +9,12 @@
 </div>
 {% endif %}
 <h1>Create new user form :</h1>
-
   <form action="{% url 'usersubmitform' %}" method="post">
     {% csrf_token %}
     <table>
     {{ u_form  | crispy }}
     </table>
     <button href="" class="btn btn-success my-3" type="submit">Save</button>
-    <a href="{% url 'user_list' %}" class="btn btn-danger my-3">Cancel</a>
-
-    
+    <a href="{% url 'user-filter' %}" class="btn btn-danger my-3">Cancel</a>
   </form>
-
-
 {% endblock %}

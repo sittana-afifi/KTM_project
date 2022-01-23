@@ -12,8 +12,19 @@ from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-import os, logging, logging.config # Logging view in Django:
-logger = logging.getLogger(__name__) # Create a logger for this file or the name of the log level or Get an instance of a logger
+import os, logging, logging.config # Logging view in Django
+from .filters import ReservationMeetingRoomFilter, MeetingRoomFilter
+from .tables import ReservationMeetingRoomTable
+import datetime
+import xlwt
+import csv
+from django.http import HttpResponse
+from .resources import MeetingResource, ReservationMeetingRoomResource
+from tablib import Dataset
+import _datetime
+
+# Create a logger for this file or the name of the log level or Get an instance of a logger
+logger = logging.getLogger(__name__) 
 logger = logging.getLogger(__file__)
 
 # Create your views here.
@@ -21,6 +32,14 @@ class MeetingListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter MeetingListView.")
     model = Meeting
     template_name = 'MeetingRoom/meeting_list.html'
+    paginate_by = 5
+    filter_class = MeetingRoomFilter
+
+# Meeting Rooms Filter View:    
+def MeetingFilter(request):
+    meeting_list = Meeting.objects.all()
+    meeting_filter = MeetingRoomFilter(request.GET, queryset= meeting_list)
+    return render(request, 'MeetingRoom/meeting_list.html', {'filter': meeting_filter})
 
 class MeetingDetailView(LoginRequiredMixin,generic.DetailView):
     logger.info("Enter MeetingDetailView.")
@@ -40,15 +59,16 @@ class MeetingUpdate(LoginRequiredMixin,UpdateView):
 class MeetingDelete(LoginRequiredMixin,DeleteView):
     logger.info("Enter MeetingDelete.")
     model = Meeting
-    success_url = reverse_lazy('meetings')
+    success_url = reverse_lazy('meetings-filter')
 
-######################################################
-# ReservationMeetingRoom CRUD:
+# ReservationMeetingRoom CRUD View:
 class ReservationMeetingRoomListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter ReservationMeetingRoomListView.")
     model = ReservationMeetingRoom
     template_name = 'MeetingRoom/reservationmeetingroom_list.html'
     paginate_by = 5
+    table_class  = ReservationMeetingRoomTable
+    filter_class = ReservationMeetingRoomFilter
 
 class ReservationMeetingRoomDetailView(LoginRequiredMixin,generic.DetailView):
     logger.info("Enter ReservationMeetingRoomDetailView.")
@@ -68,11 +88,26 @@ class ReservationMeetingRoomUpdate(LoginRequiredMixin,UpdateView):
 class ReservationMeetingRoomDelete(LoginRequiredMixin,DeleteView):
     logger.info("Enter ReservationMeetingRoomDelete.")
     model = ReservationMeetingRoom
-    success_url = reverse_lazy('reservationmeetingrooms')
+    success_url = reverse_lazy('reserve-filter')
 
-###############################################
+# Reservation Meeting Rooms Filter View:    
+def ReservationFilter(request):
+    reservation_list = ReservationMeetingRoom.objects.all()
+    reservation_filter = ReservationMeetingRoomFilter(request.GET, queryset= reservation_list)
+    return render(request, 'MeetingRoom/reservationmeetingroom_list.html', {'filter': reservation_filter})
 
+# -----------------------------------------------------------
 # Validation Reservation Meeting Room Requests Function:
+# validate the reservation request in the database .
+# to make sure that there is no reservation for same meeting duplicated at same time  
+# created by : Mohammed Almoiz
+# creation date : -Dec-2021
+# update date : -Dec-2022
+# parameters : input of reservation form and check cases.
+# meeting room name, reservation date , the involved team in the meeting finally resrvation from and to time. 
+# output: Boolean (true or false)
+# -----------------------------------------------------------
+
 def validateReservationForm(form):
     logger.info("Enter validateReservationForm.")
     if form.is_valid():
@@ -92,9 +127,18 @@ def validateReservationForm(form):
             # if either of these is true, abort and render the error
             return case_1 or case_2 or case_3 or case_4 or case_6
 
-#####################################################
+# -----------------------------------------------------------
+# Validation Reservation Meeting Room Requests Create View:
+# for a reservation Form and validate the reservation request in the database .
+# to make sure that there is no reservation for same meeting duplicated at same time  
+# created by : Eman
+# creation date : -Dec-2021
+# update date : -Dec-2022
+# parameters : 
+# meeting room name, reservation date , the involved team in the meeting finally resrvation from and to time. 
+# output: reservation request details.
+# -----------------------------------------------------------
 
-# Reservation Form Create View:
 @login_required
 def reserve_view(request):
     logger.info("Enter reserve_view.")
@@ -107,15 +151,25 @@ def reserve_view(request):
         elif form.is_valid():
             form.save()
             messages.success(request, "You successfully reserve this meeting room at this time and date")
-            return HttpResponseRedirect(reverse('reservationmeetingrooms') )
+            return HttpResponseRedirect(reverse('reserve-filter') )
     context = {
     'form' : form ,
     }
     return render(request, "MeetingRoom/reserve.html", context)
 
-###########################################
+# -----------------------------------------------------------
+# Update Reservation Request View  for Metting Room.
+# display the attributes of form.
+# and ask user to enter all requirements to reserve meeting room.
+# created by : Eman 
+# creation date : -Dec-2021
+# update date : -Dec-2022
+# parameters : modelchoice , datefield input , timefield , multiple choices for team , charfiled 
+# meeting room name, reservation date , the involved team in the meeting finally resrvation from and to time. 
+# output: details of the reservation request and the staus if it success or failed , add meeting outcomes
+# also execlude the self reservation request from validation.
+# -----------------------------------------------------------
 
-# Reservation Form Update View :
 @login_required
 def update_reserve_view(request, pk):
     logger.info("Enter update_reserve_view.")
@@ -127,9 +181,150 @@ def update_reserve_view(request, pk):
             logger.info("form is valid")
             form.save()
             messages.success(request, "You Successfully update reservation request for this meeting room at this time and date")
-            return HttpResponseRedirect(reverse('reservationmeetingrooms'))
+            return HttpResponseRedirect(reverse('reserve-filter'))
     context = {
     'form' : form ,
     }
     return render(request, 'MeetingRoom/update_reserve_view.html', context)
+
+# -----------------------------------------------------------
+# function for Export Meeting Rooms  list view with filter option.
+# display the different export format to choose from it.
+# and download report.
+# created by : Eman 
+# creation date : 15-Jan-2021
+# update date : 20-Jan-2022
+# parameters : first choose filter option from filter 
+# function and then export file
+# output: file with different format (csv, excel ,yaml)
+# -----------------------------------------------------------
+
+today = _datetime.date.today()
+
+def export_meetingrooms_xls(request):
+    logger.info("Export Function.")
+    file_format = request.POST['file-format']
+    meeting_filter = MeetingRoomFilter(request.GET, queryset=Meeting.objects.all())
+    dataset = MeetingResource().export(meeting_filter.qs)
+
+    if file_format == 'CSV':
+        logger.info("Export csv file format.")
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment;filename={date}-MeetingRooms.csv'.format(date=today.strftime('%Y-%m-%d'),)    
+        writer = csv.writer(response)
+        writer.writerow(['Name', 'Description',])
+        for std in dataset:
+            writer.writerow(std)
+        return response 
     
+    elif  file_format == 'JSON':
+        logger.info("Export json file format.")
+        response = HttpResponse(dataset.json, content_type='application/json')
+        response['Content-Disposition'] = 'attachment;filename={date}-MeetingRooms.json'.format(date=today.strftime('%Y-%m-%d'),)    
+        return response
+
+    elif file_format == 'YAML':
+        logger.info("Export yaml file format.")
+        response = HttpResponse(dataset.yaml,content_type='application/x-yaml')
+        response['Content-Disposition'] = 'attachment;filename={date}-MeetingRooms.yaml'.format(date=today.strftime('%Y-%m-%d'),)    
+        return response
+
+    elif file_format == 'Excel':
+        logger.info("Export excel file format.")
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment;filename={date}-MeetingRooms.xls'.format(date=today.strftime('%Y-%m-%d'),)    
+
+        wb = xlwt.Workbook(encoding='utf-8')
+        ws = wb.add_sheet('Meetings')
+
+        # Sheet header, first row
+        row_num = 0
+
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True 
+
+        columns = ['Name', 'Description',]
+
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+
+        # Sheet body, remaining rows
+        font_style = xlwt.XFStyle()
+    
+        for row in dataset:
+            row_num += 1
+            for col_num in range(len(row)):
+                ws.write(row_num, col_num, row[col_num], font_style)
+
+        wb.save(response)
+        return response
+
+# -----------------------------------------------------------
+# function for Export Reservation Meeting Room Request  list view with filter option.
+# display the different export format to choose from it.
+# and download report.
+# created by : Eman 
+# creation date : 15-Jan-2021
+# update date : 20-Jan-2022
+# parameters : first choose filter option from filter 
+# function and then export file
+# output: file with different format (csv, excel ,yaml)
+# -----------------------------------------------------------
+
+def export_reservation_meeting_room_xls(request):
+    logger.info("Export Function.")
+    file_format = request.POST['file-format']
+    reservation_filter = ReservationMeetingRoomFilter(request.GET, queryset=ReservationMeetingRoom.objects.all())
+    dataset = ReservationMeetingRoomResource().export(reservation_filter.qs)
+    
+    if file_format == 'CSV':
+        logger.info("Export csv file format.")
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] ='attachment;filename={date}-Reservation_Meeting_Rooms.csv'.format(date=today.strftime('%Y-%m-%d'),)    
+        writer = csv.writer(response)
+        writer.writerow(['Meeting_Room', 'Reservation_Date','Reservation_From_Time', 'Reservation_To_Time','Team','Meeting_Outcomes','Meeting_Project_Name','Task_Name',])
+        for std in dataset:
+            writer.writerow(std)
+        return response 
+
+    elif  file_format == 'JSON':
+        logger.info("Export json file format.")
+        response = HttpResponse(dataset.json, content_type='application/json')
+        response['Content-Disposition'] = 'attachment;filename={date}-Reservation_Meeting_Rooms.json'.format(date=today.strftime('%Y-%m-%d'),)    
+        return response
+
+    elif file_format == 'YAML':
+        logger.info("Export yaml file format.")
+        response = HttpResponse(dataset.yaml,content_type='application/x-yaml')
+        response['Content-Disposition'] = 'attachment;filename={date}-Reservation_Meeting_Rooms.yaml'.format(date=today.strftime('%Y-%m-%d'),)    
+        return response
+
+    elif file_format == 'Excel':
+        logger.info("Export excel file format.")
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment;filename={date}-Reservation_Meeting_Rooms.xls'.format(date=today.strftime('%Y-%m-%d'),)    
+
+        wb = xlwt.Workbook(encoding='utf-8')
+        ws = wb.add_sheet('ReservationMeetingRoomsRequest')
+
+        # Sheet header, first row
+        row_num = 0
+
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+
+        columns = ['Meeting_Room', 'Reservation_Date','Reservation_From_Time', 'Reservation_To_Time','Team','Meeting_Outcomes','Meeting_Project_Name','Task_Name',]
+
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+
+        # Sheet body, remaining rows
+        font_style = xlwt.XFStyle()
+
+        for row in dataset:
+            row_num += 1
+            for col_num in range(len(row)):                
+                ws.write(row_num, col_num, row[col_num], font_style)
+
+        wb.save(response)
+        return response

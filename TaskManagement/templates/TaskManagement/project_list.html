@@ -1,28 +1,139 @@
 {% extends "base_generic.html" %}
-
+{% load render_table from django_tables2 %}
+{% load widget_tweaks %}
 {% block content %}
   <h2>Projects List
       <a href="{% url 'project-create' %}"> 
         <i data-feather="plus-circle" style="width:25px;height:25px;" ></i> <!-- <img alt="Add project" src="https://www.iconsdb.com/icons/download/color/096647/add-file-16.png">-->
       </a>
   </h2>
-  {% if project_list %}
-  <ul>
-    {% for project in project_list %}
-      <li  display:inline;>
-        <a href="{{ project.get_absolute_url }}">{{ project.name }}</a>
-       
-        <a href="{% url 'project-update' project.id %}">
-          <i data-feather="edit-3" style="width:20px" ></i> <!--<img alt="Update" src="https://www.iconsdb.com/icons/download/orange/edit-2-16.png">-->
-        </a>
-        <a href="{% url 'project-delete' project.id %}">
-          <i data-feather="trash-2" style="width:20px" ></i><!--<img alt="Delete" src="https://www.iconsdb.com/icons/download/red/delete-16.png">-->
-        </a>
-      </li>
-    {% endfor %}
-  </ul>
+  <form method="get">
+    <div class="well">
+      <h4 style="margin-top: 0">Filter</h4>
+      <div class="row">
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.name.label_tag }}
+          {% render_field filter.form.name class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.description.label_tag }}
+          {% render_field filter.form.description class="form-control" %}
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">
+        <span class="glyphicon glyphicon-search"></span> Search
+      </button>
+    </div>
+  </form> 
+ {# {% if project_list %}#}
+ {% if filter.qs%}
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">No</th>
+        <th scope="col">Project Name</th>
+        <th scope="col">Project Description</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+    {# {% for project in project_list %} #}
+    {% for project in filter.qs %}
+          <th scope="row">{{ forloop.counter }} </th> 
+          <td><a href="{{ project.get_absolute_url }}">{{ project.name }}</a></td>
+          <td>{{ project.description  }}</td>
+          <td><a href="{% url 'project-update' project.id %}"><button class="btn btn-success my-3">Update</button></a></td>
+          <td><a href="{% url 'project-delete' project.id %}"><input class="btn btn-danger my-3" type="submit" value="Delete."></a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   {% else %}
     <p>There are no projects.</p>
   {% endif %}
+  <br><br><br>
+  <style>
+    .tab {
+        display: inline-block;
+        margin-left: 40px;
+    }
+  </style>
+        <form role="form" method="POST" action="{% url 'export_projects_xls' %}?{{request.GET.urlencode}}" enctype="multipart/form-data">
+          {% csrf_token %}
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary my-3">Export<span class="oi oi-data-transfer-download"></span></button></a>
+              <span class="tab"></span>             
+               <select class="custom-select" name="file-format">
+                {# <option value="" selected disabled hidden>Choose format...</option>#}
+                <option>Excel</option>
+                <option>CSV</option>
+                <option>JSON</option>
+                <option>YAML</option>
+                {#<option>PDF</option>#}
+              </select>
+            </div>
+        </form>
+    </div>
+  <!-- 
+  <a href="{% url 'export_projects_xls' %}?{{request.GET.urlencode}}">
+    <button type="button" class="btn btn-primary my-3">Print File <span class="oi oi-data-transfer-download"></span></button></a>
+  -->
+    {% if is_paginated %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <!-- << PREVIOUS PART -->
+            <!-- << Disable 'Previous' page button if you are at the 1st page -->
+            {% if not page_obj.has_previous %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-label="Previous">
+            {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+            {% endif %}
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only"></span>
+                    </a>
+                </li>
+            <!-- PAGES PART -->
+            {% for num in page_obj.paginator.page_range %}
+                <!-- Active page -->
+                {% if num == page_obj.number %}
+                    <li class="page-item active">
+                        <a class="page-link" href="#">{{ num }}<span class="sr-only"></span></a>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <!-- For the 1st page we do not use ?page=1 -->
+                        {% if num == 0 %}
+                            <a class="page-link" href="{{ profiles_1st_page_url }}">{{ num }}</a>
+                        {% else %}
+                            <!-- Show current page and +-3 pages -->
+                            {% if num|add:"-3" <= page_obj.number and page_obj.number <= num|add:"3" %}
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            <!-- Shows every 10th page and the last page -->
+                            {% elif num|divisibleby:"10" or num == page_obj.paginator.num_pages %}
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            {% endif %}
+                        {% endif %}
+                    </li>
+                {% endif %}
+            {% endfor %}
+            <!-- >> NEXT PART -->
+            {% if not page_obj.has_next %}
+                <!-- << Disable 'Next' page button if you are at the last page -->
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-label="Next">
+            {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+            {% endif %}
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only"></span>
+                    </a>
+                </li>
+        </ul>
+    </nav>
+{% endif %}
 {% endblock %}
-

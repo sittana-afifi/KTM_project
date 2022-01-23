@@ -1,13 +1,11 @@
-from django.conf.urls import handler404
-from django.urls import include, path
-from django.views.generic import RedirectView
-from django.contrib import admin
-from TaskManagement import forms
-from accounts import views , forms
+from django.urls import path
+from accounts import views 
 
 urlpatterns = [
 
     path('users', views.usersListView.as_view(), name='user_list'),
+    path('users/usersfilter/', views.AccountViewFilter, name='user-filter'),
+    path('usersfilter/export/xls/', views.export_users_xls, name='export_users_xls'),
     path('detail/<int:pk>/', views.UserDetailView.as_view(), name='user-detail'),
     path('<int:pk>/update/', views.UserUpdate.as_view(), name='user-update'),
     path('<int:pk>/delete/', views.UserDelete.as_view(), name='user-delete'),

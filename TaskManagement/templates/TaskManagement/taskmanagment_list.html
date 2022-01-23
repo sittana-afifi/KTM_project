@@ -1,31 +1,182 @@
 {% extends "base_generic.html" %}
-
+{% load render_table from django_tables2 %}
+{% load widget_tweaks %}
 {% block content %}
   <h2>Assign Task
     <a href="{% url 'taskmanagment-create' %}"> 
       <i data-feather="plus-circle" style="width:25px;height:25px;" ></i>  
       </a>
   </h2>
-  {% if taskmanagment_list %}
-  <ul>
-    {% for taskmanagment in taskmanagment_list %}
-      <li>
-        <a href="{{ taskmanagment.get_absolute_url }}">
-          {{ taskmanagment.id}}, {{ taskmanagment.task_managment}}</a> 
-       
-        
-
-        <a href="{% url 'taskmanagment-update' taskmanagment.id %}">
-          <i data-feather="edit-3" style="width:20px" ></i>
-        </a>
-        <a href="{% url 'taskmanagment-delete' taskmanagment.id %}">
-          <i data-feather="trash-2" style="width:20px" ></i>
-        </a>
-
-      </li>
-    {% endfor %}
-  </ul>
+  <form method="get">
+    <div class="well">
+      <h4 style="margin-top: 0">Filter</h4>
+      <div class="row">
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.task_managment.label_tag }}
+          {% render_field filter.form.task_managment class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.assignee.label_tag }}
+          {% render_field filter.form.assignee class="form-control" %}
+        </div>
+        <br></br>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.status.label_tag }}
+          {% render_field filter.form.status class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.priority.label_tag }}
+          {% render_field filter.form.priority class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.start_date.label_tag }}
+          {% render_field filter.form.start_date class="form-control" %}
+        </div>
+        <div class="form-group col-sm-4 col-md-3">
+          {{ filter.form.end_date.label_tag }}
+          {% render_field filter.form.end_date class="form-control" %}
+        </div>
+        <div class="form-group col-sm-8 col-md-6">
+          {{ filter.form.assigneedTo.label_tag }}
+          <div>
+            {% for choice in filter.form.assigneedTo %}
+              <label class="checkbox-inline">
+                {{ choice.tag }} {{ choice.choice_label }}
+              </label>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">
+        <span class="glyphicon glyphicon-search"></span> Search
+      </button>
+    </div>
+  </form> 
+  {# {% if taskmanagment_list %}#}
+  {% if filter.qs%}
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Task</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">End Date</th>
+        <th scope="col">Status</th>
+        <th scope="col">Created By</th>
+        {# <th scope="col">Assignees</th> #}
+        <th scope="col">Edit</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+    {# {% for taskmanagment in taskmanagment_list %} #}
+    {% for taskmanagment in filter.qs %}
+    <td><a href="{{ taskmanagment.get_absolute_url }}">{{ taskmanagment.task_managment }}</a></td>
+          <td>{{ taskmanagment.start_date }}</td>
+          <td>{{ taskmanagment.end_date  }}</td>
+          <td>
+            {% if taskmanagment.status == 'TD' %}
+          <button class="btn btn-secondary" type="button">To Do Task.</button>
+          {% endif %}
+          {% if taskmanagment.status == 'IP' %}
+          <button class="btn btn-warning"   type="button">In Progress</button>        
+          {% endif %}
+          {% if taskmanagment.status == 'C' %}
+          <button class="btn btn-primary"   type="button">Completed..</button>
+          {% endif %}
+          </td>
+          <td>{{ taskmanagment.assignee }}</td>
+          {# <td>{{ taskmanagment.assigneedTo  }}</td> #}
+          <td><a href="{% url 'taskmanagment-update' taskmanagment.id  %}"><button class="btn btn-success my-3">Update</button></a></td>
+          <td><a href="{% url 'taskmanagment-delete' taskmanagment.id %}"><input class="btn btn-danger my-3" type="submit" value="Delete."></a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   {% else %}
     <p>There are no taskmanagment.</p>
   {% endif %}
+  <br><br><br>
+  <style>
+    .tab {
+        display: inline-block;
+        margin-left: 40px;
+    }
+  </style>
+        <form role="form" method="POST" action="{% url 'export_taskmanagment_xls' %}?{{request.GET.urlencode}}" enctype="multipart/form-data">
+          {% csrf_token %}
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary my-3">Export<span class="oi oi-data-transfer-download"></span></button></a>
+              <span class="tab"></span>
+              <select class="custom-select" name="file-format">
+                {# <option value="" selected disabled hidden>Choose format...</option>#}
+                <option>Excel</option>
+                <option>CSV</option>
+                <option>JSON</option>
+                <option>YAML</option>
+                {#<option>PDF</option>#}
+              </select>
+            </div> 
+        </form>
+    </div>
+    <!--
+    <a href="{% url 'export_taskmanagment_xls' %}?{{request.GET.urlencode}}">
+    <button type="button" class="btn btn-primary my-3">Print File <span class="oi oi-data-transfer-download"></span></button></a>
+    -->
+  {% if is_paginated %}
+  <nav aria-label="Page navigation">
+      <ul class="pagination">
+          <!-- << PREVIOUS PART -->
+          <!-- << Disable 'Previous' page button if you are at the 1st page -->
+          {% if not page_obj.has_previous %}
+              <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-label="Previous">
+          {% else %}
+              <li class="page-item">
+                  <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+          {% endif %}
+                      <span aria-hidden="true">&laquo;</span>
+                      <span class="sr-only"></span>
+                  </a>
+              </li>
+          <!-- PAGES PART -->
+          {% for num in page_obj.paginator.page_range %}
+              <!-- Active page -->
+              {% if num == page_obj.number %}
+                  <li class="page-item active">
+                      <a class="page-link" href="#">{{ num }}<span class="sr-only"></span></a>
+                  </li>
+              {% else %}
+                  <li class="page-item">
+                      <!-- For the 1st page we do not use ?page=1 -->
+                      {% if num == 0 %}
+                          <a class="page-link" href="{{ profiles_1st_page_url }}">{{ num }}</a>
+                      {% else %}
+                          <!-- Show current page and +-3 pages -->
+                          {% if num|add:"-3" <= page_obj.number and page_obj.number <= num|add:"3" %}
+                              <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                          <!-- Shows every 10th page and the last page -->
+                          {% elif num|divisibleby:"10" or num == page_obj.paginator.num_pages %}
+                              <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                          {% endif %}
+                      {% endif %}
+                  </li>
+              {% endif %}
+          {% endfor %}
+          <!-- >> NEXT PART -->
+          {% if not page_obj.has_next %}
+              <!-- << Disable 'Next' page button if you are at the last page -->
+              <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-label="Next">
+          {% else %}
+              <li class="page-item">
+                  <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+          {% endif %}
+                      <span aria-hidden="true">&raquo;</span>
+                      <span class="sr-only"></span>
+                  </a>
+              </li>
+      </ul>
+  </nav>
+{% endif %}
 {% endblock %}
