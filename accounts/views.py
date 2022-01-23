@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-=======
-
-from django.http.response import HttpResponse
->>>>>>> fd3c574aaafc9a630a479459199a4ccdab3f73b9
 from django.views import generic
 from django.contrib.auth.models import User
 from django.views.generic.edit import UpdateView , DeleteView , CreateView 
