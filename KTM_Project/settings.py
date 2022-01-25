@@ -197,12 +197,9 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-<<<<<<< HEAD
 
 '''
 
-=======
->>>>>>> fd3c574aaafc9a630a479459199a4ccdab3f73b9
 # LDAP CONFIGRATION START HERE !
 AUTH_LDAP_SERVER_URI = env('AUTH_LDAP_SERVER_URI')
 AUTH_LDAP_BIND_DN = "CN=bind,CN=Users,DC=BD,DC=COM"
@@ -233,10 +230,7 @@ ldap.OPT_REFERRALS: 0,
 }
 
 # LDAP CONFIGRATION ENDS HERE !
-<<<<<<< HEAD
 '''
-=======
->>>>>>> fd3c574aaafc9a630a479459199a4ccdab3f73b9
 #Mail service
 EMAIL_BACKEND = env('EMAIL_BACKEND')
 EMAIL_HOST =env('EMAIL_HOST')

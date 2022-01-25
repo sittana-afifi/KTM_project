@@ -26,7 +26,7 @@ class ReservationMeetingRoom(models.Model):
     reservation_from_time = models.TimeField(auto_now=False, auto_now_add=False)
     reservation_to_time = models.TimeField(auto_now=False, auto_now_add=False)
     team = models.ManyToManyField(Employee,blank=True,related_name='+')
-    meeting_outcomes = models.TextField(max_length=1000, help_text='Enter the meeting outcomes')
+    meeting_outcomes = models.TextField(null = True ,max_length=1000, help_text='Enter the meeting outcomes')
     meeting_project_name = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, blank=True)
     task_name = models.ForeignKey(Task, on_delete=models.SET_NULL, null=True, blank=True)
 

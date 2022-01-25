@@ -1,6 +1,8 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser , UserManager
-import logging, logging.config # Logging view in Django.
+import logging, logging.config
+
+from django.db import  models # Logging view in Django.
 
 # Create a logger for this file or the name of the log level or Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -34,6 +36,7 @@ logger = logging.getLogger(__file__)
 """
 
 class Account (AbstractBaseUser):
+    username = models.CharField('username',null = True , max_length= 20)
     logger.info('enter Account model.')
     class ReadonlyMeta:
         readonly = ['username']
