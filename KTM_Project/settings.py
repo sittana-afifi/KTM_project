@@ -62,7 +62,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # configure the accounts app 
-    'accounts.apps.AccountsConfig',
+    #'accounts.apps.AccountsConfig',
     'rosetta',  # Rosetta Translation Interface
     'parler', #Translating Models with django-parler
     'crispy_forms',# 3rd party apps
@@ -77,6 +77,7 @@ INSTALLED_APPS = [
     'django_filters',
     'widget_tweaks',
     'import_export',
+    'accounts',
 ]
 
 # Indicates the frontend framework django crispy forms use

@@ -1,3 +1,13 @@
+<<<<<<< HEAD
+=======
+#Django==2.0.4  
+gunicorn==19.7.0  
+#psycopg2==2.7.4
+#Django>=3.0,<4.0
+#psycopg2>=2.8
+mysqlclient==2.0.3
+# mysql-connector==2.2.9
+>>>>>>> 9a9d0f3f14f4622ca7980b4362857200c32dca11
 asgiref==3.4.1
 
 beautifulsoup4==4.10.0
@@ -97,5 +107,9 @@ xlrd==2.0.1
 xlwt==1.3.0
 
 zipp==3.6.0
+<<<<<<< HEAD
 
  
+=======
+python-novaclient
+>>>>>>> 9a9d0f3f14f4622ca7980b4362857200c32dca11

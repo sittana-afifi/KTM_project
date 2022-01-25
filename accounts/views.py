@@ -7,13 +7,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
+from accounts.models import Account
 from django_auth_ldap.backend import LDAPBackend
 from .forms import  UserForm , AccountCreateForm 
 from django.contrib import messages
 from .filters import AccountFilter
 import _datetime, csv
 from django.http import HttpResponse
-from django.contrib.auth.models import User
 import logging, logging.config # Logging view in Django.
 import xlwt
 from .resources import AccountResource
@@ -385,3 +385,4 @@ def export_users_xls(request):
 
         wb.save(response)
         return response
+#print(Account.objects.all())
