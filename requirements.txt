@@ -33,3 +33,4 @@ sqlparse==0.4.2
 typing-extensions==3.10.0.2
 urllib3==1.26.7
 zipp==3.6.0
+python-novaclient

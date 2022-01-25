@@ -12,8 +12,8 @@ class EmployeeModelTest(TestCase):
     def setUpTestData(cls):
         # Set up non-modified objects used by all test methods
         user1=User.objects.create_user('sonu','sonu@xyz.com','sn@pswrd')        
-        Employee.objects.create(user=user1, Employee_id='1111',Phone_number='0911111111')
-
+        t=Employee.objects.create(user=user1, Employee_id='1111',Phone_number='0911111111')
+        print(t.Employee_id)
     
     def test_Employee_id_label(self):
         Employee1 = Employee.objects.get(id=1)
