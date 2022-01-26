@@ -5,18 +5,31 @@ from django.views import generic
 from .models import Employee , Taskmanagment, Project, Task
 from django.views.generic.edit import UpdateView , DeleteView , CreateView 
 from django.contrib.auth.decorators import login_required, permission_required
+<<<<<<< HEAD
 from .forms import AssignTaskForm
 import csv
+=======
+from django import forms
+from .forms import AssignTaskForm, UpdateAssignTaskForm
+import datetime, _datetime
+import csv, xlwt # use in export functions
+from django.shortcuts import render, get_object_or_404
+>>>>>>> c9fce7c (add email setting in the reservation request and assign task request)
 from django.http import HttpResponseRedirect, HttpResponse
 from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput, MonthPickerInput, YearPickerInput
 from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 from flatpickr.utils import GenericViewWidgetMixin
 import os, logging, logging.config # Logging view in Django.
 from TaskManagement.filters import EmployeeFilter, ProjectFilter, TaskFilter, TaskmanagmentFilter
-import xlwt
-from django.http import HttpResponse
 from .resources import EmployeeResource, TaskResource, ProjectResource, TaskmanagmentResource
+<<<<<<< HEAD
 import _datetime
+=======
+from tablib import Dataset 
+from django.conf import settings
+from django.core.mail import send_mail
+from django.contrib.auth.models import User
+>>>>>>> c9fce7c (add email setting in the reservation request and assign task request)
 
 # Create a logger for this file or the name of the log level or Get an instance of a logger
 logger = logging.getLogger(__name__) 
@@ -54,6 +67,7 @@ class EmployeesListView(LoginRequiredMixin,generic.ListView):
     paginate_by = 5
     filter_class = EmployeeFilter
 
+<<<<<<< HEAD
 def EmployeeViewFilter(request):
     """ Employee Filter View.
         created by :
@@ -77,10 +91,25 @@ def EmployeeViewFilter(request):
         ----------
             Return an HttpResponseRedirect to 'TaskManagement/employee_list.html' for the arguments passed.
         """
+=======
+@login_required    
+def EmployeeViewFilter(request):
+    """Employee View filter for employee list and show filter options.
+
+    Parameters
+    ----------
+    name : list
+        a list of all employes
+    returns : list, 
+        a list of all employes with CRUD oprtions and detail view
+    """
+
+>>>>>>> c9fce7c (add email setting in the reservation request and assign task request)
     employeef_list = Employee.objects.all()
     employeef_filter = EmployeeFilter(request.GET, queryset= employeef_list)
     return render(request, 'TaskManagement/employee_list.html', {'filter': employeef_filter})
 
+<<<<<<< HEAD
 """
     A class used to view employee detail.
     ...
@@ -105,10 +134,15 @@ def EmployeeViewFilter(request):
          21-Jan-2022
 """
 class EmployeeDetailView(generic.DetailView):
+=======
+# view details of the specific employee.
+class EmployeeDetailView(LoginRequiredMixin,generic.DetailView):
+>>>>>>> c9fce7c (add email setting in the reservation request and assign task request)
     logger.info("Enter EmployeeDetailView.")
     model = Employee
     template_name ='TaskManagement/employee_detail.html'
 
+<<<<<<< HEAD
 """
     A class used to delete employee.
     ...
@@ -131,10 +165,15 @@ class EmployeeDetailView(generic.DetailView):
          21-Jan-2022
 """
 class EmployeeDelete(DeleteView):
+=======
+# delete specific employee.
+class EmployeeDelete(LoginRequiredMixin,DeleteView):
+>>>>>>> c9fce7c (add email setting in the reservation request and assign task request)
     logger.info("Enter EmployeeDelete.")
     model = Employee
     success_url = reverse_lazy('employee-filter')
 
+<<<<<<< HEAD
 """ 
     add new employee.
     ...
@@ -162,11 +201,16 @@ class EmployeeDelete(DeleteView):
          21-Jan-2022
 """
 class EmployeeCreateView(CreateView):
+=======
+# Add specific employee.
+class EmployeeCreateView(LoginRequiredMixin,CreateView):
+>>>>>>> c9fce7c (add email setting in the reservation request and assign task request)
     logger.info("Enter EmployeeCreateView.")
     model = Employee
     fields = ['user','Employee_id', 'Phone_number', 'date_joined']
     success_url = reverse_lazy('employee-filter')
 
+    """ add detepicker input from bootstrap"""
     def get_form(self):
         """ "eman should update it".
         created by :
@@ -195,6 +239,7 @@ class EmployeeCreateView(CreateView):
         form.fields['date_joined'].widget = DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True})
         return form
 
+<<<<<<< HEAD
 """ 
     update employee's information.
     ...
@@ -224,6 +269,10 @@ class EmployeeCreateView(CreateView):
          21-Jan-2022
 """
 class EmployeeUpdateView(UpdateView):
+=======
+# update specific employee.
+class EmployeeUpdateView(LoginRequiredMixin,UpdateView):
+>>>>>>> c9fce7c (add email setting in the reservation request and assign task request)
     logger.info("Enter EmployeeUpdateView.")
     model = Employee
     fields = ['Employee_id', 'Phone_number', 'date_joined']
@@ -254,6 +303,7 @@ class EmployeeUpdateView(UpdateView):
         logger.info("Enter get_success_url.")
         return reverse('employee-detail',args= [str(self.object.id)])
     
+    """ add detepicker input from bootstrap"""
     def get_form(self):
         """ "eman should update it".
         created by :
@@ -288,8 +338,18 @@ class ProjectListView(LoginRequiredMixin,generic.ListView):
     paginate_by = 5
     filter_class = ProjectFilter
 
-# Project Filter View:    
+@login_required    
 def ProjectViewFilter(request):
+    """Project View filter for employee list and show filter options.
+
+    Parameters
+    ----------
+    name : list
+        a list of all projects
+    returns : list, 
+        a list of all projects with CRUD oprtions and detail view
+    """
+
     project_list = Project.objects.all()
     project_filter = ProjectFilter(request.GET, queryset= project_list)
     return render(request, 'TaskManagement/project_list.html', {'filter': project_filter})
@@ -321,8 +381,18 @@ class TaskListView(LoginRequiredMixin,generic.ListView):
     paginate_by = 5
     filter_class = TaskFilter
 
-# Project Filter View:    
+@login_required
 def TaskViewFilter(request):
+    """Task View filter for employee list and show filter options.
+
+    Parameters
+    ----------
+    name : list
+        a list of all tasks
+    returns : list, 
+        a list of all tasks with CRUD oprtions and detail view
+    """
+
     task_list = Task.objects.all()
     task_filter = TaskFilter(request.GET, queryset= task_list)
     return render(request, 'TaskManagement/task_list.html', {'filter': task_filter})
@@ -355,8 +425,18 @@ class TaskmanagmentListView(LoginRequiredMixin,generic.ListView):
     paginate_by = 5
     filter_class = TaskmanagmentFilter
 
-# Taskmanagment Filter View:    
+@login_required  
 def TaskmanagmentViewFilter(request):
+    """Taskmanagment View filter for taskmanagment list and show filter options.
+
+    Parameters
+    ----------
+    name : list
+        a list of all assigned tasks
+    returns : list, 
+        a list of all assigned tasks with CRUD oprtions and detail view
+    """
+    
     taskmanagment_list = Taskmanagment.objects.all()
     taskmanagment_filter = TaskmanagmentFilter(request.GET, queryset= taskmanagment_list)
     return render(request, 'TaskManagement/taskmanagment_list.html', {'filter': taskmanagment_filter})
@@ -385,6 +465,50 @@ class TaskmanagmentUpdate(LoginRequiredMixin,UpdateView):
     logger.info("Enter TaskmanagmentUpdate.")
     model = Taskmanagment
     fields = ['assignee' , 'assigneedTo' , 'task_managment' , 'status' , 'priority' , 'comment' , 'start_date' , 'end_date' ]
+
+    def form_valid(self, form):
+        """Function to send emails after update Taskmanagment model.
+
+    Parameters
+    ----------
+    subject : 
+        str
+
+    assignee : 
+        forighn key from employee model
+    
+    assigneedTo : 
+        manytomany field from employee model
+    
+    task_managment :
+        charfield
+
+    status  , priority and  comment :
+        charfield
+    
+    start_date and  end_date:
+        datefield
+        
+    returns : email, 
+        send email address for the selected team email address.
+
+    """
+
+        subject = 'Update Assign Task Details'
+        Assignee_Name = form.cleaned_data.get('assignee')
+        AssignedTo_Team = form.cleaned_data.get('assigneedTo')
+        [print(member.user.email) for member in AssignedTo_Team.all()]
+        Task_Detail = form.cleaned_data.get('task_managment')
+        Task_Start_Date = form.cleaned_data.get('start_date')
+        Task_End_Date = form.cleaned_data.get('end_date') 
+        Task_Priority = form.cleaned_data.get('priority')
+        Task_Status = form.cleaned_data.get('status')
+        Comments = form.cleaned_data.get('comment')
+        email_from = settings.EMAIL_HOST_USER
+        message = f'Dear All:\n  Have a good day this email due to update task details {Task_Detail} created by {Assignee_Name}, The task will start at {Task_Start_Date} and end at {Task_End_Date} with {Task_Priority} priority and status {Task_Status}. \n {Comments}.\n (H) means High,\n (L) means Low, \n (M) means meduim priorities.\n (TD) means To Do,\n (IP) means In Progress, \n (C) means Completed For status.\n\n \n Best Regards'
+        recipient_list = [ (member.user.email) for member in AssignedTo_Team.all() ]
+        send_mail( subject, message, email_from, recipient_list )
+        return super(TaskmanagmentUpdate, self).form_valid(form)
     
     """ add datepicker to the form """
     def get_form(self):
@@ -399,20 +523,79 @@ class TaskmanagmentDelete(LoginRequiredMixin,DeleteView):
     model = Taskmanagment
     success_url = reverse_lazy('taskmanagment-filter')
 
-# -----------------------------------------------------------
-# Assign Task to the Team Form create view  for Metting Room.
-# display the attributes of form and ask user to enter all requirements to assign task.
-# created by : Eman 
-# creation date : -Dec-2021
-# update date : -Dec-2022
-# parameters : modelchoice , datefield input , multiple choices for team , charfiled 
-# task creater , assignees of the task  , task name if it addhoc tasks or project name
-# task status and the priority of it , start and end date of the task finally addtional comments.
-# output: details of the assigned tasks request and the staus if it success or failed.
-# -----------------------------------------------------------
+"""
+    A function used to Assign Task to the Team Form create view  for Metting Room.
+    display the attributes of form and ask user to enter all requirements to assign task.
+    ...
+
+    Attributes
+    ----------
+    assignee : 
+        forighn key from employee model
+    
+    assigneedTo : 
+        manytomany field from employee model
+    
+    task_managment :
+        charfield
+
+    status  , priority and  comment :
+        charfield
+    
+    start_date and  end_date:
+        datefield
+
+    Methods
+    -------
+        use assign task form
+
+    output 
+    -------
+    details of the assigned tasks request and the staus if it success or failed.
+
+    -------
+    created by :
+    -------
+        Eman 
+
+    creation date : 
+    -------
+        15-Dec-2021
+
+    update date :
+    -------
+        20-Dec-2022
+"""
 
 @login_required
 def assign_task_view(request):
+    """Function to send emails after asign Taskmanagment model.
+
+    Parameters
+    ----------
+    subject : 
+        str
+
+    assignee : 
+        forighn key from employee model
+    
+    assigneedTo : 
+        manytomany field from employee model
+    
+    task_managment :
+        charfield
+
+    status  , priority and  comment :
+        charfield
+    
+    start_date and  end_date:
+        datefield
+        
+    returns : email, 
+        send email address for the selected team email address.
+
+    """
+
     logger.info("Enter assign_task_view.")
     form = AssignTaskForm()
     if request.method == "POST":
@@ -421,10 +604,26 @@ def assign_task_view(request):
         if form.is_valid():
             logger.info("Enter is valid.")
             form.save()
+            subject = 'Assign Task Details'
+            Assignee_Name = form.cleaned_data.get('assignee')
+            AssignedTo_Team = form.cleaned_data.get('assigneedTo')
+            [print(member.user.email) for member in AssignedTo_Team.all()]
+            Task_Detail = form.cleaned_data.get('task_managment')
+            Task_Start_Date = form.cleaned_data.get('start_date')
+            Task_End_Date = form.cleaned_data.get('end_date') 
+            Task_Priority = form.cleaned_data.get('priority')
+            Task_Status = form.cleaned_data.get('status')
+            Comments = form.cleaned_data.get('comment')
+            email_from = settings.EMAIL_HOST_USER
+            message = f'Dear All:\n  Have a good day this email due to new task details {Task_Detail} created by {Assignee_Name}, The task will start at {Task_Start_Date} and end at {Task_End_Date} with {Task_Priority} priority and status {Task_Status}. \n {Comments}.\n (H) means High,\n (L) means Low, \n (M) means meduim priorities.\n (TD) means To Do,\n (IP) means In Progress, \n (C) means Completed For status.\n\n \n Best Regards'
+            recipient_list = [ (member.user.email) for member in AssignedTo_Team.all() ]
+            send_mail( subject, message, email_from, recipient_list )
             return HttpResponseRedirect(reverse('taskmanagment-filter') )
+
     context = {
         'form' : form ,
         }
+
     return render(request, "TaskManagement/assign_task.html", context)
 
 # -----------------------------------------------------------
@@ -443,10 +642,10 @@ def assign_task_view(request):
 def update_assign_task_view(request, pk):
     logger.info("Enter assign_task_view.")
     assign = Taskmanagment.objects.get(pk=pk)
-    form = AssignTaskForm(request.POST or None,instance=assign)
+    form = UpdateAssignTaskForm(request.POST or None,instance=assign)
     if request.method == "POST":
         logger.info("The request is POST.")
-        form = AssignTaskForm(request.POST)
+        form = UpdateAssignTaskForm(request.POST)
         if form.is_valid():
             logger.info("Enter is valid.")
             form.save()
@@ -456,21 +655,58 @@ def update_assign_task_view(request, pk):
         }
     return render(request, "TaskManagement/update_assign_task.html", context)
 
-# -----------------------------------------------------------
-# function for Export Employee list view with filter option.
-# display the different export format to choose from it.
-# and download report.
-# created by : Eman 
-# creation date : 15-Jan-2021
-# update date : 20-Jan-2022
-# parameters : first choose filter option from filter 
-# function and then export file
-# output: file with different format (csv, excel ,yaml)
-# -----------------------------------------------------------
-
 today = _datetime.date.today()
 
+"""
+    A function used to export model information from database.
+    ...
+
+    Attributes
+    ----------
+    list : list
+        the list of the employee
+        first choose filter option from filter 
+        function and then export file
+
+    Methods
+    -------
+        import-export method in django
+
+    output 
+    -------
+    file with different format (csv, excel ,yaml)
+
+    -------
+    created by :
+    -------
+        Eman 
+
+    creation date : 
+    -------
+        15-Jan-2021
+
+    update date :
+    -------
+        20-Jan-2022
+"""
+
+@login_required
 def export_employees_xls(request):
+    """ Export all employee list details view from database and allow filter option
+        with different firmat(excel , json , yaml) .
+
+        If there is no filter option choosed all employee in database will be export.
+
+        Parameters
+        ----------
+        file format : (excel , json , yaml) 
+            choose the file format from dropdown list
+
+        Result
+        ------
+        export requested data with requested format.
+        """
+
     logger.info("Export Function.")
     file_format = request.POST['file-format']
     employeef_filter = EmployeeFilter(request.GET, queryset=Employee.objects.all())
@@ -526,19 +762,55 @@ def export_employees_xls(request):
         wb.save(response)
         return response
 
-# -----------------------------------------------------------
-# function for Export Project list view with filter option.
-# display the different export format to choose from it.
-# and download report.
-# created by : Eman 
-# creation date : 15-Jan-2021
-# update date : 20-Jan-2022
-# parameters : first choose filter option from filter 
-# function and then export file
-# output: file with different format (csv, excel ,yaml)
-# -----------------------------------------------------------
+"""
+    A function used to export model information from database.
+    ...
 
+    Attributes
+    ----------
+    list : list
+        the list of the project
+        first choose filter option from filter 
+        function and then export file
+
+    Methods
+    -------
+        import-export method in django
+
+    output 
+    -------
+    file with different format (csv, excel ,yaml)
+
+    -------
+    created by :
+    -------
+        Eman 
+
+    creation date : 
+    -------
+        15-Jan-2021
+
+    update date :
+    -------
+        20-Jan-2022
+"""
+@login_required
 def export_projects_xls(request):
+    """ Export all projects list details view from database and allow filter option
+        with different firmat(excel , json , yaml) .
+
+        If there is no filter option choosed all projects in database will be export.
+
+        Parameters
+        ----------
+        file format : (excel , json , yaml) 
+            choose the file format from dropdown list
+
+        Result
+        ------
+        export requested data with requested format.
+        """
+
     logger.info("Export Function.")
     file_format = request.POST['file-format']
     project_filter = ProjectFilter(request.GET, queryset=Project.objects.all())
@@ -596,19 +868,55 @@ def export_projects_xls(request):
         wb.save(response)
         return response
 
-# -----------------------------------------------------------
-# function for Export Task list view with filter option.
-# display the different export format to choose from it.
-# and download report.
-# created by : Eman 
-# creation date : 15-Jan-2021
-# update date : 20-Jan-2022
-# parameters : first choose filter option from filter 
-# function and then export file
-# output: file with different format (csv, excel ,yaml)
-# -----------------------------------------------------------
+"""
+    A function used to export model information from database.
+    ...
 
+    Attributes
+    ----------
+    list : list
+        the list of the task
+        first choose filter option from filter 
+        function and then export file
+
+    Methods
+    -------
+        import-export method in django
+
+    output 
+    -------
+    file with different format (csv, excel ,yaml)
+
+    -------
+    created by :
+    -------
+        Eman 
+
+    creation date : 
+    -------
+        15-Jan-2021
+
+    update date :
+    -------
+        20-Jan-2022
+"""
+
+@login_required
 def export_tasks_xls(request):
+    """ Export all tasks list details view from database and allow filter option
+        with different firmat(excel , json , yaml) .
+
+        If there is no filter option choosed all tasks in database will be export.
+
+        Parameters
+        ----------
+        file format : (excel , json , yaml) 
+            choose the file format from dropdown list
+
+        Result
+        ------
+        export requested data with requested format.
+        """
     logger.info("Export Function.")
     file_format = request.POST['file-format']
     task_filter = TaskFilter(request.GET, queryset=Task.objects.all())
@@ -666,19 +974,56 @@ def export_tasks_xls(request):
         wb.save(response)
         return response
 
-# -----------------------------------------------------------
-# function for Export Tasks Managment list view with filter option.
-# display the different export format to choose from it.
-# and download report.
-# created by : Eman 
-# creation date : 15-Jan-2021
-# update date : 20-Jan-2022
-# parameters : first choose filter option from filter 
-# function and then export file
-# output: file with different format (csv, excel ,yaml)
-# -----------------------------------------------------------
+"""
+    A function used to export model information from database.
+    ...
 
+    Attributes
+    ----------
+    list : list
+        the list of the assig task
+        first choose filter option from filter 
+        function and then export file
+
+    Methods
+    -------
+        import-export method in django
+
+    output 
+    -------
+    file with different format (csv, excel ,yaml)
+
+    -------
+    created by :
+    -------
+        Eman 
+
+    creation date : 
+    -------
+        15-Jan-2021
+
+    update date :
+    -------
+        20-Jan-2022
+"""
+
+@login_required
 def export_taskmanagment_xls(request):
+    """ Export all assign task list details view from database and allow filter option
+        with different firmat(excel , json , yaml) .
+
+        If there is no filter option choosed all assign tasks in database will be export.
+
+        Parameters
+        ----------
+        file format : (excel , json , yaml) 
+            choose the file format from dropdown list
+
+        Result
+        ------
+        export requested data with requested format.
+        """
+
     logger.info("Export Function.")
     file_format = request.POST['file-format']
     taskmanagment_filter = TaskmanagmentFilter(request.GET, queryset=Taskmanagment.objects.all())

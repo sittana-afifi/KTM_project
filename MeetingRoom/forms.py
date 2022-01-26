@@ -27,7 +27,7 @@ from django.forms.utils import ErrorList
 class ReservationForm(forms.ModelForm):
     meeting_room = forms.ModelChoiceField(queryset = Meeting.objects.all())
     reservation_date = forms.DateField(required=True, widget=DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}))
-    team = forms.ModelMultipleChoiceField(queryset =Employee.objects.all(),blank=True,required=False, widget=forms.CheckboxSelectMultiple) 
+    team = forms.ModelMultipleChoiceField(queryset =Employee.objects.all(),required= True) 
     reservation_from_time = forms.TimeField(widget=TimePickerInput(options={"format": "hh:mm","autoclose": True,"use24hours": True}))
     reservation_to_time = forms.TimeField(widget=TimePickerInput(options={"format": "hh:mm","autoclose": True}))
     meeting_project_name = forms.ModelChoiceField(queryset = Project.objects.all(), required=False)
@@ -91,7 +91,7 @@ class ReservationForm(forms.ModelForm):
 class UpdateReservationForm(forms.ModelForm):
     meeting_room = forms.ModelChoiceField(queryset = Meeting.objects.all())
     reservation_date = forms.DateField(widget=DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}), required=True )
-    team = forms.ModelMultipleChoiceField(queryset =Employee.objects.all(),blank=True,required=False,widget=forms.CheckboxSelectMultiple) 
+    team = forms.ModelMultipleChoiceField(queryset =Employee.objects.all(), required=True) 
     reservation_from_time = forms.TimeField(widget=TimePickerInput(options={"format": "hh:mm","autoclose": True}))
     reservation_to_time = forms.TimeField(widget=TimePickerInput(options={"format": "hh:mm","autoclose": True}))
     meeting_project_name = forms.ModelChoiceField(queryset = Project.objects.all(), required=False)
@@ -147,3 +147,11 @@ class UpdateReservationForm(forms.ModelForm):
             raise ValidationError(('Selected Meeting room already reserved at this date and time ,please correct your information and then submit'))
             messages.error(request, "Selected Meeting room already reserved at this date and time ,please correct your information and then submit")
         return cleaned_data
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.meeting_room}'
+    
+    def get_absolute_url(self):
+        """Returns the url to access a detail record for this project."""
+        return reverse('reservationmeetingroom-detail', args=[str(self.id)])

@@ -10,7 +10,7 @@ from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 class EmployeeFilter(django_filters.FilterSet):
     user = django_filters.ModelChoiceFilter(queryset=User.objects.all())
     date_joined = django_filters.DateFromToRangeFilter(label='Date Joined Range', widget=django_filters.widgets.RangeWidget(attrs={'placeholder': 'yyyy/mm/dd','class': 'datepicker', 'type': 'date'}))
-    #user = django_filters.CharFilter(lookup_expr='icontains')
+
     class Meta:
         model = Employee
         fields = ['user', 'Employee_id','Phone_number','date_joined',]

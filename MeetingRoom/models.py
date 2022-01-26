@@ -18,7 +18,40 @@ class Meeting(models.Model):
         """Returns the url to access a detail record for this project."""
         return reverse('meeting-detail', args=[str(self.id)])
 
-# ReservationMeetingRoom Model:
+"""
+    A class used to represent Reservation meeting room request.
+    ...
+
+    Attributes
+    ----------
+    meeting_room : ForeignKey from MeetingModel is CharField
+    reservation_date : DateField
+    reservation_from_time : TimeField
+    reservation_to_time : TimeField
+    team : ForeignKey as ManyToManyField from Employee Model
+    meeting_outcomes : TextField
+    meeting_project_name : ForeignKey from Project model
+    task_name : ForeignKey from Task Model
+
+
+    Methods
+    -------
+    def __str__(self)
+        tells Django what to print when it needs to print out an instance of Reservation meeting room request model
+
+    created by :
+    -------
+        Eman 
+
+    creation date : 
+    -------
+        -Dec-2021
+
+    update date :
+    -------
+         -Jan-2022
+"""
+
 class ReservationMeetingRoom(models.Model):
     """Model representing a reservation meeting room."""
     meeting_room = models.ForeignKey(Meeting, on_delete=models.SET_NULL, null=True, blank=False)
@@ -36,6 +69,7 @@ class ReservationMeetingRoom(models.Model):
         if date < datetime.date.today():
             raise ValidationError(_('Invalid date - Date cannot be in the past'))
         return date
+
     def get_team_values(self):
         ret = ''
         print(self.team.all())
@@ -67,11 +101,11 @@ class ReservationMeetingRoom(models.Model):
             if case_1 or case_2 or case_3 or case_4 or case_5 or case_6 :
                 raise ValidationError(('Selected Meeting room already reserved at this date and time ,please correct your information and then submit'))
         return cleaned_data
-    
+        
+    def get_absolute_url(self):
+        """Returns the url to access a detail record for this ReservationMeetingRoom Request Model."""
+        return reverse('reservationmeetingroom-detail', args=[str(self.id)])
+
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.meeting_room}'
-        
-    def get_absolute_url(self):
-        """Returns the url to access a detail record for this project."""
-        return reverse('reservationmeetingroom-detail', args=[str(self.id)])

@@ -1,10 +1,12 @@
 from django.views import generic
+<<<<<<< HEAD
+=======
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+>>>>>>> c9fce7c (add email setting in the reservation request and assign task request)
 from django.contrib.auth.models import User
 from django.views.generic.edit import UpdateView , DeleteView , CreateView 
 from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from accounts.models import Account
@@ -12,32 +14,37 @@ from django_auth_ldap.backend import LDAPBackend
 from .forms import  UserForm , AccountCreateForm 
 from django.contrib import messages
 from .filters import AccountFilter
+<<<<<<< HEAD
 import _datetime, csv
 from django.http import HttpResponse
 import logging, logging.config # Logging view in Django.
 import xlwt
+=======
+import datetime, _datetime
+import os, logging, logging.config # Logging view in Django.
+import xlwt, csv # use in export function
+>>>>>>> c9fce7c (add email setting in the reservation request and assign task request)
 from .resources import AccountResource
 
 # Create a logger for this file or the name of the log level or Get an instance of a logger
 logger = logging.getLogger(__name__)
 logger = logging.getLogger(__file__)
 
-# -----------------------------------------------------------
-# View function for home page of site.
-# display the Number of times visited this page.
-# and contians details about the web application and how to use it.
-# created by : Eman 
-# creation date : 20-Dec-2021
-# update date : 10-Jan-2022
-# parameters : Number (integer)
-# output: Number Integer + static conent
-# -----------------------------------------------------------
-
 @login_required
 def index(request):
-    """View function for home page of site."""
+    """View function for home page of site display the Number of times visited this page.
+
+    Parameters
+    ----------
+    name : str
+        The name of the file
+    returns : int, str 
+        The Number of times visited this page and the homw page static information
+    """
+    
     logger.info('info This logs an info message.')
     logger.debug(' debug This logs an info message.')
+
     num_visits = request.session.get('num_visits', 0)
     request.session['num_visits'] = num_visits + 1
     context = {
@@ -205,6 +212,7 @@ class usersListView(LoginRequiredMixin,generic.ListView):
     model = User
     template_name ='accounts/user_list.html'
     filter_class = AccountFilter
+<<<<<<< HEAD
     
 def AccountViewFilter(request):
     """ filter user list view.
@@ -228,6 +236,19 @@ def AccountViewFilter(request):
     return:
     ----------
         Return an HttpResponseRedirect to 'accounts/user_list.html' for the arguments passed.
+=======
+
+@login_required    
+def AccountViewFilter(request):
+    """Account View filter for user list and show filter options.
+
+    Parameters
+    ----------
+    name : lisy
+        a list of all users
+    returns : list, 
+        a list of all users with CRUD oprtions and detail view
+>>>>>>> c9fce7c (add email setting in the reservation request and assign task request)
     """
     userf_list = User.objects.all()
     userf_filter = AccountFilter(request.GET, queryset= userf_list)
@@ -315,21 +336,57 @@ class UserDelete(LoginRequiredMixin,DeleteView):
     model = User
     success_url = reverse_lazy('user-filter')
 
-# -----------------------------------------------------------
-# function for Export User list view with filter option.
-# display the different export format to choose from it.
-# and download report.
-# created by : Eman 
-# creation date : 15-Jan-2021
-# update date : 20-Jan-2022
-# parameters : first choose filter option from filter 
-# function and then export file
-# output: file with different format (csv, excel ,yaml)
-# -----------------------------------------------------------
-
 today = _datetime.date.today()
+"""
+    A function used to export model information from database.
+    ...
 
+    Attributes
+    ----------
+    list : list
+        the list of the user
+        first choose filter option from filter 
+        function and then export file
+
+    Methods
+    -------
+        import-export method in django
+
+    output 
+    -------
+    file with different format (csv, excel ,yaml)
+
+    -------
+    created by :
+    -------
+        Eman 
+
+    creation date : 
+    -------
+        15-Jan-2021
+
+    update date :
+    -------
+        20-Jan-2022
+"""
+
+@login_required
 def export_users_xls(request):
+    """ Export all user list details view from database and allow filter option
+        with different firmat(excel , json , yaml) .
+
+        If there is no filter option choosed all users in database will be export.
+
+        Parameters
+        ----------
+        file format : (excel , json , yaml) 
+            choose the file format from dropdown list
+
+        Result
+        ------
+        export requested data with requested format.
+        """
+
     logger.info("Export Function.")
     file_format = request.POST['file-format']
     userf_filter = AccountFilter(request.GET, queryset=User.objects.all())
