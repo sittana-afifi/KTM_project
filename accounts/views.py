@@ -1,8 +1,5 @@
 from django.views import generic
-<<<<<<< HEAD
-=======
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
->>>>>>> c9fce7c (add email setting in the reservation request and assign task request)
 from django.contrib.auth.models import User
 from django.views.generic.edit import UpdateView , DeleteView , CreateView 
 from django.utils.translation import ugettext_lazy as _
@@ -14,16 +11,13 @@ from django_auth_ldap.backend import LDAPBackend
 from .forms import  UserForm , AccountCreateForm 
 from django.contrib import messages
 from .filters import AccountFilter
-<<<<<<< HEAD
 import _datetime, csv
 from django.http import HttpResponse
 import logging, logging.config # Logging view in Django.
 import xlwt
-=======
 import datetime, _datetime
 import os, logging, logging.config # Logging view in Django.
 import xlwt, csv # use in export function
->>>>>>> c9fce7c (add email setting in the reservation request and assign task request)
 from .resources import AccountResource
 
 # Create a logger for this file or the name of the log level or Get an instance of a logger
@@ -212,7 +206,6 @@ class usersListView(LoginRequiredMixin,generic.ListView):
     model = User
     template_name ='accounts/user_list.html'
     filter_class = AccountFilter
-<<<<<<< HEAD
     
 def AccountViewFilter(request):
     """ filter user list view.
@@ -236,19 +229,6 @@ def AccountViewFilter(request):
     return:
     ----------
         Return an HttpResponseRedirect to 'accounts/user_list.html' for the arguments passed.
-=======
-
-@login_required    
-def AccountViewFilter(request):
-    """Account View filter for user list and show filter options.
-
-    Parameters
-    ----------
-    name : lisy
-        a list of all users
-    returns : list, 
-        a list of all users with CRUD oprtions and detail view
->>>>>>> c9fce7c (add email setting in the reservation request and assign task request)
     """
     userf_list = User.objects.all()
     userf_filter = AccountFilter(request.GET, queryset= userf_list)

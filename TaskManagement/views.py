@@ -5,16 +5,13 @@ from django.views import generic
 from .models import Employee , Taskmanagment, Project, Task
 from django.views.generic.edit import UpdateView , DeleteView , CreateView 
 from django.contrib.auth.decorators import login_required, permission_required
-<<<<<<< HEAD
 from .forms import AssignTaskForm
 import csv
-=======
 from django import forms
 from .forms import AssignTaskForm, UpdateAssignTaskForm
 import datetime, _datetime
 import csv, xlwt # use in export functions
 from django.shortcuts import render, get_object_or_404
->>>>>>> c9fce7c (add email setting in the reservation request and assign task request)
 from django.http import HttpResponseRedirect, HttpResponse
 from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput, MonthPickerInput, YearPickerInput
 from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
@@ -22,14 +19,11 @@ from flatpickr.utils import GenericViewWidgetMixin
 import os, logging, logging.config # Logging view in Django.
 from TaskManagement.filters import EmployeeFilter, ProjectFilter, TaskFilter, TaskmanagmentFilter
 from .resources import EmployeeResource, TaskResource, ProjectResource, TaskmanagmentResource
-<<<<<<< HEAD
 import _datetime
-=======
 from tablib import Dataset 
 from django.conf import settings
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
->>>>>>> c9fce7c (add email setting in the reservation request and assign task request)
 
 # Create a logger for this file or the name of the log level or Get an instance of a logger
 logger = logging.getLogger(__name__) 
@@ -67,7 +61,6 @@ class EmployeesListView(LoginRequiredMixin,generic.ListView):
     paginate_by = 5
     filter_class = EmployeeFilter
 
-<<<<<<< HEAD
 def EmployeeViewFilter(request):
     """ Employee Filter View.
         created by :
@@ -91,7 +84,6 @@ def EmployeeViewFilter(request):
         ----------
             Return an HttpResponseRedirect to 'TaskManagement/employee_list.html' for the arguments passed.
         """
-=======
 @login_required    
 def EmployeeViewFilter(request):
     """Employee View filter for employee list and show filter options.
@@ -104,12 +96,10 @@ def EmployeeViewFilter(request):
         a list of all employes with CRUD oprtions and detail view
     """
 
->>>>>>> c9fce7c (add email setting in the reservation request and assign task request)
     employeef_list = Employee.objects.all()
     employeef_filter = EmployeeFilter(request.GET, queryset= employeef_list)
     return render(request, 'TaskManagement/employee_list.html', {'filter': employeef_filter})
 
-<<<<<<< HEAD
 """
     A class used to view employee detail.
     ...
@@ -133,16 +123,12 @@ def EmployeeViewFilter(request):
     -------
          21-Jan-2022
 """
-class EmployeeDetailView(generic.DetailView):
-=======
 # view details of the specific employee.
 class EmployeeDetailView(LoginRequiredMixin,generic.DetailView):
->>>>>>> c9fce7c (add email setting in the reservation request and assign task request)
     logger.info("Enter EmployeeDetailView.")
     model = Employee
     template_name ='TaskManagement/employee_detail.html'
 
-<<<<<<< HEAD
 """
     A class used to delete employee.
     ...
@@ -164,16 +150,12 @@ class EmployeeDetailView(LoginRequiredMixin,generic.DetailView):
     -------
          21-Jan-2022
 """
-class EmployeeDelete(DeleteView):
-=======
-# delete specific employee.
+
 class EmployeeDelete(LoginRequiredMixin,DeleteView):
->>>>>>> c9fce7c (add email setting in the reservation request and assign task request)
     logger.info("Enter EmployeeDelete.")
     model = Employee
     success_url = reverse_lazy('employee-filter')
 
-<<<<<<< HEAD
 """ 
     add new employee.
     ...
@@ -200,11 +182,7 @@ class EmployeeDelete(LoginRequiredMixin,DeleteView):
     -------
          21-Jan-2022
 """
-class EmployeeCreateView(CreateView):
-=======
-# Add specific employee.
 class EmployeeCreateView(LoginRequiredMixin,CreateView):
->>>>>>> c9fce7c (add email setting in the reservation request and assign task request)
     logger.info("Enter EmployeeCreateView.")
     model = Employee
     fields = ['user','Employee_id', 'Phone_number', 'date_joined']
@@ -239,7 +217,6 @@ class EmployeeCreateView(LoginRequiredMixin,CreateView):
         form.fields['date_joined'].widget = DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True})
         return form
 
-<<<<<<< HEAD
 """ 
     update employee's information.
     ...
@@ -268,11 +245,7 @@ class EmployeeCreateView(LoginRequiredMixin,CreateView):
     -------
          21-Jan-2022
 """
-class EmployeeUpdateView(UpdateView):
-=======
-# update specific employee.
 class EmployeeUpdateView(LoginRequiredMixin,UpdateView):
->>>>>>> c9fce7c (add email setting in the reservation request and assign task request)
     logger.info("Enter EmployeeUpdateView.")
     model = Employee
     fields = ['Employee_id', 'Phone_number', 'date_joined']
