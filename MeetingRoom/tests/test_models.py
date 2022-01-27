@@ -13,7 +13,7 @@ class MeetingModelTest(TestCase):
         field_label = meeting._meta.get_field('name').verbose_name
         self.assertEqual(field_label, 'name')
     
-    def test_date_of_death_label(self):
+    def test_description_label(self):
         meeting = Meeting.objects.get(id=1)
         field_label = meeting._meta.get_field('description').verbose_name
         self.assertEqual(field_label, 'description')
@@ -29,3 +29,4 @@ class MeetingModelTest(TestCase):
         self.assertEqual(max_length, 100)
     
     '''
+   

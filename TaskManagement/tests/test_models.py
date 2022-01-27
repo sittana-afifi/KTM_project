@@ -1,10 +1,51 @@
 from django.test import TestCase
 from TaskManagement.admin import EmployeeAdmin
 #from TaskManagement.models import Employee
-from TaskManagement.models import Employee
+from TaskManagement.models import Employee,Project,Task
 from django.contrib.auth.models import User
 
 #from accounts.models import Account
+class TaskModelTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Set up non-modified objects used by all test methods
+        Task.objects.create(name='firstone', description='Taskfortest')
+    
+    def test_name_label(self):
+        task = Task.objects.get(id=1)
+        field_label = task._meta.get_field('name').verbose_name
+        self.assertEqual(field_label, 'name')
+    
+    def test_description_label(self):
+        task = Task.objects.get(id=1)
+        field_label = task._meta.get_field('description').verbose_name
+        self.assertEqual(field_label, 'description')
+    
+    def test_get_absolute_url(self):
+        task = Task.objects.get(id=1)
+        # This will also fail if the urlconf is not defined.
+        self.assertEqual(task.get_absolute_url(), '/en/TaskManagement/task/1/')
+
+class  ProjectModelTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Set up non-modified objects used by all test methods
+        Project.objects.create(name='firstone', description='Projectfortest')
+    
+    def test_name_label(self):
+        project = Project.objects.get(id=1)
+        field_label = project._meta.get_field('name').verbose_name
+        self.assertEqual(field_label, 'name')
+    
+    def test_description_label(self):
+        project = Project.objects.get(id=1)
+        field_label = project._meta.get_field('description').verbose_name
+        self.assertEqual(field_label, 'description')
+    
+    def test_get_absolute_url(self):
+        project = Project.objects.get(id=1)
+        # This will also fail if the urlconf is not defined.
+        self.assertEqual(project.get_absolute_url(), '/en/TaskManagement/project/1/')
 
 
 class EmployeeModelTest(TestCase):
