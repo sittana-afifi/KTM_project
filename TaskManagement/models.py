@@ -88,8 +88,40 @@ class Task(models.Model):
         """Returns the url to access a detail record for this project."""
         return reverse('task-detail', args=[str(self.id)])
 
-# Create taskmanagment model :
+"""
+    A class used to represent Taskmanagment.
+    ...
+
+    Attributes
+    ----------
+    assignee : ForeignKey from Employee Model which is ForeignKey from User model
+    assigneedTo : ForeignKey as ManyToManyField from Employee Model
+    task_managment : ForeignKey from Task Model
+    status : CharField
+    priority : CharField
+    comment : CharField
+    start_date : DateField
+    end_date : DateField
+
+    Methods
+    -------
+    def __str__(self)
+        tells Django what to print when it needs to print out an instance of Taskmanagment model
+
+    created by :
+    -------
+        Eman 
+
+    creation date : 
+    -------
+        -Dec-2021
+
+    update date :
+    -------
+         -Jan-2022
+"""
 class Taskmanagment(models.Model):
+    """Model representing assign task process as Taskmanagment ."""
     assignee = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=False, related_name='taskmanagments')
     assigneedTo = models.ManyToManyField(Employee)
     task_managment = models.ForeignKey('Task', on_delete=models.SET_NULL, null=True,blank=False)
@@ -102,7 +134,7 @@ class Taskmanagment(models.Model):
         max_length=2,
         choices=TASK_STATUS,
         blank=False,
-        default='C',
+        default='TD',
         help_text='Tasks Status',
     )
     TASK_PRIORITY = (
@@ -120,22 +152,23 @@ class Taskmanagment(models.Model):
     comment = models.CharField(max_length=200,null=True,blank=True)
     start_date = models.DateField(null=True, blank=False)
     end_date = models.DateField(null=True, blank=False)
+    
     def get_assigneedTo_values(self):
         ret = ''
         print(self.assigneedTo.all())
-    # use models.ManyToMany field's all() method to return all the assigneedTo objects that this employee belongs to.
+        # use models.ManyToMany field's all() method to return all the assigneedTo objects that this employee belongs to.
         for assigneedTo in self.assigneedTo.all():
             ret = ret + assigneedTo.user.username + ','
-    # remove the last ',' and return the value.
+        # remove the last ',' and return the value.
         return ret[:-1]
 
     def get_assigneedTo_emails(self):
         ret = ''
         print(self.assigneedTo .all())
-    # use models.ManyToMany field's all() method to return all the Team objects that this employee belongs to.
+        # use models.ManyToMany field's all() method to return all the Team objects that this employee belongs to.
         for assigneedTo  in self.assigneedTo .all():
             ret = ret + assigneedTo .user.email + ','
-    # remove the last ',' and return the value.
+        # remove the last ',' and return the value.
         return ret[:-1]
 
     @property
@@ -148,10 +181,10 @@ class Taskmanagment(models.Model):
         ordering = ['end_date']
         permissions = (("can_mark_completed", "Set task as completed"),)
 
-    def __str__(self):
-        """String for representing the Model object."""
-        return f'{self.task_managment}'
-
     def get_absolute_url(self):
         """Returns the url to access a detail record for this task."""
         return reverse('taskmanagment-detail', args=[str(self.id)])
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f'{self.task_managment}'
