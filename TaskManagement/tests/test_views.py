@@ -34,7 +34,6 @@ class EmployeeListViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'TaskManagement/employee_list.html')
 
-<<<<<<< HEAD
 class ProjectListViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -95,8 +94,7 @@ class TaskListViewTest(TestCase):
                      
 
  
-=======
-
+'''
 class TaskmanagmentListViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -134,4 +132,4 @@ class TaskmanagmentListViewTest(TestCase):
         self.assertTrue('is_paginated' in response.context)
         self.assertTrue(response.context['is_paginated'] == True)
         self.assertEqual(len(response.context['taskmanagment_list']), 5)
->>>>>>> 5c007ec (add code documentation)
+'''
