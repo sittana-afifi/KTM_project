@@ -1,8 +1,15 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser , UserManager
 import logging, logging.config
+<<<<<<< HEAD
 
 from django.db import  models # Logging view in Django.
+=======
+from django.db import  models # Logging view in Django.
+from django.db import  models # Logging view in Django.
+from django.db import models
+import os, logging, logging.config # Logging view in Django.
+>>>>>>> 82732e88fecd1dc1c860502aa3d4b2d27dff5e55
 
 # Create a logger for this file or the name of the log level or Get an instance of a logger
 logger = logging.getLogger(__name__)

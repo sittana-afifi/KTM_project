@@ -33,7 +33,7 @@ def index(request):
     name : str
         The name of the file
     returns : int, str 
-        The Number of times visited this page and the homw page static information
+        The Number of times visited this page and the how page static information
     """
     
     logger.info('info This logs an info message.')
