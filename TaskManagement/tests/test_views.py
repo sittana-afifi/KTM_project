@@ -35,10 +35,16 @@ class ProjectListViewTest(TestCase):
         # Create 13 projects for pagination tests
         number_of_projects = 10
         for project_id in range(number_of_projects):
+            Project.objects.create(
+                    name=f'firstproject{project_id}',
+                    description=f'desc{project_id}',
+                    )
+            '''
             x = Project.objects.create(
                 user=User.objects.get(username=f'TestUser{project_id}'),
                 Project_id=f'123{project_id}'
             )
+            '''
     def test_view_url_exists_at_desired_location(self):
         response = self.client.get('/en/projects/projectsfilter/')
         self.assertEqual(response.status_code, 200)    
@@ -60,10 +66,16 @@ class TaskListViewTest(TestCase):
         number_of_projects = 10
        
         for task_id in range(number_of_projects):
+            Task.objects.create(
+                 name=f'task1{task_id}',
+                description=f'desc{task_id}',
+            )
+            '''
             x = Project.objects.create(
                 user=User.objects.get(username=f'TestUser{task_id}'),
                 Task_id=f'123{task_id}'
             )
+            '''
     def test_view_url_exists_at_desired_location(self):
         response = self.client.get('/en/tasks/tasksfilter/')
         self.assertEqual(response.status_code, 200)    

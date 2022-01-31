@@ -25,9 +25,11 @@ class MeetingListViewTest(TestCase):
         number_of_meetings = 10
            
         for meeting_id in range(number_of_meetings):
-            x = Meeting.objects.create(
-                user=User.objects.get(username=f'TestUser{meeting_id}'),
-                Meeting_id=f'123{meeting_id}'
+             Meeting.objects.create(
+                name=f'lina{meeting_id}',
+                description=f'desc{meeting_id}',
+                #user=User.objects.get(username=f'TestUser{meeting_id}'),
+                #Meeting_id=f'123{meeting_id}'
             )
     def test_view_url_exists_at_desired_location(self):
         response = self.client.get('/en/meetings/meetingsfilter/')
