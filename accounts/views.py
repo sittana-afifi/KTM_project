@@ -1,12 +1,11 @@
 from django.views import generic
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import  LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.views.generic.edit import UpdateView , DeleteView , CreateView 
+from django.views.generic.edit import UpdateView , DeleteView  
 from django.utils.translation import ugettext_lazy as _
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
-from accounts.models import Account
 from django_auth_ldap.backend import LDAPBackend
 from .forms import  UserForm , AccountCreateForm 
 from django.contrib import messages
@@ -15,8 +14,7 @@ import _datetime, csv
 from django.http import HttpResponse
 import logging, logging.config # Logging view in Django.
 import xlwt
-import datetime, _datetime
-import os, logging, logging.config # Logging view in Django.
+import  logging, logging.config # Logging view in Django.
 import xlwt, csv # use in export function
 from .resources import AccountResource
 
@@ -352,6 +350,7 @@ today = _datetime.date.today()
 
 @login_required
 def export_users_xls(request):
+
     """ Export all user list details view from database and allow filter option
         with different firmat(excel , json , yaml) .
 
@@ -422,4 +421,3 @@ def export_users_xls(request):
 
         wb.save(response)
         return response
-#print(Account.objects.all())

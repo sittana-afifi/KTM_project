@@ -5,22 +5,21 @@ from TaskManagement.models import Employee,Project,Task
 from TaskManagement.models import Employee, Taskmanagment
 from django.contrib.auth.models import User
 
-#from accounts.models import Account
 class TaskModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         # Set up non-modified objects used by all test methods
-        Task.objects.create(name='firstone', description='Taskfortest')
+        Task.objects.create(task_name='firstone', task_description='Taskfortest')
     
     def test_name_label(self):
         task = Task.objects.get(id=1)
-        field_label = task._meta.get_field('name').verbose_name
-        self.assertEqual(field_label, 'name')
+        field_label = task._meta.get_field('task_name').verbose_name
+        self.assertEqual(field_label, 'task name')
     
     def test_description_label(self):
         task = Task.objects.get(id=1)
-        field_label = task._meta.get_field('description').verbose_name
-        self.assertEqual(field_label, 'description')
+        field_label = task._meta.get_field('task_description').verbose_name
+        self.assertEqual(field_label, 'task description')
     
     def test_get_absolute_url(self):
         task = Task.objects.get(id=1)
@@ -87,31 +86,4 @@ class EmployeeModelTest(TestCase):
         self.assertEqual(max_length, 10)
 
     
-'''
-class TaskmanagmentTest(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        # Set up non-modified objects used by all test methods
-        user1=User.objects.create_user('sonu','sonu@xyz.com','sn@pswrd')
-        user2=User.objects.create_user('user','sonu@xyz.com','sn@pswrd')
-        empl=Employee.objects.create(user=user1, Employee_id='1',Phone_number='0111111111')
-        empl2=Employee.objects.create(user=user2, Employee_id='2',Phone_number='0000000000')
-        task1=Task.objects.create(task_name=testtask, task_description='testtask')
-        Taskmanagment.objects.create(assignee='user1', assigneedTo='user2', task_managment = 'task1',status='TD', priority ='L',
-        start_date = 'datetime.date.today()',end_date= 'datetime.date.today()')
 
-    def test_task_name_label(self):
-        taskmanagment = Taskmanagment.objects.get(id=1)
-        field_label = taskmanagment._meta.get_field('task_managment').verbose_name
-        self.assertEqual(field_label, 'task managment')
-
-    def test_date_of_death_label(self):
-        taskmanagment = Taskmanagment.objects.get(id=1)
-        field_label = taskmanagment._meta.get_field('start_date').verbose_name
-        self.assertEqual(field_label, 'datetime.date.today()')
-
-    def test_get_absolute_url(self):
-        taskmanagment = Taskmanagment.objects.get(id=1)
-        # This will also fail if the urlconf is not defined.
-        self.assertEqual(taskmanagment.get_absolute_url(), '/TaskManagement/taskmanagment/1')
-'''
