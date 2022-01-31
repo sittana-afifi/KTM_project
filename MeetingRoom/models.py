@@ -1,11 +1,11 @@
+import datetime
 from django.db import models
 from django.db.models.fields import DateField
-from django.urls.base import reverse
+from django.urls.base import reverse , reverse_lazy as _
 from django.core.exceptions import ValidationError
 from TaskManagement.models import Employee, Project, Task, Taskmanagment
 from parler.models import TranslatableModel, TranslatedFields
 
-# Create your models here.
 class Meeting(models.Model):
     """Model representing a Meeting."""
     name = models.CharField(max_length=200, help_text='Enter a Meeting name (e.g. Meeting Room )')
@@ -53,7 +53,6 @@ class Meeting(models.Model):
 """
 
 class ReservationMeetingRoom(models.Model):
-    """Model representing a reservation meeting room."""
     meeting_room = models.ForeignKey(Meeting, on_delete=models.SET_NULL, null=True, blank=False)
     reservation_date = models.DateField(null=False, blank=False)
     reservation_from_time = models.TimeField(auto_now=False, auto_now_add=False)

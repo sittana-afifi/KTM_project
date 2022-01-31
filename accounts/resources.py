@@ -1,11 +1,6 @@
 from import_export import resources
 from django.contrib.auth.models import User
-#from accounts.models import Account
-from django.contrib.auth.base_user import BaseUserManager
-from django_filters import FilterSet, ChoiceFilter, BooleanFilter,DateFromToRangeFilter
-from django_filters.widgets import BooleanWidget
-from import_export import fields
-from import_export import fields, resources, widgets
+from import_export import  resources
     
 class AccountResource(resources.ModelResource):
 

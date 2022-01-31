@@ -1,27 +1,21 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 from .models import Meeting, ReservationMeetingRoom
 from django.views.generic.edit import UpdateView , DeleteView , CreateView 
-from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput, MonthPickerInput, YearPickerInput
 from .forms import ReservationForm, UpdateReservationForm
-from django.core.exceptions import ValidationError 
-from django.forms import ValidationError
-from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import  redirect, render
 import os, logging, logging.config # Logging view in Django
 from .filters import ReservationMeetingRoomFilter, MeetingRoomFilter
 from .tables import ReservationMeetingRoomTable
 import datetime, _datetime
 import xlwt, csv # use in export function
 from .resources import MeetingResource, ReservationMeetingRoomResource
-from tablib import Dataset
 from django.conf import settings
 from django.core.mail import send_mail
-from django.contrib.auth.models import User
 
 # Create a logger for this file or the name of the log level or Get an instance of a logger
 logger = logging.getLogger(__name__) 
@@ -32,7 +26,7 @@ class MeetingListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter MeetingListView.")
     model = Meeting
     template_name = 'MeetingRoom/meeting_list.html'
-    paginate_by = 5
+    #paginate_by = 5
     filter_class = MeetingRoomFilter
 
 @login_required   
@@ -76,7 +70,7 @@ class ReservationMeetingRoomListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter ReservationMeetingRoomListView.")
     model = ReservationMeetingRoom
     template_name = 'MeetingRoom/reservationmeetingroom_list.html'
-    paginate_by = 5
+    #paginate_by = 5
     table_class  = ReservationMeetingRoomTable
     filter_class = ReservationMeetingRoomFilter
 
@@ -116,13 +110,15 @@ def ReservationFilter(request):
     reservation_filter = ReservationMeetingRoomFilter(request.GET, queryset= reservation_list)
     return render(request, 'MeetingRoom/reservationmeetingroom_list.html', {'filter': reservation_filter})
 
-# -----------------------------------------------------------
-# Validation Reservation Meeting Room Requests Function:
-# validate the reservation request in the database.
-# created by : Mohammed Almoiz
-# creation date : -Dec-2021
-# update date : -Dec-2022
-# -----------------------------------------------------------
+'''
+-----------------------------------------------------------
+Validation Reservation Meeting Room Requests Function:
+validate the reservation request in the database.
+created by : Mohammed Almoiz
+creation date : -Dec-2021
+update date : -Dec-2022
+-----------------------------------------------------------
+'''
 
 @login_required
 def validateReservationForm(form):

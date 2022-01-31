@@ -61,14 +61,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # configure the accounts app 
-    #'accounts.apps.AccountsConfig',
     'rosetta',  # Rosetta Translation Interface
     'parler', #Translating Models with django-parler
     'crispy_forms',# 3rd party apps
     'TaskManagement.apps.TaskManagementConfig',
-    # configure the MeetingRoom app 
-    'MeetingRoom.apps.MeetingRoomConfig',
+    'MeetingRoom.apps.MeetingRoomConfig', # configure the MeetingRoom app 
     'bootstrap_datepicker_plus',
     'flatpickr',
     'bootstrap4',
@@ -199,7 +196,7 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-'''
+
 
 # LDAP CONFIGRATION START HERE !
 AUTH_LDAP_SERVER_URI = env('AUTH_LDAP_SERVER_URI')
@@ -231,7 +228,7 @@ ldap.OPT_REFERRALS: 0,
 }
 
 # LDAP CONFIGRATION ENDS HERE !
-'''
+
 #Mail service
 EMAIL_BACKEND = env('EMAIL_BACKEND')
 EMAIL_HOST =env('EMAIL_HOST')

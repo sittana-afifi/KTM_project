@@ -1,9 +1,7 @@
 from import_export import resources
 from .models import Employee, Task, Project, Taskmanagment
 from import_export.widgets import ManyToManyWidget
-from import_export.fields import Field
 from import_export import resources,fields
-from django.contrib.auth.models import User
 
 class CustomManyToManyWidget(ManyToManyWidget):
     def __init__(self, model, separator=None, field=None, *args, **kwargs):

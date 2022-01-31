@@ -1,9 +1,8 @@
-from gettext import install
 from django.test import TestCase
 from django.urls import reverse
-from TaskManagement.models import Employee, Project
-from TaskManagement.models import Taskmanagment,Task
+from TaskManagement.models import Employee
 from django.contrib.auth.models import User
+
 
 class EmployeeListViewTest(TestCase):
     @classmethod

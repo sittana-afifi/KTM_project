@@ -1,6 +1,5 @@
 import datetime
 from django import forms
-from django.db import models
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -9,25 +8,25 @@ from TaskManagement.models import  Employee, Task, Project, Taskmanagment
 from django.shortcuts import render
 from flatpickr import DatePickerInput, TimePickerInput, DateTimePickerInput
 from .models import ReservationMeetingRoom, Meeting
-from django.utils import timezone
-from django.forms.utils import ErrorList
 
-# -----------------------------------------------------------
-# Reservation Request Form  for Metting Room.
-# display the attributes of form.
-# and ask user to enter all requirements to reserve meeting room.
-# created by : Eman 
-# creation date : -Dec-2021
-# update date : -Dec-2022
-# parameters : modelchoice , datefield input , timefield , multiple choices for team
-# meeting room name, reservation date , the involved team in the meeting finally resrvation from and to time. 
-# output: details of the reservation request and the staus if it success or failed
-# -----------------------------------------------------------
+'''
+-----------------------------------------------------------
+Reservation Request Form  for Metting Room.
+display the attributes of form.
+and ask user to enter all requirements to reserve meeting room.
+created by : Eman 
+creation date : -Dec-2021
+update date : -Dec-2022
+parameters : modelchoice , datefield input , timefield , multiple choices for team
+meeting room name, reservation date , the involved team in the meeting finally resrvation from and to time. 
+output: details of the reservation request and the staus if it success or failed
+-----------------------------------------------------------
+'''
 
 class ReservationForm(forms.ModelForm):
     meeting_room = forms.ModelChoiceField(queryset = Meeting.objects.all())
     reservation_date = forms.DateField(required=True, widget=DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}))
-    team = forms.ModelMultipleChoiceField(queryset =Employee.objects.all(),required= True) 
+    team = forms.ModelMultipleChoiceField(queryset =Employee.objects.all(),blank=True,required=False, widget=forms.CheckboxSelectMultiple) 
     reservation_from_time = forms.TimeField(widget=TimePickerInput(options={"format": "hh:mm","autoclose": True,"use24hours": True}))
     reservation_to_time = forms.TimeField(widget=TimePickerInput(options={"format": "hh:mm","autoclose": True}))
     meeting_project_name = forms.ModelChoiceField(queryset = Project.objects.all(), required=False)
@@ -75,23 +74,25 @@ class ReservationForm(forms.ModelForm):
         """Returns the url to access a detail record for this project."""
         return reverse('reservationmeetingroom-detail', args=[str(self.id)])
 
-# -----------------------------------------------------------
-# Update Reservation Request Form  for Metting Room.
-# display the attributes of form.
-# and ask user to enter all requirements to reserve meeting room.
-# created by : Eman 
-# creation date : -Dec-2021
-# update date : -Dec-2022
-# parameters : modelchoice , datefield input , timefield , multiple choices for team , charfiled 
-# meeting room name, reservation date , the involved team in the meeting finally resrvation from and to time. 
-# output: details of the reservation request and the staus if it success or failed , add meeting outcomes
-# also execlude the self reservation request from validation.
-# -----------------------------------------------------------
+'''
+-----------------------------------------------------------
+Update Reservation Request Form  for Metting Room.
+display the attributes of form.
+and ask user to enter all requirements to reserve meeting room.
+created by : Eman 
+creation date : -Dec-2021
+update date : -Dec-2022
+parameters : modelchoice , datefield input , timefield , multiple choices for team , charfiled 
+meeting room name, reservation date , the involved team in the meeting finally resrvation from and to time. 
+output: details of the reservation request and the staus if it success or failed , add meeting outcomes
+also execlude the self reservation request from validation.
+-----------------------------------------------------------
+'''
 
 class UpdateReservationForm(forms.ModelForm):
     meeting_room = forms.ModelChoiceField(queryset = Meeting.objects.all())
     reservation_date = forms.DateField(widget=DatePickerInput(options={"format": "mm/dd/yyyy","autoclose": True}), required=True )
-    team = forms.ModelMultipleChoiceField(queryset =Employee.objects.all(), required=True) 
+    team = forms.ModelMultipleChoiceField(queryset =Employee.objects.all(),blank=True,required=False,widget=forms.CheckboxSelectMultiple) 
     reservation_from_time = forms.TimeField(widget=TimePickerInput(options={"format": "hh:mm","autoclose": True}))
     reservation_to_time = forms.TimeField(widget=TimePickerInput(options={"format": "hh:mm","autoclose": True}))
     meeting_project_name = forms.ModelChoiceField(queryset = Project.objects.all(), required=False)
@@ -147,11 +148,3 @@ class UpdateReservationForm(forms.ModelForm):
             raise ValidationError(('Selected Meeting room already reserved at this date and time ,please correct your information and then submit'))
             messages.error(request, "Selected Meeting room already reserved at this date and time ,please correct your information and then submit")
         return cleaned_data
-
-    def __str__(self):
-        """String for representing the Model object."""
-        return f'{self.meeting_room}'
-    
-    def get_absolute_url(self):
-        """Returns the url to access a detail record for this project."""
-        return reverse('reservationmeetingroom-detail', args=[str(self.id)])
