@@ -12,11 +12,6 @@ class EmployeeListViewTest(TestCase):
         # Create 13 employees for pagination tests
         number_of_employees = 10
 
-        for user_id in range(number_of_employees):
-            User.objects.create(
-                username=f'TestUser{user_id}',
-                #last_name=f'Surname {user_id}',
-            )
         for emp_id in range(number_of_employees):
             x = Employee.objects.create(
                 user=User.objects.get(username=f'TestUser{emp_id}'),
@@ -40,11 +35,6 @@ class ProjectListViewTest(TestCase):
     def setUpTestData(cls):
         # Create 13 projects for pagination tests
         number_of_projects = 10
-        for user_id in range(number_of_projects):
-            User.objects.create(
-                username=f'TestUser{user_id}',
-                #last_name=f'Surname {user_id}',
-            )
         for project_id in range(number_of_projects):
             x = Project.objects.create(
                 user=User.objects.get(username=f'TestUser{project_id}'),
@@ -69,11 +59,7 @@ class TaskListViewTest(TestCase):
     def setUpTestData(cls):
         # Create 13 Tasks for pagination tests
         number_of_projects = 10
-        for user_id in range(number_of_projects):
-            User.objects.create(
-                username=f'TestUser{user_id}',
-                #last_name=f'Surname {user_id}',
-            )
+       
         for task_id in range(number_of_projects):
             x = Project.objects.create(
                 user=User.objects.get(username=f'TestUser{task_id}'),

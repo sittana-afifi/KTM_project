@@ -12,11 +12,7 @@ class MeetingListViewTest(TestCase):
     def setUpTestData(cls):
         # Create 13 meetings for pagination tests
         number_of_meetings = 10
-        for user_id in range(number_of_meetings):
-            User.objects.create(
-                username=f'TestUser{user_id}',
-                #last_name=f'Surname {user_id}',
-            )
+           
         for meeting_id in range(number_of_meetings):
             x = Meeting.objects.create(
                 user=User.objects.get(username=f'TestUser{meeting_id}'),
