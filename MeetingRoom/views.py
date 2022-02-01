@@ -15,10 +15,13 @@ from django.shortcuts import get_object_or_404, redirect, render
 import os, logging, logging.config # Logging view in Django
 from .filters import ReservationMeetingRoomFilter, MeetingRoomFilter
 from .tables import ReservationMeetingRoomTable
-import datetime, _datetime
-import xlwt, csv # use in export function
+import datetime
+import xlwt
+import csv
+from django.http import HttpResponse
 from .resources import MeetingResource, ReservationMeetingRoomResource
 from tablib import Dataset
+import _datetime
 from django.conf import settings
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
@@ -35,18 +38,8 @@ class MeetingListView(LoginRequiredMixin,generic.ListView):
     paginate_by = 5
     filter_class = MeetingRoomFilter
 
-@login_required   
+# Meeting Rooms Filter View:    
 def MeetingFilter(request):
-    """meeting View filter for meetings list and show filter options.
-
-    Parameters
-    ----------
-    name : list
-        a list of all meeting rooms
-    returns : list, 
-        a list of all meeting rooms with CRUD oprtions and detail view
-    """
-    
     meeting_list = Meeting.objects.all()
     meeting_filter = MeetingRoomFilter(request.GET, queryset= meeting_list)
     return render(request, 'MeetingRoom/meeting_list.html', {'filter': meeting_filter})
@@ -100,150 +93,57 @@ class ReservationMeetingRoomDelete(LoginRequiredMixin,DeleteView):
     model = ReservationMeetingRoom
     success_url = reverse_lazy('reserve-filter')
 
-@login_required
+# Reservation Meeting Rooms Filter View:    
 def ReservationFilter(request):
-    """reservation meeting room requests View filter for meetings list and show filter options.
-
-    Parameters
-    ----------
-    name : list
-        a list of all reservation meeting room requests
-    returns : list, 
-        a list of all reservation meeting room requests with CRUD oprtions and detail view
-    """
-    
     reservation_list = ReservationMeetingRoom.objects.all()
     reservation_filter = ReservationMeetingRoomFilter(request.GET, queryset= reservation_list)
     return render(request, 'MeetingRoom/reservationmeetingroom_list.html', {'filter': reservation_filter})
 
 # -----------------------------------------------------------
 # Validation Reservation Meeting Room Requests Function:
-# validate the reservation request in the database.
+# validate the reservation request in the database .
+# to make sure that there is no reservation for same meeting duplicated at same time  
 # created by : Mohammed Almoiz
 # creation date : -Dec-2021
 # update date : -Dec-2022
+# parameters : input of reservation form and check cases.
+# meeting room name, reservation date , the involved team in the meeting finally resrvation from and to time. 
+# output: Boolean (true or false)
+# -----------------------------------------------------------
+
+def validateReservationForm(form):
+    logger.info("Enter validateReservationForm.")
+    if form.is_valid():
+            logger.info("Enter form.is_valid.")
+            meeting_room = form.cleaned_data['meeting_room']
+            reservation_date = form.cleaned_data['reservation_date']
+            reservation_from_time = form.cleaned_data['reservation_from_time']
+            reservation_to_time = form.cleaned_data['reservation_to_time']
+            team = form.cleaned_data['team']
+            form = form.save(commit=False)
+            case_1 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room, reservation_date=reservation_date, reservation_from_time__gte=reservation_from_time, reservation_to_time=reservation_to_time).exists()
+            case_2 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room, reservation_date=reservation_date, reservation_from_time__lte=reservation_from_time, reservation_to_time__gte=reservation_to_time).exists()
+            case_3 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room, reservation_date=reservation_date, reservation_from_time__gte=reservation_from_time, reservation_to_time__lte=reservation_to_time).exists()
+            case_4 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room, reservation_date=reservation_date, reservation_from_time__lte=reservation_from_time, reservation_to_time=reservation_to_time).exists()
+            case_5 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room, reservation_date=reservation_date, reservation_from_time__gt=(reservation_from_time and reservation_to_time), reservation_to_time__lt=(reservation_to_time and reservation_from_time)).exists()
+            case_6 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room, reservation_date=reservation_date, reservation_from_time__lt=(reservation_from_time and reservation_to_time), reservation_to_time__gt=(reservation_to_time and reservation_from_time)).exists()
+            # if either of these is true, abort and render the error
+            return case_1 or case_2 or case_3 or case_4 or case_6
+
+# -----------------------------------------------------------
+# Validation Reservation Meeting Room Requests Create View:
+# for a reservation Form and validate the reservation request in the database .
+# to make sure that there is no reservation for same meeting duplicated at same time  
+# created by : Eman
+# creation date : -Dec-2021
+# update date : -Dec-2022
+# parameters : 
+# meeting room name, reservation date , the involved team in the meeting finally resrvation from and to time. 
+# output: reservation request details.
 # -----------------------------------------------------------
 
 @login_required
-def validateReservationForm(form):
-    """Function to check and make sure that there is no reservation for same meeting duplicated at same time
-        and execlude the self pk.
-
-    Parameters
-    ----------
-    input of reservation form and check cases
-
-    meeting room : 
-        forighn key from meeting model
-    
-    reservation date :
-        datefield
-    
-    reservation_from_time ,reservation_to_time:
-        timefield
-        
-    returns : 
-        Boolean (true or false)
-
-    """
-    logger.info("Enter validateReservationForm.")
-    if form.is_valid():
-        logger.info("Enter form.is_valid.")
-        meeting_room = form.cleaned_data['meeting_room']
-        reservation_date = form.cleaned_data['reservation_date']
-        reservation_from_time = form.cleaned_data['reservation_from_time']
-        reservation_to_time = form.cleaned_data['reservation_to_time']
-        team = form.cleaned_data['team']
-        form = form.save(commit=False)
-        case_1 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room, reservation_date=reservation_date, reservation_from_time__gte=reservation_from_time, reservation_to_time=reservation_to_time).exists()
-        case_2 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room, reservation_date=reservation_date, reservation_from_time__lte=reservation_from_time, reservation_to_time__gte=reservation_to_time).exists()
-        case_3 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room, reservation_date=reservation_date, reservation_from_time__gte=reservation_from_time, reservation_to_time__lte=reservation_to_time).exists()
-        case_4 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room, reservation_date=reservation_date, reservation_from_time__lte=reservation_from_time, reservation_to_time=reservation_to_time).exists()
-        case_5 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room, reservation_date=reservation_date, reservation_from_time__gt=(reservation_from_time and reservation_to_time), reservation_to_time__lt=(reservation_to_time and reservation_from_time)).exists()
-        case_6 = ReservationMeetingRoom.objects.filter(meeting_room=meeting_room, reservation_date=reservation_date, reservation_from_time__lt=(reservation_from_time and reservation_to_time), reservation_to_time__gt=(reservation_to_time and reservation_from_time)).exists()
-        # if either of these is true, abort and render the error
-        return case_1 or case_2 or case_3 or case_4 or case_6
-
-"""
-    A function used to reserve meetingroom request to the Team Form create view  for Metting Room.
-    display the attributes of form and ask user to enter all requirements to reserve meetingroom.
-    or a reservation Form and validate the reservation request in the database .
-    to make sure that there is no reservation for same meeting duplicated at same time  
-    ...
-
-    Attributes
-    ----------
-    meeting room : 
-        forighn key from meeting model
-    
-    team : 
-        manytomany field from employee model
-    
-    task_managment :
-        charfield forighn key from project model
-
-    task_name :
-        charfield forighn key form task model
-    
-    reservation date :
-        datefield
-    
-    reservation_from_time ,reservation_to_time:
-        timefield
-
-    Methods
-    -------
-        user validation function and reserve form
-    output 
-    -------
-    details of the reservation request and the staus if it success or failed.
-
-    -------
-    created by :
-    -------
-        Eman 
-
-    creation date : 
-    -------
-        -Dec-2021
-
-    update date :
-    -------
-        -Dec-2022
-"""
-
-@login_required
 def reserve_view(request):
-    """Function to send emails after reservationmeeting room model.
-
-    Parameters
-    ----------
-    subject : 
-        str
-
-    meeting room : 
-        forighn key from meeting model
-    
-    team : 
-        manytomany field from employee model
-    
-    task_managment :
-        charfield forighn key from project model
-
-    task_name :
-        charfield forighn key form task model
-    
-    reservation date :
-        datefield
-    
-    reservation_from_time ,reservation_to_time:
-        timefield
-        
-    returns : email, 
-        send email address for the selected team email address.
-
-    """
-    
     logger.info("Enter reserve_view.")
     form = ReservationForm()
     if request.method == "POST":
@@ -272,87 +172,21 @@ def reserve_view(request):
     }
     return render(request, "MeetingRoom/reserve.html", context)
 
-
-"""
-    A function used to update reserve meetingroom request to the Team Form create view  for Metting Room.
-    display the attributes of form and ask user to enter all requirements to reserve meetingroom.
-    display the attributes of form.
-     and ask user to enter all requirements to reserve meeting room.
-    ...
-
-    Attributes
-    ----------
-    meeting room : 
-        forighn key from meeting model
-    
-    team : 
-        manytomany field from employee model
-    
-    task_managment :
-        charfield forighn key from project model
-
-    task_name :
-        charfield forighn key form task model
-    
-    reservation date :
-        datefield
-    
-    reservation_from_time ,reservation_to_time:
-        timefield
-
-    Methods
-    -------
-        user validation function and reserve form
-    output 
-    -------
-    details of the reservation request and the staus if it success or failed.
-    add meeting outcomes  also execlude the self reservation request from validation.
-
-    -------
-    created by :
-    -------
-        Eman 
-
-    creation date : 
-    -------
-        -Dec-2021
-
-    update date :
-    -------
-        -Dec-2022
-"""
+# -----------------------------------------------------------
+# Update Reservation Request View  for Metting Room.
+# display the attributes of form.
+# and ask user to enter all requirements to reserve meeting room.
+# created by : Eman 
+# creation date : -Dec-2021
+# update date : -Dec-2022
+# parameters : modelchoice , datefield input , timefield , multiple choices for team , charfiled 
+# meeting room name, reservation date , the involved team in the meeting finally resrvation from and to time. 
+# output: details of the reservation request and the staus if it success or failed , add meeting outcomes
+# also execlude the self reservation request from validation.
+# -----------------------------------------------------------
 
 @login_required
 def update_reserve_view(request, pk):
-    """ Function to send emails after update reservationmeeting room model.
-
-    Parameters
-    ----------
-    subject : 
-        str
-
-    meeting room : 
-        forighn key from meeting model
-    
-    team : 
-        manytomany field from employee model
-    
-    task_managment :
-        charfield forighn key from project model
-
-    task_name :
-        charfield forighn key form task model
-    
-    reservation date :
-        datefield
-    
-    reservation_from_time ,reservation_to_time:
-        timefield
-        
-    returns : email, 
-        send email address for the selected team email address.
-
-    """
     logger.info("Enter update_reserve_view.")
     reservation = ReservationMeetingRoom.objects.get(pk=pk)
     form = UpdateReservationForm(request.POST or None,instance=reservation)
@@ -381,58 +215,21 @@ def update_reserve_view(request, pk):
     }
     return render(request, 'MeetingRoom/update_reserve_view.html', context)
 
+# -----------------------------------------------------------
+# function for Export Meeting Rooms  list view with filter option.
+# display the different export format to choose from it.
+# and download report.
+# created by : Eman 
+# creation date : 15-Jan-2021
+# update date : 20-Jan-2022
+# parameters : first choose filter option from filter 
+# function and then export file
+# output: file with different format (csv, excel ,yaml)
+# -----------------------------------------------------------
+
 today = _datetime.date.today()
 
-"""
-    A function used to export model information from database.
-    ...
-
-    Attributes
-    ----------
-    list : list
-        the list of the meeting room
-        first choose filter option from filter 
-        function and then export file
-
-    Methods
-    -------
-        import-export method in django
-
-    output 
-    -------
-    file with different format (csv, excel ,yaml)
-
-    -------
-    created by :
-    -------
-        Eman 
-
-    creation date : 
-    -------
-        15-Jan-2021
-
-    update date :
-    -------
-        20-Jan-2022
-"""
-
-@login_required
 def export_meetingrooms_xls(request):
-    """ Export all meeting rooms list details view from database and allow filter option
-        with different firmat(excel , json , yaml) .
-
-        If there is no filter option choosed all meeting rooms in database will be export.
-
-        Parameters
-        ----------
-        file format : (excel , json , yaml) 
-            choose the file format from dropdown list
-
-        Result
-        ------
-        export requested data with requested format.
-        """
-
     logger.info("Export Function.")
     file_format = request.POST['file-format']
     meeting_filter = MeetingRoomFilter(request.GET, queryset=Meeting.objects.all())
@@ -490,57 +287,19 @@ def export_meetingrooms_xls(request):
         wb.save(response)
         return response
 
-"""
-    A function used to export model information from database.
-    ...
+# -----------------------------------------------------------
+# function for Export Reservation Meeting Room Request  list view with filter option.
+# display the different export format to choose from it.
+# and download report.
+# created by : Eman 
+# creation date : 15-Jan-2021
+# update date : 20-Jan-2022
+# parameters : first choose filter option from filter 
+# function and then export file
+# output: file with different format (csv, excel ,yaml)
+# -----------------------------------------------------------
 
-    Attributes
-    ----------
-    list : list
-        the list of the reservationmeetingroom
-        first choose filter option from filter 
-        function and then export file
-
-    Methods
-    -------
-        import-export method in django
-
-    output 
-    -------
-    file with different format (csv, excel ,yaml)
-
-    -------
-    created by :
-    -------
-        Eman 
-
-    creation date : 
-    -------
-        15-Jan-2021
-
-    update date :
-    -------
-        20-Jan-2022
-"""
-
-@login_required
 def export_reservation_meeting_room_xls(request):
-    """ Export all reservation meeting room requests list details view from database
-         and allow filter option with different firmat(excel , json , yaml) .
-
-        If there is no filter option choosed all reservation meeting room requests
-        in database will be export.
-
-        Parameters
-        ----------
-        file format : (excel , json , yaml) 
-            choose the file format from dropdown list
-
-        Result
-        ------
-        export requested data with requested format.
-        """
-
     logger.info("Export Function.")
     file_format = request.POST['file-format']
     reservation_filter = ReservationMeetingRoomFilter(request.GET, queryset=ReservationMeetingRoom.objects.all())
