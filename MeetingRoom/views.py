@@ -153,7 +153,7 @@ def reserve_view(request):
             messages.error(request, "Selected Meeting room already reserved at this date and time ,please correct your information and then submit")
         elif form.is_valid():
             form.save()
-            messages.success(request, "You successfully reserve this meeting room at this time and date")
+            #messages.success(request, "You successfully reserve this meeting room at this time and date")
             Meeting_Room_Name = form.cleaned_data.get('meeting_room')
             Reservation_Date = form.cleaned_data.get('reservation_date')
             Reservation_From_Time = form.cleaned_data.get('reservation_from_time')
@@ -195,7 +195,7 @@ def update_reserve_view(request, pk):
         if form.is_valid():   
             logger.info("form is valid")
             form.save()
-            messages.success(request, "You Successfully update reservation request for this meeting room at this time and date")
+            #messages.success(request, "You Successfully update reservation request for this meeting room at this time and date")
             Meeting_Room_Name = form.cleaned_data.get('meeting_room')
             Reservation_Date = form.cleaned_data.get('reservation_date')
             Reservation_From_Time = form.cleaned_data.get('reservation_from_time')
@@ -205,7 +205,7 @@ def update_reserve_view(request, pk):
             Meeting_Outcomes = form.cleaned_data.get('meeting_outcomes')
             [print(member.user.email) for member in Team_Members.all()]
             subject = 'Update Team Meeting Details'
-            message = f'Dear All:\n Have a good day this email due to update meeting details.The meeting will be in {Meeting_Room_Name} at {Reservation_Date} from {Reservation_From_Time} to {Reservation_To_Time}. \n The meeting outcoumes points as below: \n\n {Meeting_Outcomes}..\n \nBest Regards'
+            message = f'Dear All:\n Have a good day this email due to update meeting details.The meeting will be in {Meeting_Room_Name} at {Reservation_Date} from {Reservation_From_Time} to {Reservation_To_Time}. \n The meeting outcoumes points as below: \n {Meeting_Outcomes}..\n \nBest Regards'
             email_from = settings.EMAIL_HOST_USER
             recipient_list = [(member.user.email) for member in Team_Members.all() ]
             send_mail( subject, message, email_from, recipient_list )
