@@ -201,6 +201,7 @@ def createUser(request):
     -------
          21-Jan-2022
 """
+@login_required
 class usersListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter usersListView.")
     model = User
