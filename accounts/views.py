@@ -201,13 +201,14 @@ def createUser(request):
     -------
          21-Jan-2022
 """
-@login_required
+
 class usersListView(LoginRequiredMixin,generic.ListView):
     logger.info("Enter usersListView.")
     model = User
     template_name ='accounts/user_list.html'
     filter_class = AccountFilter
-    
+
+@login_required
 def AccountViewFilter(request):
     """ filter user list view.
     created by :
